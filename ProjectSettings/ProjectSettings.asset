@@ -245,8 +245,8 @@ PlayerSettings:
   AndroidTargetDevice: 0
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
-  AndroidKeystoreName: 
-  AndroidKeyaliasName: 
+  AndroidKeystoreName: Assets/Editor Default Resources/development-key.keystore
+  AndroidKeyaliasName: development
   AndroidTVCompatibility: 1
   AndroidIsGame: 1
   AndroidEnableTango: 0

@@ -20,6 +20,7 @@ public class OnlineDatabase
     public OnlineDatabase()
     {
         m_root = Static.FirebaseDatabase.RootReference;
+        UnityThread.initUnityThread();
     }
 
     /// <summary>
@@ -104,7 +105,7 @@ public class OnlineDatabase
     {
         return (arg => {
             if (!string.IsNullOrEmpty(name)) Debug.Log(name + " -> " + arg);
-            if (action != null) action(arg);
+            if (action != null) UnityThread.executeInUpdate(() => action(arg));
         });
     }
 

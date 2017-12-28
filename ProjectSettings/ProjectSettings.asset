@@ -160,8 +160,9 @@ PlayerSettings:
   applicationIdentifier:
     Android: com.notyetinteractive.fourensics
     Standalone: com.notyetinteractive.fourensics
-  buildNumber: {}
-  AndroidBundleVersionCode: 1
+  buildNumber:
+    Standalone: 100
+  AndroidBundleVersionCode: 100
   AndroidMinSdkVersion: 16
   AndroidTargetSdkVersion: 0
   AndroidPreferredInstallLocation: 1

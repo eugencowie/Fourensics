@@ -19,8 +19,7 @@ public class OnlineDatabase
     /// </summary>
     public OnlineDatabase()
     {
-        FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://fourensics-game.firebaseio.com");
-        m_root = FirebaseDatabase.DefaultInstance.RootReference;
+        m_root = Static.FirebaseDatabase.RootReference;
     }
 
     /// <summary>
@@ -77,7 +76,7 @@ public class OnlineDatabase
     /// </summary>
     public void RegisterListener(string path, EventHandler<ValueChangedEventArgs> listener)
     {
-        FirebaseDatabase.DefaultInstance.GetReference(path).ValueChanged += listener;
+        Static.FirebaseDatabase.GetReference(path).ValueChanged += listener;
     }
 
     /// <summary>
@@ -85,7 +84,7 @@ public class OnlineDatabase
     /// </summary>
     public void DeregisterListener(string path, EventHandler<ValueChangedEventArgs> listener)
     {
-        FirebaseDatabase.DefaultInstance.GetReference(path).ValueChanged -= listener;
+        Static.FirebaseDatabase.GetReference(path).ValueChanged -= listener;
     }
 
     /// <summary>

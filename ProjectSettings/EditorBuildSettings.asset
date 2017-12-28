@@ -6,8 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Assets/Scenes/Lobby.unity
-    guid: 6aa7f954fd1fca3499510d504f8a2756
+    path: Assets/Assets/Scenes/Startup.unity
+    guid: 57388ccd89db2ac46ae1a8879f58219f
   - enabled: 1
     path: Assets/Assets/Scenes/Rooms/Bartender.unity
     guid: d858c1784694de949a44880b19d2d3c1
@@ -20,6 +20,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Assets/Scenes/Rooms/Lawyer.unity
     guid: 762d1d827963c334399a08a88d5b35ae
+  - enabled: 1
+    path: Assets/Assets/Scenes/Lobby.unity
+    guid: 6aa7f954fd1fca3499510d504f8a2756
   - enabled: 1
     path: Assets/Assets/Scenes/Database.unity
     guid: 02d35302db79d7e479cf809d7054dc2b

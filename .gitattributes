@@ -13,3 +13,9 @@
 *.meta   linguist-generated
 *.prefab linguist-generated
 *.unity  linguist-generated
+
+# Third-party dependencies
+/Assets/Firebase/**             linguist-generated
+/Assets/Parse/**                linguist-generated
+/Assets/PlayServicesResolver/** linguist-generated
+/Assets/Plugins/**              linguist-generated

@@ -1,0 +1,259 @@
+fileFormatVersion: 2
+guid: 18bc4133e9bb37749843e4c67808766c
+timeCreated: 1512046849
+licenseType: Pro
+ModelImporter:
+  serializedVersion: 21
+  fileIDToRecycleName:
+    100000: Back
+    100002: Body
+    100004: Bridge
+    100006: CATRigHub002
+    100008: CATRigHub003
+    100010: CATRigHub004
+    100012: CATRigLArm1
+    100014: CATRigLArm2
+    100016: CATRigLArmCollarbone
+    100018: CATRigLArmDigit11
+    100020: CATRigLArmDigit12
+    100022: CATRigLArmDigit21
+    100024: CATRigLArmDigit22
+    100026: CATRigLArmDigit23
+    100028: CATRigLArmDigit31
+    100030: CATRigLArmDigit32
+    100032: CATRigLArmDigit33
+    100034: CATRigLArmDigit41
+    100036: CATRigLArmDigit42
+    100038: CATRigLArmDigit43
+    100040: CATRigLArmDigit51
+    100042: CATRigLArmDigit52
+    100044: CATRigLArmDigit53
+    100046: CATRigLArmPalm
+    100048: CATRigLLeg1
+    100050: CATRigLLeg2
+    100052: CATRigLLegAnkle
+    100054: CATRigLLegDigit11
+    100056: CATRigLLegDigit12
+    100058: CATRigLLegPlatform
+    100060: CATRigRArm1
+    100062: CATRigRArm2
+    100064: CATRigRArmCollarbone
+    100066: CATRigRArmDigit11
+    100068: CATRigRArmDigit12
+    100070: CATRigRArmDigit21
+    100072: CATRigRArmDigit22
+    100074: CATRigRArmDigit23
+    100076: CATRigRArmDigit31
+    100078: CATRigRArmDigit32
+    100080: CATRigRArmDigit33
+    100082: CATRigRArmDigit41
+    100084: CATRigRArmDigit42
+    100086: CATRigRArmDigit43
+    100088: CATRigRArmDigit51
+    100090: CATRigRArmDigit52
+    100092: CATRigRArmDigit53
+    100094: CATRigRArmPalm
+    100096: CATRigRLeg1
+    100098: CATRigRLeg2
+    100100: CATRigRLegAnkle
+    100102: CATRigRLegDigit11
+    100104: CATRigRLegDigit12
+    100106: CATRigRLegPlatform
+    100108: CATRigSpine1
+    100110: CATRigSpine1 1
+    100112: CATRigSpine2
+    100114: CATRigSpine2 1
+    100116: CATRigSpine3
+    100118: Character001
+    100120: Cylinder001
+    100122: Cylinder002
+    100124: Hair
+    100126: Lawyer
+    100128: //RootNode
+    100130: Rectangle003
+    100132: Rectangle004
+    100134: Seat
+    100136: Seat 1
+    100138: Shirt
+    100140: Shoes
+    100142: Skirt
+    400000: Back
+    400002: Body
+    400004: Bridge
+    400006: CATRigHub002
+    400008: CATRigHub003
+    400010: CATRigHub004
+    400012: CATRigLArm1
+    400014: CATRigLArm2
+    400016: CATRigLArmCollarbone
+    400018: CATRigLArmDigit11
+    400020: CATRigLArmDigit12
+    400022: CATRigLArmDigit21
+    400024: CATRigLArmDigit22
+    400026: CATRigLArmDigit23
+    400028: CATRigLArmDigit31
+    400030: CATRigLArmDigit32
+    400032: CATRigLArmDigit33
+    400034: CATRigLArmDigit41
+    400036: CATRigLArmDigit42
+    400038: CATRigLArmDigit43
+    400040: CATRigLArmDigit51
+    400042: CATRigLArmDigit52
+    400044: CATRigLArmDigit53
+    400046: CATRigLArmPalm
+    400048: CATRigLLeg1
+    400050: CATRigLLeg2
+    400052: CATRigLLegAnkle
+    400054: CATRigLLegDigit11
+    400056: CATRigLLegDigit12
+    400058: CATRigLLegPlatform
+    400060: CATRigRArm1
+    400062: CATRigRArm2
+    400064: CATRigRArmCollarbone
+    400066: CATRigRArmDigit11
+    400068: CATRigRArmDigit12
+    400070: CATRigRArmDigit21
+    400072: CATRigRArmDigit22
+    400074: CATRigRArmDigit23
+    400076: CATRigRArmDigit31
+    400078: CATRigRArmDigit32
+    400080: CATRigRArmDigit33
+    400082: CATRigRArmDigit41
+    400084: CATRigRArmDigit42
+    400086: CATRigRArmDigit43
+    400088: CATRigRArmDigit51
+    400090: CATRigRArmDigit52
+    400092: CATRigRArmDigit53
+    400094: CATRigRArmPalm
+    400096: CATRigRLeg1
+    400098: CATRigRLeg2
+    400100: CATRigRLegAnkle
+    400102: CATRigRLegDigit11
+    400104: CATRigRLegDigit12
+    400106: CATRigRLegPlatform
+    400108: CATRigSpine1
+    400110: CATRigSpine1 1
+    400112: CATRigSpine2
+    400114: CATRigSpine2 1
+    400116: CATRigSpine3
+    400118: Character001
+    400120: Cylinder001
+    400122: Cylinder002
+    400124: Hair
+    400126: Lawyer
+    400128: //RootNode
+    400130: Rectangle003
+    400132: Rectangle004
+    400134: Seat
+    400136: Seat 1
+    400138: Shirt
+    400140: Shoes
+    400142: Skirt
+    2300000: Back
+    2300002: Bridge
+    2300004: Cylinder001
+    2300006: Cylinder002
+    2300008: Rectangle003
+    2300010: Rectangle004
+    2300012: Seat 1
+    3300000: Back
+    3300002: Bridge
+    3300004: Cylinder001
+    3300006: Cylinder002
+    3300008: Rectangle003
+    3300010: Rectangle004
+    3300012: Seat 1
+    4300000: Rectangle004
+    4300002: Rectangle003
+    4300004: Cylinder002
+    4300006: Cylinder001
+    4300008: Bridge
+    4300010: Back
+    4300012: Seat
+    4300014: Hair
+    4300016: Body
+    4300018: Shirt
+    4300020: Skirt
+    4300022: Shoes
+    7400000: Take 001
+    9500000: //RootNode
+    13700000: Body
+    13700002: Hair
+    13700004: Shirt
+    13700006: Shoes
+    13700008: Skirt
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

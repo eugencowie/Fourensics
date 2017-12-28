@@ -1,0 +1,166 @@
+fileFormatVersion: 2
+guid: 777099fcb3162944f8cddeb5104f95f0
+timeCreated: 1511256994
+licenseType: Pro
+ModelImporter:
+  serializedVersion: 21
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: Box001
+    100004: Celling
+    100006: DoorHandle002
+    100008: DoorHandle003
+    100010: Flooring
+    100012: Front Door
+    100014: Handles
+    100016: Hindge
+    100018: Hindge002
+    100020: Kitchen Flooring
+    100022: Kitchen Unit
+    100024: Kitchen window
+    100026: Living window
+    100028: Object
+    100030: Raditor
+    100032: Wall001
+    400000: //RootNode
+    400002: Box001
+    400004: Celling
+    400006: DoorHandle002
+    400008: DoorHandle003
+    400010: Flooring
+    400012: Front Door
+    400014: Handles
+    400016: Hindge
+    400018: Hindge002
+    400020: Kitchen Flooring
+    400022: Kitchen Unit
+    400024: Kitchen window
+    400026: Living window
+    400028: Object
+    400030: Raditor
+    400032: Wall001
+    2300000: Box001
+    2300002: Celling
+    2300004: DoorHandle002
+    2300006: DoorHandle003
+    2300008: Flooring
+    2300010: Front Door
+    2300012: Handles
+    2300014: Hindge
+    2300016: Hindge002
+    2300018: Kitchen Flooring
+    2300020: Kitchen Unit
+    2300022: Kitchen window
+    2300024: Living window
+    2300026: Object
+    2300028: Raditor
+    2300030: Wall001
+    3300000: Box001
+    3300002: Celling
+    3300004: DoorHandle002
+    3300006: DoorHandle003
+    3300008: Flooring
+    3300010: Front Door
+    3300012: Handles
+    3300014: Hindge
+    3300016: Hindge002
+    3300018: Kitchen Flooring
+    3300020: Kitchen Unit
+    3300022: Kitchen window
+    3300024: Living window
+    3300026: Object
+    3300028: Raditor
+    3300030: Wall001
+    4300000: Wall001
+    4300002: Kitchen window
+    4300004: Living window
+    4300006: Front Door
+    4300008: Hindge002
+    4300010: DoorHandle003
+    4300012: Hindge
+    4300014: DoorHandle002
+    4300016: Kitchen Flooring
+    4300018: Celling
+    4300020: Kitchen Unit
+    4300022: Handles
+    4300024: Flooring
+    4300026: Object
+    4300028: Box001
+    4300030: Raditor
+    7400000: Take 001
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

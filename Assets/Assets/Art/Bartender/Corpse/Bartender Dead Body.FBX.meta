@@ -1,0 +1,1265 @@
+fileFormatVersion: 2
+guid: da5aba3f7778e9548b31c374eb7a3690
+timeCreated: 1509614886
+licenseType: Pro
+ModelImporter:
+  serializedVersion: 21
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: CATRigChest
+    100004: CATRigHead
+    100006: CATRigLArm1
+    100008: CATRigLArm21
+    100010: CATRigLArm22
+    100012: CATRigLArm23
+    100014: CATRigLArmCollarbone
+    100016: CATRigLArmDigit11
+    100018: CATRigLArmDigit12
+    100020: CATRigLArmDigit13
+    100022: CATRigLArmDigit21
+    100024: CATRigLArmDigit22
+    100026: CATRigLArmDigit23
+    100028: CATRigLArmDigit31
+    100030: CATRigLArmDigit32
+    100032: CATRigLArmDigit33
+    100034: CATRigLArmDigit41
+    100036: CATRigLArmDigit42
+    100038: CATRigLArmDigit43
+    100040: CATRigLArmDigit51
+    100042: CATRigLArmDigit52
+    100044: CATRigLArmDigit53
+    100046: CATRigLArmPalm
+    100048: CATRigLLeg1
+    100050: CATRigLLeg2
+    100052: CATRigLLegAnkle
+    100054: CATRigPelvis
+    100056: CATRigRArm1
+    100058: CATRigRArm21
+    100060: CATRigRArm22
+    100062: CATRigRArm23
+    100064: CATRigRArmCollarbone
+    100066: CATRigRArmDigit11
+    100068: CATRigRArmDigit12
+    100070: CATRigRArmDigit13
+    100072: CATRigRArmDigit21
+    100074: CATRigRArmDigit22
+    100076: CATRigRArmDigit23
+    100078: CATRigRArmDigit31
+    100080: CATRigRArmDigit32
+    100082: CATRigRArmDigit33
+    100084: CATRigRArmDigit41
+    100086: CATRigRArmDigit42
+    100088: CATRigRArmDigit43
+    100090: CATRigRArmDigit51
+    100092: CATRigRArmDigit52
+    100094: CATRigRArmDigit53
+    100096: CATRigRArmPalm
+    100098: CATRigRLeg1
+    100100: CATRigRLeg2
+    100102: CATRigRLegAnkle
+    100104: CATRigSpine
+    100106: CATRigSpine1
+    100108: CATRigSpine2
+    100110: CATRigSpine3
+    100112: Dead Body
+    100114: Hair
+    100116: Hair Strands
+    100118: Hair Strands001
+    100120: Hair Strands002
+    100122: Hair Strands003
+    100124: Hair Strands004
+    100126: Hair Strands005
+    100128: Hair Strands006
+    100130: Hair Strands007
+    100132: Hair Strands008
+    100134: Hair Strands009
+    100136: Hair Strands010
+    100138: Hair Strands011
+    100140: Hair Strands012
+    100142: Hair Strands013
+    100144: Hair Strands014
+    100146: Hair Strands015
+    100148: Hair Strands016
+    100150: Hair Strands017
+    100152: Hair Strands018
+    100154: Hair Strands019
+    100156: Hair Strands020
+    100158: Hair Strands021
+    100160: Hair Strands022
+    100162: Hair Strands023
+    100164: Hair Strands024
+    100166: Hair Strands025
+    100168: Hair Strands026
+    100170: Hair Strands027
+    100172: Hair Strands028
+    100174: Hair Strands029
+    100176: Hair Strands030
+    100178: Hair Strands031
+    100180: Hair Strands032
+    100182: Hair Strands033
+    100184: Hair Strands034
+    100186: Hair Strands035
+    100188: Hair Strands036
+    100190: Hair Strands037
+    100192: Hair Strands038
+    100194: Hair Strands039
+    100196: Hair Strands040
+    100198: Hair Strands041
+    100200: Hair Strands042
+    100202: Hair Strands043
+    100204: Hair Strands044
+    100206: Hair Strands045
+    100208: Hair Strands046
+    100210: Hair Strands047
+    100212: Hair Strands048
+    100214: Hair Strands049
+    100216: Hair Strands050
+    100218: Hair Strands051
+    100220: Hair Strands052
+    100222: Hair Strands053
+    100224: Hair Strands054
+    100226: Hair Strands055
+    100228: Hair Strands056
+    100230: Hair Strands057
+    100232: Hair Strands058
+    100234: Hair Strands059
+    100236: Hair Strands060
+    100238: Hair Strands061
+    100240: Hair Strands062
+    100242: Hair Strands063
+    100244: Hair Strands064
+    100246: Hair Strands065
+    100248: Hair Strands067
+    100250: Hair Strands068
+    100252: Hair Strands069
+    100254: Hair Strands070
+    100256: Hair Strands071
+    100258: Hair Strands072
+    100260: Hair Strands074
+    100262: Hair Strands075
+    100264: Hair Strands076
+    100266: Hair Strands077
+    100268: Hair Strands078
+    100270: Hair Strands079
+    100272: Hair Strands080
+    100274: Hair Strands082
+    100276: Hair Strands083
+    100278: Hair Strands084
+    100280: Hair Strands085
+    100282: Hair Strands086
+    100284: Hair Strands087
+    100286: Hair Strands088
+    100288: Hair Strands089
+    100290: Hair Strands090
+    100292: Hair Strands091
+    100294: Hair Strands092
+    100296: Hair Strands093
+    100298: Hair Strands094
+    100300: Hair Strands095
+    100302: Hair Strands096
+    100304: Hair Strands097
+    100306: Hair Strands098
+    100308: Hair Strands099
+    100310: Hair Strands100
+    100312: Hair Strands101
+    100314: Hair Strands102
+    100316: Hair Strands103
+    100318: Hair Strands104
+    100320: Hair Strands105
+    100322: Hair Strands106
+    100324: Hair Strands107
+    100326: Hair Strands108
+    100328: Hair Strands109
+    100330: Hair Strands110
+    100332: Hair Strands111
+    100334: Hair Strands112
+    100336: Hair Strands113
+    100338: Hair Strands114
+    100340: Hair Strands115
+    100342: Hair Strands116
+    100344: Hair Strands117
+    100346: Hair Strands118
+    100348: Hair Strands119
+    100350: Hair Strands120
+    100352: Hair Strands121
+    100354: Hair Strands122
+    100356: Hair Strands123
+    100358: Hair Strands124
+    100360: Hair Strands125
+    100362: Hair Strands126
+    100364: Hair Strands127
+    100366: Hair Strands128
+    100368: Hair Strands129
+    100370: Hair Strands130
+    100372: Hair Strands131
+    100374: Hair Strands132
+    100376: Hair Strands133
+    100378: Hair Strands134
+    100380: Hair Strands135
+    100382: Hair Strands136
+    100384: Hair Strands137
+    100386: Hair Strands138
+    100388: Hair Strands139
+    100390: Hair Strands140
+    100392: Hair Strands141
+    100394: Hair Strands142
+    100396: Hair Strands143
+    100398: Hair Strands144
+    100400: Hair Strands145
+    100402: Hair Strands146
+    100404: Hair Strands147
+    100406: Hair Strands148
+    100408: Hair Strands149
+    100410: Hair Strands150
+    100412: Hair Strands151
+    100414: Hair Strands152
+    100416: Hair Strands153
+    100418: Hair Strands154
+    100420: Hair Strands155
+    100422: Hair Strands156
+    100424: Hair Strands157
+    100426: Hair Strands158
+    100428: Hair Strands159
+    100430: Hair Strands160
+    100432: Hair Strands161
+    100434: Hair Strands162
+    100436: Hair Strands163
+    100438: Hair Strands164
+    100440: Hair Strands165
+    100442: Hair Strands166
+    100444: Hair Strands167
+    100446: Hair Strands168
+    100448: Hair Strands169
+    100450: Hair Strands170
+    100452: Hair Strands171
+    100454: Hair Strands172
+    100456: Hair Strands173
+    100458: Hair Strands174
+    100460: Hair Strands175
+    100462: Hair Strands176
+    100464: Hair Strands177
+    100466: Hair Strands178
+    100468: Hair Strands179
+    100470: Hair Strands180
+    100472: Hair Strands181
+    100474: Hair Strands182
+    100476: Hair Strands183
+    100478: Hair Strands184
+    100480: Hair Strands185
+    100482: Hair Strands186
+    100484: Hair Strands187
+    100486: Hair Strands188
+    100488: Hair Strands189
+    100490: Hair Strands190
+    100492: Hair Strands191
+    100494: Hair Strands192
+    100496: Hair Strands193
+    100498: Hair Strands194
+    100500: Hair Strands195
+    100502: Hair Strands196
+    100504: Hair Strands197
+    100506: Hair Strands198
+    100508: Hair Strands199
+    100510: Hair Strands200
+    100512: Hair Strands201
+    100514: Hair Strands202
+    100516: Hair Strands203
+    100518: Hair Strands204
+    100520: Hair Strands205
+    100522: Hair Strands206
+    100524: Hair Strands207
+    100526: Hair Strands208
+    100528: Hair Strands209
+    100530: Hair Strands210
+    100532: Left Eye
+    100534: Right Eye
+    100536: Shirt
+    100538: trousers
+    400000: //RootNode
+    400002: CATRigChest
+    400004: CATRigHead
+    400006: CATRigLArm1
+    400008: CATRigLArm21
+    400010: CATRigLArm22
+    400012: CATRigLArm23
+    400014: CATRigLArmCollarbone
+    400016: CATRigLArmDigit11
+    400018: CATRigLArmDigit12
+    400020: CATRigLArmDigit13
+    400022: CATRigLArmDigit21
+    400024: CATRigLArmDigit22
+    400026: CATRigLArmDigit23
+    400028: CATRigLArmDigit31
+    400030: CATRigLArmDigit32
+    400032: CATRigLArmDigit33
+    400034: CATRigLArmDigit41
+    400036: CATRigLArmDigit42
+    400038: CATRigLArmDigit43
+    400040: CATRigLArmDigit51
+    400042: CATRigLArmDigit52
+    400044: CATRigLArmDigit53
+    400046: CATRigLArmPalm
+    400048: CATRigLLeg1
+    400050: CATRigLLeg2
+    400052: CATRigLLegAnkle
+    400054: CATRigPelvis
+    400056: CATRigRArm1
+    400058: CATRigRArm21
+    400060: CATRigRArm22
+    400062: CATRigRArm23
+    400064: CATRigRArmCollarbone
+    400066: CATRigRArmDigit11
+    400068: CATRigRArmDigit12
+    400070: CATRigRArmDigit13
+    400072: CATRigRArmDigit21
+    400074: CATRigRArmDigit22
+    400076: CATRigRArmDigit23
+    400078: CATRigRArmDigit31
+    400080: CATRigRArmDigit32
+    400082: CATRigRArmDigit33
+    400084: CATRigRArmDigit41
+    400086: CATRigRArmDigit42
+    400088: CATRigRArmDigit43
+    400090: CATRigRArmDigit51
+    400092: CATRigRArmDigit52
+    400094: CATRigRArmDigit53
+    400096: CATRigRArmPalm
+    400098: CATRigRLeg1
+    400100: CATRigRLeg2
+    400102: CATRigRLegAnkle
+    400104: CATRigSpine
+    400106: CATRigSpine1
+    400108: CATRigSpine2
+    400110: CATRigSpine3
+    400112: Dead Body
+    400114: Hair
+    400116: Hair Strands
+    400118: Hair Strands001
+    400120: Hair Strands002
+    400122: Hair Strands003
+    400124: Hair Strands004
+    400126: Hair Strands005
+    400128: Hair Strands006
+    400130: Hair Strands007
+    400132: Hair Strands008
+    400134: Hair Strands009
+    400136: Hair Strands010
+    400138: Hair Strands011
+    400140: Hair Strands012
+    400142: Hair Strands013
+    400144: Hair Strands014
+    400146: Hair Strands015
+    400148: Hair Strands016
+    400150: Hair Strands017
+    400152: Hair Strands018
+    400154: Hair Strands019
+    400156: Hair Strands020
+    400158: Hair Strands021
+    400160: Hair Strands022
+    400162: Hair Strands023
+    400164: Hair Strands024
+    400166: Hair Strands025
+    400168: Hair Strands026
+    400170: Hair Strands027
+    400172: Hair Strands028
+    400174: Hair Strands029
+    400176: Hair Strands030
+    400178: Hair Strands031
+    400180: Hair Strands032
+    400182: Hair Strands033
+    400184: Hair Strands034
+    400186: Hair Strands035
+    400188: Hair Strands036
+    400190: Hair Strands037
+    400192: Hair Strands038
+    400194: Hair Strands039
+    400196: Hair Strands040
+    400198: Hair Strands041
+    400200: Hair Strands042
+    400202: Hair Strands043
+    400204: Hair Strands044
+    400206: Hair Strands045
+    400208: Hair Strands046
+    400210: Hair Strands047
+    400212: Hair Strands048
+    400214: Hair Strands049
+    400216: Hair Strands050
+    400218: Hair Strands051
+    400220: Hair Strands052
+    400222: Hair Strands053
+    400224: Hair Strands054
+    400226: Hair Strands055
+    400228: Hair Strands056
+    400230: Hair Strands057
+    400232: Hair Strands058
+    400234: Hair Strands059
+    400236: Hair Strands060
+    400238: Hair Strands061
+    400240: Hair Strands062
+    400242: Hair Strands063
+    400244: Hair Strands064
+    400246: Hair Strands065
+    400248: Hair Strands067
+    400250: Hair Strands068
+    400252: Hair Strands069
+    400254: Hair Strands070
+    400256: Hair Strands071
+    400258: Hair Strands072
+    400260: Hair Strands074
+    400262: Hair Strands075
+    400264: Hair Strands076
+    400266: Hair Strands077
+    400268: Hair Strands078
+    400270: Hair Strands079
+    400272: Hair Strands080
+    400274: Hair Strands082
+    400276: Hair Strands083
+    400278: Hair Strands084
+    400280: Hair Strands085
+    400282: Hair Strands086
+    400284: Hair Strands087
+    400286: Hair Strands088
+    400288: Hair Strands089
+    400290: Hair Strands090
+    400292: Hair Strands091
+    400294: Hair Strands092
+    400296: Hair Strands093
+    400298: Hair Strands094
+    400300: Hair Strands095
+    400302: Hair Strands096
+    400304: Hair Strands097
+    400306: Hair Strands098
+    400308: Hair Strands099
+    400310: Hair Strands100
+    400312: Hair Strands101
+    400314: Hair Strands102
+    400316: Hair Strands103
+    400318: Hair Strands104
+    400320: Hair Strands105
+    400322: Hair Strands106
+    400324: Hair Strands107
+    400326: Hair Strands108
+    400328: Hair Strands109
+    400330: Hair Strands110
+    400332: Hair Strands111
+    400334: Hair Strands112
+    400336: Hair Strands113
+    400338: Hair Strands114
+    400340: Hair Strands115
+    400342: Hair Strands116
+    400344: Hair Strands117
+    400346: Hair Strands118
+    400348: Hair Strands119
+    400350: Hair Strands120
+    400352: Hair Strands121
+    400354: Hair Strands122
+    400356: Hair Strands123
+    400358: Hair Strands124
+    400360: Hair Strands125
+    400362: Hair Strands126
+    400364: Hair Strands127
+    400366: Hair Strands128
+    400368: Hair Strands129
+    400370: Hair Strands130
+    400372: Hair Strands131
+    400374: Hair Strands132
+    400376: Hair Strands133
+    400378: Hair Strands134
+    400380: Hair Strands135
+    400382: Hair Strands136
+    400384: Hair Strands137
+    400386: Hair Strands138
+    400388: Hair Strands139
+    400390: Hair Strands140
+    400392: Hair Strands141
+    400394: Hair Strands142
+    400396: Hair Strands143
+    400398: Hair Strands144
+    400400: Hair Strands145
+    400402: Hair Strands146
+    400404: Hair Strands147
+    400406: Hair Strands148
+    400408: Hair Strands149
+    400410: Hair Strands150
+    400412: Hair Strands151
+    400414: Hair Strands152
+    400416: Hair Strands153
+    400418: Hair Strands154
+    400420: Hair Strands155
+    400422: Hair Strands156
+    400424: Hair Strands157
+    400426: Hair Strands158
+    400428: Hair Strands159
+    400430: Hair Strands160
+    400432: Hair Strands161
+    400434: Hair Strands162
+    400436: Hair Strands163
+    400438: Hair Strands164
+    400440: Hair Strands165
+    400442: Hair Strands166
+    400444: Hair Strands167
+    400446: Hair Strands168
+    400448: Hair Strands169
+    400450: Hair Strands170
+    400452: Hair Strands171
+    400454: Hair Strands172
+    400456: Hair Strands173
+    400458: Hair Strands174
+    400460: Hair Strands175
+    400462: Hair Strands176
+    400464: Hair Strands177
+    400466: Hair Strands178
+    400468: Hair Strands179
+    400470: Hair Strands180
+    400472: Hair Strands181
+    400474: Hair Strands182
+    400476: Hair Strands183
+    400478: Hair Strands184
+    400480: Hair Strands185
+    400482: Hair Strands186
+    400484: Hair Strands187
+    400486: Hair Strands188
+    400488: Hair Strands189
+    400490: Hair Strands190
+    400492: Hair Strands191
+    400494: Hair Strands192
+    400496: Hair Strands193
+    400498: Hair Strands194
+    400500: Hair Strands195
+    400502: Hair Strands196
+    400504: Hair Strands197
+    400506: Hair Strands198
+    400508: Hair Strands199
+    400510: Hair Strands200
+    400512: Hair Strands201
+    400514: Hair Strands202
+    400516: Hair Strands203
+    400518: Hair Strands204
+    400520: Hair Strands205
+    400522: Hair Strands206
+    400524: Hair Strands207
+    400526: Hair Strands208
+    400528: Hair Strands209
+    400530: Hair Strands210
+    400532: Left Eye
+    400534: Right Eye
+    400536: Shirt
+    400538: trousers
+    2300000: Hair
+    2300002: Hair Strands
+    2300004: Hair Strands001
+    2300006: Hair Strands002
+    2300008: Hair Strands003
+    2300010: Hair Strands004
+    2300012: Hair Strands005
+    2300014: Hair Strands006
+    2300016: Hair Strands007
+    2300018: Hair Strands008
+    2300020: Hair Strands009
+    2300022: Hair Strands010
+    2300024: Hair Strands011
+    2300026: Hair Strands012
+    2300028: Hair Strands013
+    2300030: Hair Strands014
+    2300032: Hair Strands015
+    2300034: Hair Strands016
+    2300036: Hair Strands017
+    2300038: Hair Strands018
+    2300040: Hair Strands019
+    2300042: Hair Strands020
+    2300044: Hair Strands021
+    2300046: Hair Strands022
+    2300048: Hair Strands023
+    2300050: Hair Strands024
+    2300052: Hair Strands025
+    2300054: Hair Strands026
+    2300056: Hair Strands027
+    2300058: Hair Strands028
+    2300060: Hair Strands029
+    2300062: Hair Strands030
+    2300064: Hair Strands031
+    2300066: Hair Strands032
+    2300068: Hair Strands033
+    2300070: Hair Strands034
+    2300072: Hair Strands035
+    2300074: Hair Strands036
+    2300076: Hair Strands037
+    2300078: Hair Strands038
+    2300080: Hair Strands039
+    2300082: Hair Strands040
+    2300084: Hair Strands041
+    2300086: Hair Strands042
+    2300088: Hair Strands043
+    2300090: Hair Strands044
+    2300092: Hair Strands045
+    2300094: Hair Strands046
+    2300096: Hair Strands047
+    2300098: Hair Strands048
+    2300100: Hair Strands049
+    2300102: Hair Strands050
+    2300104: Hair Strands051
+    2300106: Hair Strands052
+    2300108: Hair Strands053
+    2300110: Hair Strands054
+    2300112: Hair Strands055
+    2300114: Hair Strands056
+    2300116: Hair Strands057
+    2300118: Hair Strands058
+    2300120: Hair Strands059
+    2300122: Hair Strands060
+    2300124: Hair Strands061
+    2300126: Hair Strands062
+    2300128: Hair Strands063
+    2300130: Hair Strands064
+    2300132: Hair Strands065
+    2300134: Hair Strands067
+    2300136: Hair Strands068
+    2300138: Hair Strands069
+    2300140: Hair Strands070
+    2300142: Hair Strands071
+    2300144: Hair Strands072
+    2300146: Hair Strands074
+    2300148: Hair Strands075
+    2300150: Hair Strands076
+    2300152: Hair Strands077
+    2300154: Hair Strands078
+    2300156: Hair Strands079
+    2300158: Hair Strands080
+    2300160: Hair Strands082
+    2300162: Hair Strands083
+    2300164: Hair Strands084
+    2300166: Hair Strands085
+    2300168: Hair Strands086
+    2300170: Hair Strands087
+    2300172: Hair Strands088
+    2300174: Hair Strands089
+    2300176: Hair Strands090
+    2300178: Hair Strands091
+    2300180: Hair Strands092
+    2300182: Hair Strands093
+    2300184: Hair Strands094
+    2300186: Hair Strands095
+    2300188: Hair Strands096
+    2300190: Hair Strands097
+    2300192: Hair Strands098
+    2300194: Hair Strands099
+    2300196: Hair Strands100
+    2300198: Hair Strands101
+    2300200: Hair Strands102
+    2300202: Hair Strands103
+    2300204: Hair Strands104
+    2300206: Hair Strands105
+    2300208: Hair Strands106
+    2300210: Hair Strands107
+    2300212: Hair Strands108
+    2300214: Hair Strands109
+    2300216: Hair Strands110
+    2300218: Hair Strands111
+    2300220: Hair Strands112
+    2300222: Hair Strands113
+    2300224: Hair Strands114
+    2300226: Hair Strands115
+    2300228: Hair Strands116
+    2300230: Hair Strands117
+    2300232: Hair Strands118
+    2300234: Hair Strands119
+    2300236: Hair Strands120
+    2300238: Hair Strands121
+    2300240: Hair Strands122
+    2300242: Hair Strands123
+    2300244: Hair Strands124
+    2300246: Hair Strands125
+    2300248: Hair Strands126
+    2300250: Hair Strands127
+    2300252: Hair Strands128
+    2300254: Hair Strands129
+    2300256: Hair Strands130
+    2300258: Hair Strands131
+    2300260: Hair Strands132
+    2300262: Hair Strands133
+    2300264: Hair Strands134
+    2300266: Hair Strands135
+    2300268: Hair Strands136
+    2300270: Hair Strands137
+    2300272: Hair Strands138
+    2300274: Hair Strands139
+    2300276: Hair Strands140
+    2300278: Hair Strands141
+    2300280: Hair Strands142
+    2300282: Hair Strands143
+    2300284: Hair Strands144
+    2300286: Hair Strands145
+    2300288: Hair Strands146
+    2300290: Hair Strands147
+    2300292: Hair Strands148
+    2300294: Hair Strands149
+    2300296: Hair Strands150
+    2300298: Hair Strands151
+    2300300: Hair Strands152
+    2300302: Hair Strands153
+    2300304: Hair Strands154
+    2300306: Hair Strands155
+    2300308: Hair Strands156
+    2300310: Hair Strands157
+    2300312: Hair Strands158
+    2300314: Hair Strands159
+    2300316: Hair Strands160
+    2300318: Hair Strands161
+    2300320: Hair Strands162
+    2300322: Hair Strands163
+    2300324: Hair Strands164
+    2300326: Hair Strands165
+    2300328: Hair Strands166
+    2300330: Hair Strands167
+    2300332: Hair Strands168
+    2300334: Hair Strands169
+    2300336: Hair Strands170
+    2300338: Hair Strands171
+    2300340: Hair Strands172
+    2300342: Hair Strands173
+    2300344: Hair Strands174
+    2300346: Hair Strands175
+    2300348: Hair Strands176
+    2300350: Hair Strands177
+    2300352: Hair Strands178
+    2300354: Hair Strands179
+    2300356: Hair Strands180
+    2300358: Hair Strands181
+    2300360: Hair Strands182
+    2300362: Hair Strands183
+    2300364: Hair Strands184
+    2300366: Hair Strands185
+    2300368: Hair Strands186
+    2300370: Hair Strands187
+    2300372: Hair Strands188
+    2300374: Hair Strands189
+    2300376: Hair Strands190
+    2300378: Hair Strands191
+    2300380: Hair Strands192
+    2300382: Hair Strands193
+    2300384: Hair Strands194
+    2300386: Hair Strands195
+    2300388: Hair Strands196
+    2300390: Hair Strands197
+    2300392: Hair Strands198
+    2300394: Hair Strands199
+    2300396: Hair Strands200
+    2300398: Hair Strands201
+    2300400: Hair Strands202
+    2300402: Hair Strands203
+    2300404: Hair Strands204
+    2300406: Hair Strands205
+    2300408: Hair Strands206
+    2300410: Hair Strands207
+    2300412: Hair Strands208
+    2300414: Hair Strands209
+    2300416: Hair Strands210
+    2300418: Left Eye
+    2300420: Right Eye
+    2300422: Shirt
+    2300424: trousers
+    3300000: Hair
+    3300002: Hair Strands
+    3300004: Hair Strands001
+    3300006: Hair Strands002
+    3300008: Hair Strands003
+    3300010: Hair Strands004
+    3300012: Hair Strands005
+    3300014: Hair Strands006
+    3300016: Hair Strands007
+    3300018: Hair Strands008
+    3300020: Hair Strands009
+    3300022: Hair Strands010
+    3300024: Hair Strands011
+    3300026: Hair Strands012
+    3300028: Hair Strands013
+    3300030: Hair Strands014
+    3300032: Hair Strands015
+    3300034: Hair Strands016
+    3300036: Hair Strands017
+    3300038: Hair Strands018
+    3300040: Hair Strands019
+    3300042: Hair Strands020
+    3300044: Hair Strands021
+    3300046: Hair Strands022
+    3300048: Hair Strands023
+    3300050: Hair Strands024
+    3300052: Hair Strands025
+    3300054: Hair Strands026
+    3300056: Hair Strands027
+    3300058: Hair Strands028
+    3300060: Hair Strands029
+    3300062: Hair Strands030
+    3300064: Hair Strands031
+    3300066: Hair Strands032
+    3300068: Hair Strands033
+    3300070: Hair Strands034
+    3300072: Hair Strands035
+    3300074: Hair Strands036
+    3300076: Hair Strands037
+    3300078: Hair Strands038
+    3300080: Hair Strands039
+    3300082: Hair Strands040
+    3300084: Hair Strands041
+    3300086: Hair Strands042
+    3300088: Hair Strands043
+    3300090: Hair Strands044
+    3300092: Hair Strands045
+    3300094: Hair Strands046
+    3300096: Hair Strands047
+    3300098: Hair Strands048
+    3300100: Hair Strands049
+    3300102: Hair Strands050
+    3300104: Hair Strands051
+    3300106: Hair Strands052
+    3300108: Hair Strands053
+    3300110: Hair Strands054
+    3300112: Hair Strands055
+    3300114: Hair Strands056
+    3300116: Hair Strands057
+    3300118: Hair Strands058
+    3300120: Hair Strands059
+    3300122: Hair Strands060
+    3300124: Hair Strands061
+    3300126: Hair Strands062
+    3300128: Hair Strands063
+    3300130: Hair Strands064
+    3300132: Hair Strands065
+    3300134: Hair Strands067
+    3300136: Hair Strands068
+    3300138: Hair Strands069
+    3300140: Hair Strands070
+    3300142: Hair Strands071
+    3300144: Hair Strands072
+    3300146: Hair Strands074
+    3300148: Hair Strands075
+    3300150: Hair Strands076
+    3300152: Hair Strands077
+    3300154: Hair Strands078
+    3300156: Hair Strands079
+    3300158: Hair Strands080
+    3300160: Hair Strands082
+    3300162: Hair Strands083
+    3300164: Hair Strands084
+    3300166: Hair Strands085
+    3300168: Hair Strands086
+    3300170: Hair Strands087
+    3300172: Hair Strands088
+    3300174: Hair Strands089
+    3300176: Hair Strands090
+    3300178: Hair Strands091
+    3300180: Hair Strands092
+    3300182: Hair Strands093
+    3300184: Hair Strands094
+    3300186: Hair Strands095
+    3300188: Hair Strands096
+    3300190: Hair Strands097
+    3300192: Hair Strands098
+    3300194: Hair Strands099
+    3300196: Hair Strands100
+    3300198: Hair Strands101
+    3300200: Hair Strands102
+    3300202: Hair Strands103
+    3300204: Hair Strands104
+    3300206: Hair Strands105
+    3300208: Hair Strands106
+    3300210: Hair Strands107
+    3300212: Hair Strands108
+    3300214: Hair Strands109
+    3300216: Hair Strands110
+    3300218: Hair Strands111
+    3300220: Hair Strands112
+    3300222: Hair Strands113
+    3300224: Hair Strands114
+    3300226: Hair Strands115
+    3300228: Hair Strands116
+    3300230: Hair Strands117
+    3300232: Hair Strands118
+    3300234: Hair Strands119
+    3300236: Hair Strands120
+    3300238: Hair Strands121
+    3300240: Hair Strands122
+    3300242: Hair Strands123
+    3300244: Hair Strands124
+    3300246: Hair Strands125
+    3300248: Hair Strands126
+    3300250: Hair Strands127
+    3300252: Hair Strands128
+    3300254: Hair Strands129
+    3300256: Hair Strands130
+    3300258: Hair Strands131
+    3300260: Hair Strands132
+    3300262: Hair Strands133
+    3300264: Hair Strands134
+    3300266: Hair Strands135
+    3300268: Hair Strands136
+    3300270: Hair Strands137
+    3300272: Hair Strands138
+    3300274: Hair Strands139
+    3300276: Hair Strands140
+    3300278: Hair Strands141
+    3300280: Hair Strands142
+    3300282: Hair Strands143
+    3300284: Hair Strands144
+    3300286: Hair Strands145
+    3300288: Hair Strands146
+    3300290: Hair Strands147
+    3300292: Hair Strands148
+    3300294: Hair Strands149
+    3300296: Hair Strands150
+    3300298: Hair Strands151
+    3300300: Hair Strands152
+    3300302: Hair Strands153
+    3300304: Hair Strands154
+    3300306: Hair Strands155
+    3300308: Hair Strands156
+    3300310: Hair Strands157
+    3300312: Hair Strands158
+    3300314: Hair Strands159
+    3300316: Hair Strands160
+    3300318: Hair Strands161
+    3300320: Hair Strands162
+    3300322: Hair Strands163
+    3300324: Hair Strands164
+    3300326: Hair Strands165
+    3300328: Hair Strands166
+    3300330: Hair Strands167
+    3300332: Hair Strands168
+    3300334: Hair Strands169
+    3300336: Hair Strands170
+    3300338: Hair Strands171
+    3300340: Hair Strands172
+    3300342: Hair Strands173
+    3300344: Hair Strands174
+    3300346: Hair Strands175
+    3300348: Hair Strands176
+    3300350: Hair Strands177
+    3300352: Hair Strands178
+    3300354: Hair Strands179
+    3300356: Hair Strands180
+    3300358: Hair Strands181
+    3300360: Hair Strands182
+    3300362: Hair Strands183
+    3300364: Hair Strands184
+    3300366: Hair Strands185
+    3300368: Hair Strands186
+    3300370: Hair Strands187
+    3300372: Hair Strands188
+    3300374: Hair Strands189
+    3300376: Hair Strands190
+    3300378: Hair Strands191
+    3300380: Hair Strands192
+    3300382: Hair Strands193
+    3300384: Hair Strands194
+    3300386: Hair Strands195
+    3300388: Hair Strands196
+    3300390: Hair Strands197
+    3300392: Hair Strands198
+    3300394: Hair Strands199
+    3300396: Hair Strands200
+    3300398: Hair Strands201
+    3300400: Hair Strands202
+    3300402: Hair Strands203
+    3300404: Hair Strands204
+    3300406: Hair Strands205
+    3300408: Hair Strands206
+    3300410: Hair Strands207
+    3300412: Hair Strands208
+    3300414: Hair Strands209
+    3300416: Hair Strands210
+    3300418: Left Eye
+    3300420: Right Eye
+    3300422: Shirt
+    3300424: trousers
+    4300000: Dead Body
+    4300002: Right Eye
+    4300004: Left Eye
+    4300006: Hair Strands001
+    4300008: Hair Strands002
+    4300010: Hair Strands003
+    4300012: Hair Strands006
+    4300014: Hair Strands007
+    4300016: Hair Strands009
+    4300018: Hair Strands014
+    4300020: Hair Strands015
+    4300022: Hair Strands016
+    4300024: Hair Strands017
+    4300026: Hair Strands018
+    4300028: Hair Strands019
+    4300030: Hair Strands020
+    4300032: Hair Strands021
+    4300034: Hair Strands022
+    4300036: Hair Strands023
+    4300038: Hair Strands024
+    4300040: Hair Strands025
+    4300042: Hair Strands039
+    4300044: Hair Strands041
+    4300046: Hair Strands044
+    4300048: Hair Strands045
+    4300050: Hair Strands046
+    4300052: Hair Strands047
+    4300054: Hair Strands048
+    4300056: Hair Strands049
+    4300058: Hair Strands050
+    4300060: Hair Strands051
+    4300062: Hair Strands052
+    4300064: Hair Strands071
+    4300066: Hair Strands090
+    4300068: Hair Strands096
+    4300070: Hair Strands097
+    4300072: Hair Strands098
+    4300074: Hair Strands102
+    4300076: Hair Strands107
+    4300078: Hair Strands108
+    4300080: Hair Strands109
+    4300082: Hair Strands110
+    4300084: Hair Strands111
+    4300086: Hair Strands113
+    4300088: Hair Strands114
+    4300090: Hair Strands115
+    4300092: Hair Strands116
+    4300094: Hair Strands119
+    4300096: Hair Strands120
+    4300098: Hair Strands121
+    4300100: Hair Strands122
+    4300102: Hair Strands123
+    4300104: Hair Strands124
+    4300106: Hair Strands125
+    4300108: Hair Strands126
+    4300110: Hair Strands127
+    4300112: Hair Strands128
+    4300114: Hair Strands129
+    4300116: Hair Strands130
+    4300118: Hair Strands131
+    4300120: Hair Strands132
+    4300122: Hair Strands133
+    4300124: Hair Strands134
+    4300126: Hair Strands137
+    4300128: Hair Strands138
+    4300130: Hair Strands146
+    4300132: Hair Strands147
+    4300134: Hair Strands148
+    4300136: Hair Strands150
+    4300138: Hair Strands151
+    4300140: Hair Strands152
+    4300142: Hair Strands153
+    4300144: Hair Strands154
+    4300146: Hair Strands155
+    4300148: Hair Strands156
+    4300150: Hair Strands157
+    4300152: Hair Strands158
+    4300154: Hair Strands159
+    4300156: Hair Strands160
+    4300158: Hair Strands163
+    4300160: Hair Strands164
+    4300162: Hair Strands177
+    4300164: Hair Strands191
+    4300166: Hair Strands194
+    4300168: Hair Strands200
+    4300170: Hair Strands201
+    4300172: Hair Strands202
+    4300174: Hair Strands203
+    4300176: Hair Strands206
+    4300178: Hair
+    4300180: Hair Strands036
+    4300182: Hair Strands199
+    4300184: Hair Strands197
+    4300186: Hair Strands196
+    4300188: Hair Strands190
+    4300190: Hair Strands189
+    4300192: Hair Strands188
+    4300194: Hair Strands186
+    4300196: Hair Strands185
+    4300198: Hair Strands183
+    4300200: Hair Strands182
+    4300202: Hair Strands181
+    4300204: Hair Strands180
+    4300206: Hair Strands179
+    4300208: Hair Strands176
+    4300210: Hair Strands175
+    4300212: Hair Strands173
+    4300214: Hair Strands172
+    4300216: Hair Strands171
+    4300218: Hair Strands170
+    4300220: Hair Strands169
+    4300222: Hair Strands168
+    4300224: Hair Strands166
+    4300226: Hair Strands165
+    4300228: Hair Strands162
+    4300230: Hair Strands161
+    4300232: Hair Strands145
+    4300234: Hair Strands144
+    4300236: Hair Strands140
+    4300238: Hair Strands135
+    4300240: Hair Strands105
+    4300242: Hair Strands095
+    4300244: Hair Strands093
+    4300246: Hair Strands092
+    4300248: Hair Strands089
+    4300250: Hair Strands086
+    4300252: Hair Strands085
+    4300254: Hair Strands084
+    4300256: Hair Strands082
+    4300258: Hair Strands080
+    4300260: Hair Strands078
+    4300262: Hair Strands077
+    4300264: Hair Strands076
+    4300266: Hair Strands075
+    4300268: Hair Strands074
+    4300270: Hair Strands072
+    4300272: Hair Strands070
+    4300274: Hair Strands069
+    4300276: Hair Strands067
+    4300278: Hair Strands065
+    4300280: Hair Strands064
+    4300282: Hair Strands063
+    4300284: Hair Strands062
+    4300286: Hair Strands061
+    4300288: Hair Strands060
+    4300290: Hair Strands059
+    4300292: Hair Strands058
+    4300294: Hair Strands055
+    4300296: Hair Strands054
+    4300298: Hair Strands042
+    4300300: Hair Strands038
+    4300302: Hair Strands037
+    4300304: Hair Strands210
+    4300306: Hair Strands035
+    4300308: Hair Strands034
+    4300310: Hair Strands033
+    4300312: Hair Strands032
+    4300314: Hair Strands029
+    4300316: Hair Strands028
+    4300318: Hair Strands209
+    4300320: Hair Strands106
+    4300322: Hair Strands208
+    4300324: Hair Strands
+    4300326: Hair Strands004
+    4300328: Hair Strands005
+    4300330: Hair Strands008
+    4300332: Hair Strands010
+    4300334: Hair Strands011
+    4300336: Hair Strands012
+    4300338: Hair Strands013
+    4300340: Hair Strands026
+    4300342: Hair Strands027
+    4300344: Hair Strands030
+    4300346: Hair Strands031
+    4300348: Hair Strands040
+    4300350: Hair Strands043
+    4300352: Hair Strands053
+    4300354: Hair Strands056
+    4300356: Hair Strands057
+    4300358: Hair Strands068
+    4300360: Hair Strands079
+    4300362: Hair Strands083
+    4300364: Hair Strands087
+    4300366: Hair Strands088
+    4300368: Hair Strands091
+    4300370: Hair Strands094
+    4300372: Hair Strands099
+    4300374: Hair Strands100
+    4300376: Hair Strands101
+    4300378: Hair Strands103
+    4300380: Hair Strands104
+    4300382: Hair Strands207
+    4300384: Hair Strands112
+    4300386: Hair Strands117
+    4300388: Hair Strands118
+    4300390: Hair Strands136
+    4300392: Hair Strands139
+    4300394: Hair Strands141
+    4300396: Hair Strands142
+    4300398: Hair Strands143
+    4300400: Hair Strands149
+    4300402: Hair Strands167
+    4300404: Hair Strands174
+    4300406: Hair Strands178
+    4300408: Hair Strands184
+    4300410: Hair Strands187
+    4300412: Hair Strands192
+    4300414: Hair Strands193
+    4300416: Hair Strands195
+    4300418: Hair Strands198
+    4300420: Hair Strands204
+    4300422: Hair Strands205
+    4300424: Shirt
+    4300426: trousers
+    7400000: Take 001
+    9500000: //RootNode
+    13700000: Dead Body
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

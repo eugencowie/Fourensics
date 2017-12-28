@@ -17,7 +17,7 @@ public class OnlineManager
     public OnlineManager()
     {
         m_database = new OnlineDatabase();
-        m_player = new Player(m_database, GetPlayerId());
+        m_player = new Player(m_database, SignIn.GetPlayerId());
         m_lobby = null;
     }
 
@@ -457,29 +457,7 @@ public class OnlineManager
     #endregion
 
     #region Utility methods
-
-    /// <summary>
-    /// Returns a unique player id.
-    /// </summary>
-    public static string GetPlayerId()
-    {
-        const string key = "UniquePlayerId";
-
-        if (PlayerPrefs.HasKey(key))
-        {
-            string value = PlayerPrefs.GetString(key);
-
-            if (!string.IsNullOrEmpty(value))
-            {
-                return value;
-            }
-        }
-
-        string id = SystemInfo.deviceUniqueIdentifier;
-        PlayerPrefs.SetString(key, id);
-        return id;
-    }
-
+    
     /// <summary>
     /// Generates a random five-character room code.
     /// </summary>

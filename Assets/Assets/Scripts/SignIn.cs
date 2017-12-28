@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-class Startup : MonoBehaviour
+class SignIn : MonoBehaviour
 {
     public static string UserId { get; private set; }
     public static string UserDisplayName { get; private set; }
@@ -54,5 +54,17 @@ class Startup : MonoBehaviour
 
         // Load the lobby scene
         SceneManager.LoadScene("Lobby");
+    }
+
+    public static string GetPlayerId()
+    {
+        if (string.IsNullOrWhiteSpace(UserId))
+        {
+            // Set user id to unique device identifier
+            UserId = $"dev-{SystemInfo.deviceUniqueIdentifier}";
+            UserDisplayName = $"Dev #{SystemInfo.deviceUniqueIdentifier.Substring(0, 7)}";
+        }
+
+        return UserId;
     }
 }

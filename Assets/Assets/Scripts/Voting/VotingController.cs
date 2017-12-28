@@ -47,10 +47,10 @@ public class VotingController : MonoBehaviour
                         //VoteButton.SetActive(true);
                         DiscardSuspects();
                     }
-                    else SceneManager.LoadScene("Communication Detective/Scenes/Lobby");
+                    else SceneManager.LoadScene("Lobby");
                 });
             }
-            else SceneManager.LoadScene("Communication Detective/Scenes/Lobby");
+            else SceneManager.LoadScene("Lobby");
         });
     }
 
@@ -95,7 +95,7 @@ public class VotingController : MonoBehaviour
         if (ReturnButton.activeSelf)
         {
             ReturnButton.SetActive(false);
-            SceneManager.LoadScene("Communication Detective/Scenes/VotingDatabase");
+            SceneManager.LoadScene("VotingDatabase");
         }
     }
 
@@ -145,7 +145,7 @@ public class VotingController : MonoBehaviour
         if (current != null)
         {
             NetworkController.SubmitVote(current.Name.text, success => {
-                SceneManager.LoadScene("Communication Detective/Scenes/VotingWait");
+                SceneManager.LoadScene("VotingWait");
             });
         }
     }

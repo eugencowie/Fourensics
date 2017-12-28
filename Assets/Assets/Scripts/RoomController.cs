@@ -56,7 +56,7 @@ public class RoomController : MonoBehaviour
                     DatabaseButton.SetActive(true);
                 });
             }
-            else SceneManager.LoadScene("Communication Detective/Scenes/Lobby");
+            else SceneManager.LoadScene("Lobby");
         });
     }
     
@@ -65,7 +65,7 @@ public class RoomController : MonoBehaviour
         if (DatabaseButton.activeSelf)
         {
             DatabaseButton.SetActive(false);
-            SceneManager.LoadScene("Communication Detective/Scenes/Database");
+            SceneManager.LoadScene("Database");
         }
     }
     
@@ -92,7 +92,7 @@ public class RoomController : MonoBehaviour
                 if (!m_readyPlayers.Any(p => p.Value == false))
                 {
                     NetworkController.DeregisterReadyChanged(m_roomCode);
-                    SceneManager.LoadScene("Communication Detective/Scenes/Voting");
+                    SceneManager.LoadScene("Voting");
                 }
             }
         }
@@ -101,11 +101,11 @@ public class RoomController : MonoBehaviour
     public void ConfirmLeave()
     {
         NetworkController.LeaveLobby(m_roomCode, _ => {
-            SceneManager.LoadScene("Communication Detective/Scenes/Lobby");
+            SceneManager.LoadScene("Lobby");
         });
 
         //NetworkController.LeaveLobby(m_roomCode, success => {
-        //    if (success) SceneManager.LoadScene("Communication Detective/Scenes/Lobby");
+        //    if (success) SceneManager.LoadScene("Lobby");
         //});
     }
     

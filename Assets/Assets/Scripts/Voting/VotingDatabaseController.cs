@@ -41,10 +41,10 @@ public class VotingDatabaseController : MonoBehaviour
                             NetworkController.RegisterCluesChanged(m_lobby, OnSlotChanged);
                         });
                     }
-                    else SceneManager.LoadScene("Communication Detective/Scenes/Lobby");
+                    else SceneManager.LoadScene("Lobby");
                 });
             }
-            else SceneManager.LoadScene("Communication Detective/Scenes/Lobby");
+            else SceneManager.LoadScene("Lobby");
         });
 
         for (int i = 0; i < Data.Length; i++)
@@ -69,7 +69,7 @@ public class VotingDatabaseController : MonoBehaviour
 
     public void VotingButtonPressed()
     {
-        SceneManager.LoadScene("Communication Detective/Scenes/Voting");
+        SceneManager.LoadScene("Voting");
     }
 
     private void PlayerButtonPressed(Data data)

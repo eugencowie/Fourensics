@@ -22,7 +22,7 @@ public class VotingWaitController : MonoBehaviour
                     NetworkController.RegisterVoteChanged(room, OnVoteChanged);
                 });
             }
-            else SceneManager.LoadScene("Communication Detective/Scenes/Lobby");
+            else SceneManager.LoadScene("Lobby");
         });
     }
 
@@ -41,7 +41,7 @@ public class VotingWaitController : MonoBehaviour
                 if (!m_votedPlayers.Any(p => string.IsNullOrEmpty(p.Value)))
                 {
                     NetworkController.DeregisterReadyChanged(m_roomCode);
-                    SceneManager.LoadScene("Communication Detective/Scenes/GameOver");
+                    SceneManager.LoadScene("GameOver");
                 }
             }
         }

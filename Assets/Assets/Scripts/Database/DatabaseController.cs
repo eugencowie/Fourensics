@@ -85,10 +85,10 @@ public class DatabaseController : MonoBehaviour
                             NetworkController.RegisterReadyChanged(m_lobby, OnReadyChanged);
                         });
                     }
-                    else SceneManager.LoadScene("Communication Detective/Scenes/Lobby");
+                    else SceneManager.LoadScene("Lobby");
                 });
             }
-            else SceneManager.LoadScene("Communication Detective/Scenes/Lobby");
+            else SceneManager.LoadScene("Lobby");
         });
 
         for (int i = 0; i < Data.Count; i++)
@@ -148,7 +148,7 @@ public class DatabaseController : MonoBehaviour
         {
             NetworkController.DeregisterCluesChanged();
             NetworkController.DeregisterReadyChanged(m_lobby);
-            SceneManager.LoadScene("Communication Detective/Scenes/Voting");
+            SceneManager.LoadScene("Voting");
         }
     }
 

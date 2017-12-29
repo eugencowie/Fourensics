@@ -1,11 +1,16 @@
 ﻿using Firebase;
+using Firebase.Auth;
 using Firebase.Database;
 using Firebase.Unity.Editor;
+using Google;
 
 static class Static
 {
     public static FirebaseApp FirebaseApp => FirebaseApp.DefaultInstance;
+    public static FirebaseAuth FirebaseAuth => FirebaseAuth.DefaultInstance;
     public static FirebaseDatabase FirebaseDatabase => GetFirebaseDatabase();
+
+    public static GoogleSignIn GoogleSignIn => GoogleSignIn.DefaultInstance;
 
     static FirebaseDatabase GetFirebaseDatabase()
     {

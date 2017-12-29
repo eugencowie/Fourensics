@@ -451,7 +451,7 @@ public class DatabaseController : MonoBehaviour
                 string player = key[1];
                 m_readyPlayers[player] = true;
 
-                if (player == OnlineManager.GetPlayerId())
+                if (player == SignIn.GetPlayerId())
                 {
                     ConfirmReady();
                 }

@@ -16,6 +16,7 @@
 
 # Third-party dependencies
 /Assets/Firebase/**             linguist-generated
+/Assets/GoogleSignIn/**         linguist-generated
 /Assets/Parse/**                linguist-generated
 /Assets/PlayServicesResolver/** linguist-generated
 /Assets/Plugins/**              linguist-generated

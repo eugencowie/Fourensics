@@ -82,8 +82,8 @@ public class GameOverController : MonoBehaviour
 
                     if (percentage >= requiredPercentage)
                     {
-                        string yourVote = m_votedPlayers[OnlineManager.GetPlayerId()];
-                        m_votedPlayers.Remove(OnlineManager.GetPlayerId());
+                        string yourVote = m_votedPlayers[SignIn.GetPlayerId()];
+                        m_votedPlayers.Remove(SignIn.GetPlayerId());
 
                         WinText.text += "\n\nYou voted for " + yourVote;
                         for (int i=0; i<m_votedPlayers.Count; i++)
@@ -95,7 +95,7 @@ public class GameOverController : MonoBehaviour
 
                         m_winOrLoseText = WinText;
 
-                        m_votedPlayers[OnlineManager.GetPlayerId()] = yourVote;
+                        m_votedPlayers[SignIn.GetPlayerId()] = yourVote;
                     }
                     else
                     {

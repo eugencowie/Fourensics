@@ -26,7 +26,7 @@ public class VotingDatabaseController : MonoBehaviour
         MainScreen.SetActive(false);
         WaitScreen.SetActive(true);
 
-        int scene = await NetworkController.GetPlayerScene();
+        int scene = NetworkController.GetPlayerScene();
         if (scene > 0)
         {
             m_scene = scene;
@@ -34,10 +34,10 @@ public class VotingDatabaseController : MonoBehaviour
             string lobby = await NetworkController.GetPlayerLobby();
             if (!string.IsNullOrEmpty(lobby))
             {
-                string[] players = await NetworkController.GetPlayers(m_lobby);
+                string[] players = NetworkController.GetPlayers();
                 m_lobby = lobby;
                 DownloadItems();
-                NetworkController.RegisterCluesChanged(m_lobby, OnSlotChanged);
+                NetworkController.RegisterCluesChanged(OnSlotChanged);
             }
             else SceneManager.LoadScene("Lobby");
         }
@@ -102,32 +102,31 @@ public class VotingDatabaseController : MonoBehaviour
     private async void DownloadItems()
     {
         int tmp = 0;
-        Player player = await NetworkController.DownloadClues(m_lobby, tmp);
-        for (int j = 0; j < player.Clues.Clues.Length; j++)
+        User player = await NetworkController.DownloadClues(tmp);
+        for (int j = 0; j < player.Items.Length; j++)
         {
             int tmp2 = j;
-            var clue = player.Clues.Clues[tmp2];
-            await clue.PullEntries();
+            var clue = player.Items[tmp2];
             CheckPlayerItemsLoaded();
-            if (!string.IsNullOrEmpty(clue.Name.Value))
+            if (!string.IsNullOrEmpty(clue.Name.Get()))
             {
                 var slot = Data[tmp].Slots[tmp2];
-                foreach (Transform t in slot.transform) if (t.gameObject.name == clue.Name.Value) Destroy(t.gameObject);
+                foreach (Transform t in slot.transform) if (t.gameObject.name == clue.Name.Get()) Destroy(t.gameObject);
                 var newObj = Instantiate(ButtonTemplate, ButtonTemplate.transform.parent);
                 newObj.SetActive(true);
-                newObj.name = clue.Name.Value;
+                newObj.name = clue.Name.Get();
                 newObj.transform.SetParent(slot.transform);
-                if (!string.IsNullOrEmpty(clue.Image.Value))
+                if (!string.IsNullOrEmpty(clue.Image.Get()))
                 {
                     foreach (Transform t in newObj.transform)
                     {
                         if (t.gameObject.GetComponent<Text>() != null)
                         {
-                            t.gameObject.GetComponent<Text>().text = clue.Name.Value;
+                            t.gameObject.GetComponent<Text>().text = clue.Name.Get();
                         }
                         if (t.gameObject.GetComponent<Image>() != null)
                         {
-                            t.gameObject.GetComponent<Image>().sprite = Resources.Load<Sprite>(clue.Image.Value);
+                            t.gameObject.GetComponent<Image>().sprite = Resources.Load<Sprite>(clue.Image.Get());
                         }
                     }
                 }
@@ -137,7 +136,7 @@ public class VotingDatabaseController : MonoBehaviour
                     {
                         if (t.gameObject.GetComponent<Text>() != null)
                         {
-                            t.gameObject.GetComponent<Text>().text = clue.Name.Value;
+                            t.gameObject.GetComponent<Text>().text = clue.Name.Get();
                             t.gameObject.GetComponent<Text>().gameObject.SetActive(true);
                         }
                         if (t.gameObject.GetComponent<Image>() != null)
@@ -147,28 +146,28 @@ public class VotingDatabaseController : MonoBehaviour
                     }
                 }
                 newObj.GetComponent<DragHandler>().enabled = false;
-                slot.GetComponent<Slot>().Text.GetComponent<Text>().text = clue.Hint.Value;
+                slot.GetComponent<Slot>().Text.GetComponent<Text>().text = clue.Description.Get();
             }
         }
     }
 
-    private async void OnSlotChanged(OnlineDatabaseEntry entry, ValueChangedEventArgs args)
+    private async void OnSlotChanged(CloudNode entry)
     {
-        string[] key = entry.Key.Split('/');
+        string[] key = entry.Path.Split('/');
         if (key.Length >= 5)
         {
             string player = key[1];
             string field = key[4];
 
-            if (args.Snapshot.Exists)
+            if (entry.Exists())
             {
-                string value = args.Snapshot.Value.ToString();
-                Debug.Log(entry.Key + " = " + value);
+                string value = entry.Get();
+                Debug.Log(entry.Path + " = " + value);
 
                 int slotNb = -1;
                 if (int.TryParse(key[3].Replace("slot-", ""), out slotNb))
                 {
-                    int playerNb = await NetworkController.GetPlayerNumber(m_lobby, player);
+                    int playerNb = NetworkController.GetPlayerNumber(player);
                     var slot = Data[playerNb].Slots[slotNb - 1];
                     if (field == "name")
                     {
@@ -227,12 +226,12 @@ public class VotingDatabaseController : MonoBehaviour
             }
             else
             {
-                Debug.Log(entry.Key + " removed");
+                Debug.Log(entry.Path + " removed");
 
                 int slotNb = -1;
                 if (int.TryParse(key[3].Replace("slot-", ""), out slotNb))
                 {
-                    int playerNb = await NetworkController.GetPlayerNumber(m_lobby, player);
+                    int playerNb = NetworkController.GetPlayerNumber(player);
                     var slot = Data[playerNb].Slots[slotNb - 1];
 
                     slot.GetComponent<Slot>().Text.GetComponent<Text>().text = "";

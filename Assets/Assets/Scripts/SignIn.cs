@@ -8,8 +8,8 @@ using UnityEngine.UI;
 
 class SignIn : MonoBehaviour
 {
-    public static string UserId { get; private set; }
-    public static string UserDisplayName { get; private set; }
+    public static User User { get; private set; }
+    public static Lobby Lobby { get; set; }
 
     [SerializeField] Text m_status = null;
 
@@ -24,8 +24,8 @@ class SignIn : MonoBehaviour
         if (Application.isEditor)
         {
             // Set user id to unique device identifier
-            UserId = $"dev-{SystemInfo.deviceUniqueIdentifier}";
-            UserDisplayName = $"Dev #{SystemInfo.deviceUniqueIdentifier.Substring(0, 7)}";
+            User = await User.Fetch($"dev-{SystemInfo.deviceUniqueIdentifier}");
+            User.Name.Set($"Dev #{SystemInfo.deviceUniqueIdentifier.Substring(0, 7)}");
         }
         else
         {
@@ -48,23 +48,17 @@ class SignIn : MonoBehaviour
             catch (Exception e) { m_status.text = $"Authentication failed: {e.Message}"; return; }
 
             // Set user id to Firebase user id
-            UserId = firebaseUser.UserId;
-            UserDisplayName = firebaseUser.DisplayName;
+            User = await User.Fetch(firebaseUser.UserId);
+            User.Name.Set(firebaseUser.DisplayName);
+        }
+
+        if (User.Lobby.Exists())
+        {
+            // Set lobby to user's lobby
+            Lobby = await Lobby.Fetch(User.Lobby.Get());
         }
 
         // Load the lobby scene
         SceneManager.LoadScene("Lobby");
-    }
-
-    public static string GetPlayerId()
-    {
-        if (string.IsNullOrWhiteSpace(UserId))
-        {
-            // Set user id to unique device identifier
-            UserId = $"dev-{SystemInfo.deviceUniqueIdentifier}";
-            UserDisplayName = $"Dev #{SystemInfo.deviceUniqueIdentifier.Substring(0, 7)}";
-        }
-
-        return UserId;
     }
 }

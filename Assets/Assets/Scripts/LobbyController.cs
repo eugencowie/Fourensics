@@ -137,20 +137,16 @@ public class LobbyController : MonoBehaviour
         if (string.IsNullOrEmpty(code)) SwitchPanel(StartPanel);
         else
         {
-            bool createSuccess = await Network.CreateLobby(code);
-            if (!createSuccess) SwitchPanel(StartPanel);
+            Network.CreateLobby(code);
+            bool joinSuccess = await Network.JoinLobby(code, MaxPlayers);
+            if (!joinSuccess) SwitchPanel(StartPanel);
             else
             {
-                bool joinSuccess = await Network.JoinLobby(code, MaxPlayers);
-                if (!joinSuccess) SwitchPanel(StartPanel);
-                else
-                {
-                    CodeLabel.text = code;
-                    RegisterOnPlayersChanged(code);
-                    RegisterOnLobbyStateChanged(code);
-                    StartButton.SetActive(true);
-                    SwitchPanel(LobbyPanel);
-                }
+                CodeLabel.text = code;
+                RegisterOnPlayersChanged(code);
+                RegisterOnLobbyStateChanged(code);
+                StartButton.SetActive(true);
+                SwitchPanel(LobbyPanel);
             }
         }
     }
@@ -162,38 +158,34 @@ public class LobbyController : MonoBehaviour
     {
         SwitchPanel(WaitPanel);
 
-        LobbyError error = await Network.CanStartGame(CodeLabel.text, MaxPlayers);
-        if (error != LobbyError.None)
-        {
-            if (error == LobbyError.TooFewPlayers) StatusLabel.text = "too few players, requires " + MaxPlayers;
-            else if (error == LobbyError.TooManyPlayers) StatusLabel.text = "too many players, requires " + MaxPlayers;
-            else StatusLabel.text = "unknown error";
-            SwitchPanel(LobbyPanel);
-        }
-        else
-        {
+        //LobbyError error = await Network.CanStartGame(CodeLabel.text, MaxPlayers);
+        //if (error != LobbyError.None)
+        //{
+        //    if (error == LobbyError.TooFewPlayers) StatusLabel.text = "too few players, requires " + MaxPlayers;
+        //    else if (error == LobbyError.TooManyPlayers) StatusLabel.text = "too many players, requires " + MaxPlayers;
+        //    else StatusLabel.text = "unknown error";
+        //    SwitchPanel(LobbyPanel);
+        //}
+        //else
+        //{
             await Network.AssignPlayerScenes(CodeLabel.text);
             StaticInventory.Hints.Clear();
-            await Network.SetLobbyState(CodeLabel.text, LobbyState.InGame);
-        }
+            Network.SetLobbyState(LobbyState.InGame);
+        //}
     }
 
     /// <summary>
     /// Called when the leave button in the lobby panel is pressed.
     /// </summary>
-    public async void LeaveButtonPressed()
+    public void LeaveButtonPressed()
     {
         SwitchPanel(WaitPanel);
 
-        bool success = await Network.LeaveLobby(CodeLabel.text);
-        if (success)
-        {
-            DeregisterOnLobbyStateChanged(CodeLabel.text);
-            DeregisterOnPlayersChanged(CodeLabel.text);
-            CodeLabel.text = "_____";
-            SwitchPanel(StartPanel);
-        }
-        else SwitchPanel(LobbyPanel);
+        Network.LeaveLobby();
+        DeregisterOnLobbyStateChanged(CodeLabel.text);
+        DeregisterOnPlayersChanged(CodeLabel.text);
+        CodeLabel.text = "_____";
+        SwitchPanel(StartPanel);
     }
 
     public void CodeFieldChanged(string s)
@@ -245,7 +237,7 @@ public class LobbyController : MonoBehaviour
         Network.DeregisterListener(roomStateKey, OnLobbyStateChanged);
     }
 
-    private async void OnLobbyStateChanged(object sender, ValueChangedEventArgs args)
+    private void OnLobbyStateChanged(object sender, ValueChangedEventArgs args)
     {
         if (args.Snapshot.Exists)
         {
@@ -256,7 +248,7 @@ public class LobbyController : MonoBehaviour
                 LobbyState state = (LobbyState)statusNr;
                 if (state == LobbyState.InGame)
                 {
-                    int scene = await Network.GetPlayerScene();
+                    int scene = Network.GetPlayerScene();
                     if (scene >= 1 && scene <= 4)
                     {
                         DeregisterOnLobbyStateChanged(CodeLabel.text);

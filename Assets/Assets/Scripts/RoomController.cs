@@ -47,11 +47,11 @@ public class RoomController : MonoBehaviour
         string room = await NetworkController.GetPlayerLobby();
         if (!string.IsNullOrEmpty(room))
         {
-            string[] players = await NetworkController.GetPlayers(room);
+            string[] players = NetworkController.GetPlayers();
             m_roomCode = room;
             foreach (var player in players) m_readyPlayers[player] = false;
-            NetworkController.RegisterReadyChanged(room, OnReadyChanged);
-            NetworkController.RegisterCluesChanged(room, OnSlotChanged);
+            NetworkController.RegisterReadyChanged(OnReadyChanged);
+            NetworkController.RegisterCluesChanged(OnSlotChanged);
             ReadyButton.SetActive(true);
             DatabaseButton.SetActive(true);
         }
@@ -67,38 +67,38 @@ public class RoomController : MonoBehaviour
         }
     }
 
-    private void OnReadyChanged(OnlineDatabaseEntry entry, ValueChangedEventArgs args)
+    private void OnReadyChanged(CloudNode entry)
     {
         if (ReadyButton == null)
             return;
 
-        if (args.Snapshot.Exists)
+        if (entry.Exists())
         {
-            string value = args.Snapshot.Value.ToString();
+            string value = entry.Get();
 
             if (value == "true")
             {
-                string[] key = entry.Key.Split('/');
+                string[] key = entry.Path.Split('/');
                 string player = key[1];
                 m_readyPlayers[player] = true;
 
-                if (player == SignIn.GetPlayerId())
+                if (player == SignIn.User.Id)
                 {
                     ConfirmReady();
                 }
 
                 if (!m_readyPlayers.Any(p => p.Value == false))
                 {
-                    NetworkController.DeregisterReadyChanged(m_roomCode);
+                    //NetworkController.DeregisterReadyChanged(OnReadyChanged);
                     SceneManager.LoadScene("Voting");
                 }
             }
         }
     }
 
-    public async void ConfirmLeave()
+    public void ConfirmLeave()
     {
-        await NetworkController.LeaveLobby(m_roomCode);
+        NetworkController.LeaveLobby();
         SceneManager.LoadScene("Lobby");
 
         //NetworkController.LeaveLobby(m_roomCode, success => {
@@ -106,40 +106,37 @@ public class RoomController : MonoBehaviour
         //});
     }
 
-    public async void ConfirmReady()
+    public void ConfirmReady()
     {
         if (ReadyButton.activeSelf)
         {
             ReadyButton.SetActive(false);
-            bool success = await NetworkController.ReadyUp();
+            NetworkController.ReadyUp();
             ReadyButton.SetActive(true);
-            if (success)
+            ReadyButton.GetComponent<Image>().color = Color.yellow;
+            foreach (Transform t in ReadyButton.gameObject.transform)
             {
-                ReadyButton.GetComponent<Image>().color = Color.yellow;
-                foreach (Transform t in ReadyButton.gameObject.transform)
-                {
-                    var text = t.GetComponent<Text>();
-                    if (text != null) text.text = "Waiting...";
-                }
+                var text = t.GetComponent<Text>();
+                if (text != null) text.text = "Waiting...";
             }
         }
     }
 
-    private async void OnSlotChanged(OnlineDatabaseEntry entry, ValueChangedEventArgs args)
+    private void OnSlotChanged(CloudNode entry)
     {
-        string[] keys = entry.Key.Split('/');
+        string[] keys = entry.Path.Split('/');
         if (keys.Length >= 5)
         {
             string field = keys[4];
 
-            if (args.Snapshot.Exists && field == "name")
+            if (entry.Exists() && field == "name")
             {
-                string value = args.Snapshot.Value.ToString();
+                string value = entry.Get();
 
                 int slot;
                 if (!string.IsNullOrEmpty(value) && int.TryParse(keys[3].Replace("slot-", ""), out slot))
                 {
-                    int player = await NetworkController.GetPlayerNumber(m_roomCode, keys[1]);
+                    int player = NetworkController.GetPlayerNumber(keys[1]);
                     if (DatabaseButton != null && !StaticClues.SeenSlots.Any(s => s.Equals(new SlotData(player.ToString(), slot.ToString(), value))))
                     {
                         foreach (Transform t in DatabaseButton.transform)

@@ -37,10 +37,10 @@ public class GameOverController : MonoBehaviour
         string room = await NetworkController.GetPlayerLobby();
         if (!string.IsNullOrEmpty(room))
         {
-            string[] players = await NetworkController.GetPlayers(m_roomCode);
+            string[] players = NetworkController.GetPlayers();
             m_roomCode = room;
             foreach (var player in players) m_votedPlayers[player] = "";
-            NetworkController.RegisterVoteChanged(room, OnVoteChanged);
+            NetworkController.RegisterVoteChanged(OnVoteChanged);
         }
         else SceneManager.LoadScene("Lobby");
     }
@@ -54,19 +54,19 @@ public class GameOverController : MonoBehaviour
 
     public async void ResetButtonPressed()
     {
-        await NetworkController.LeaveLobby(m_roomCode);
+        NetworkController.LeaveLobby();
         SceneManager.LoadScene("Lobby");
     }
 
-    private void OnVoteChanged(OnlineDatabaseEntry entry, ValueChangedEventArgs args)
+    private void OnVoteChanged(CloudNode entry)
     {
-        if (args.Snapshot.Exists)
+        if (entry.Exists())
         {
-            string value = args.Snapshot.Value.ToString();
+            string value = entry.Get();
 
             if (!string.IsNullOrEmpty(value))
             {
-                string[] key = entry.Key.Split('/');
+                string[] key = entry.Path.Split('/');
                 string player = key[1];
                 m_votedPlayers[player] = value;
 
@@ -80,8 +80,8 @@ public class GameOverController : MonoBehaviour
 
                     if (percentage >= requiredPercentage)
                     {
-                        string yourVote = m_votedPlayers[SignIn.GetPlayerId()];
-                        m_votedPlayers.Remove(SignIn.GetPlayerId());
+                        string yourVote = m_votedPlayers[SignIn.User.Id];
+                        m_votedPlayers.Remove(SignIn.User.Id);
 
                         WinText.text += "\n\nYou voted for " + yourVote;
                         for (int i = 0; i < m_votedPlayers.Count; i++)
@@ -93,7 +93,7 @@ public class GameOverController : MonoBehaviour
 
                         m_winOrLoseText = WinText;
 
-                        m_votedPlayers[SignIn.GetPlayerId()] = yourVote;
+                        m_votedPlayers[SignIn.User.Id] = yourVote;
                     }
                     else
                     {

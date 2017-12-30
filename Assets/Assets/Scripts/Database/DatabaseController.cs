@@ -70,7 +70,7 @@ public class DatabaseController : MonoBehaviour
         MainScreen.SetActive(false);
         WaitScreen.SetActive(true);
 
-        int scene = await NetworkController.GetPlayerScene();
+        int scene = NetworkController.GetPlayerScene();
         if (scene > 0)
         {
             m_scene = scene;
@@ -78,12 +78,12 @@ public class DatabaseController : MonoBehaviour
             string lobby = await NetworkController.GetPlayerLobby();
             if (!string.IsNullOrEmpty(lobby))
             {
-                string[] players = await NetworkController.GetPlayers(lobby);
+                string[] players = NetworkController.GetPlayers();
                 m_lobby = lobby;
                 foreach (var player in players) m_readyPlayers[player] = false;
                 DownloadItems();
-                NetworkController.RegisterCluesChanged(m_lobby, OnSlotChanged);
-                NetworkController.RegisterReadyChanged(m_lobby, OnReadyChanged);
+                NetworkController.RegisterCluesChanged(OnSlotChanged);
+                NetworkController.RegisterReadyChanged(OnReadyChanged);
             }
             else SceneManager.LoadScene("Lobby");
         }
@@ -109,21 +109,18 @@ public class DatabaseController : MonoBehaviour
         }
     }
 
-    public async void ConfirmReady()
+    public void ConfirmReady()
     {
         if (ReadyButton.activeSelf)
         {
             ReadyButton.SetActive(false);
-            bool success = await NetworkController.ReadyUp();
+            NetworkController.ReadyUp();
             ReadyButton.SetActive(true);
-            if (success)
+            ReadyButton.GetComponent<Image>().color = Color.yellow;
+            foreach (Transform t in ReadyButton.gameObject.transform)
             {
-                ReadyButton.GetComponent<Image>().color = Color.yellow;
-                foreach (Transform t in ReadyButton.gameObject.transform)
-                {
-                    var text = t.GetComponent<Text>();
-                    if (text != null) text.text = "Waiting...";
-                }
+                var text = t.GetComponent<Text>();
+                if (text != null) text.text = "Waiting...";
             }
         }
     }
@@ -133,8 +130,8 @@ public class DatabaseController : MonoBehaviour
         if (ReturnButton.activeSelf)
         {
             ReturnButton.SetActive(false);
-            NetworkController.DeregisterCluesChanged();
-            NetworkController.DeregisterReadyChanged(m_lobby);
+            NetworkController.DeregisterCluesChanged(OnSlotChanged);
+            NetworkController.DeregisterReadyChanged(OnReadyChanged);
             SceneManager.LoadScene(m_scene);
         }
     }
@@ -143,8 +140,8 @@ public class DatabaseController : MonoBehaviour
     {
         if (!m_readyPlayers.Any(p => p.Value == false))
         {
-            NetworkController.DeregisterCluesChanged();
-            NetworkController.DeregisterReadyChanged(m_lobby);
+            NetworkController.DeregisterCluesChanged(OnSlotChanged);
+            NetworkController.DeregisterReadyChanged(OnReadyChanged);
             SceneManager.LoadScene("Voting");
         }
     }
@@ -234,48 +231,47 @@ public class DatabaseController : MonoBehaviour
         }
     }
 
-    public async void UploadItem(int slot, ObjectHintData hint)
+    public void UploadItem(int slot, ObjectHintData hint)
     {
-        await NetworkController.UploadDatabaseItem(slot, hint);
+        NetworkController.UploadDatabaseItem(slot, hint);
     }
 
-    public async void RemoveItem(int slot)
+    public void RemoveItem(int slot)
     {
         //if (!m_readyPlayers.Any(p => p.Value == false))
         //{
-        await NetworkController.RemoveDatabaseItem(slot);
+        NetworkController.RemoveDatabaseItem(slot);
         //}
     }
 
     private async void DownloadItems()
     {
         int tmp = 0;
-        Player player = await NetworkController.DownloadClues(m_lobby, tmp);
-        for (int j = 0; j < player.Clues.Clues.Length; j++)
+        User player = await NetworkController.DownloadClues(tmp);
+        for (int j = 0; j < player.Items.Length; j++)
         {
             int tmp2 = j;
-            var clue = player.Clues.Clues[tmp2];
-            await clue.PullEntries();
+            var clue = player.Items[tmp2];
             CheckPlayerItemsLoaded();
-            if (!string.IsNullOrEmpty(clue.Name.Value))
+            if (!string.IsNullOrEmpty(clue.Name.Get()))
             {
                 var slot = Data[tmp].Slots[tmp2];
-                foreach (Transform t in slot.transform) if (t.gameObject.name == clue.Name.Value) Destroy(t.gameObject);
+                foreach (Transform t in slot.transform) if (t.gameObject.name == clue.Name.Get()) Destroy(t.gameObject);
                 var newObj = Instantiate(ButtonTemplate, ButtonTemplate.transform.parent);
                 newObj.SetActive(true);
-                newObj.name = clue.Name.Value;
+                newObj.name = clue.Name.Get();
                 newObj.transform.SetParent(slot.transform);
-                if (!string.IsNullOrEmpty(clue.Image.Value))
+                if (!string.IsNullOrEmpty(clue.Image.Get()))
                 {
                     foreach (Transform t in newObj.transform)
                     {
                         if (t.gameObject.GetComponent<Text>() != null)
                         {
-                            t.gameObject.GetComponent<Text>().text = clue.Name.Value;
+                            t.gameObject.GetComponent<Text>().text = clue.Name.Get();
                         }
                         if (t.gameObject.GetComponent<Image>() != null)
                         {
-                            t.gameObject.GetComponent<Image>().sprite = Resources.Load<Sprite>(clue.Image.Value);
+                            t.gameObject.GetComponent<Image>().sprite = Resources.Load<Sprite>(clue.Image.Get());
                         }
                     }
                 }
@@ -285,7 +281,7 @@ public class DatabaseController : MonoBehaviour
                     {
                         if (t.gameObject.GetComponent<Text>() != null)
                         {
-                            t.gameObject.GetComponent<Text>().text = clue.Name.Value;
+                            t.gameObject.GetComponent<Text>().text = clue.Name.Get();
                             t.gameObject.GetComponent<Text>().gameObject.SetActive(true);
                         }
                         if (t.gameObject.GetComponent<Image>() != null)
@@ -305,32 +301,32 @@ public class DatabaseController : MonoBehaviour
                     }
                     else Debug.Log("YOU CANT GO THERE (EG. you have removed your maximum amount of times)");
                 });
-                slot.GetComponent<Slot>().Text.GetComponent<Text>().text = clue.Hint.Value;
+                slot.GetComponent<Slot>().Text.GetComponent<Text>().text = clue.Description.Get();
             }
         }
     }
 
-    private async void OnSlotChanged(OnlineDatabaseEntry entry, ValueChangedEventArgs args)
+    private async void OnSlotChanged(CloudNode entry)
     {
         if (ReadyButton == null)
             return;
 
         //Debug.Log(entry.Key + " | " + (args.Snapshot.Exists ? args.Snapshot.Value.ToString() : ""));
 
-        string[] key = entry.Key.Split('/');
+        string[] key = entry.Path.Split('/');
         if (key.Length >= 5)
         {
             string player = key[1];
             string field = key[4];
 
-            if (args.Snapshot.Exists)
+            if (entry.Exists())
             {
-                string value = args.Snapshot.Value.ToString();
+                string value = entry.Get();
 
                 int slotNb = -1;
                 if (!string.IsNullOrEmpty(value) && int.TryParse(key[3].Replace("slot-", ""), out slotNb))
                 {
-                    int playerNb = await NetworkController.GetPlayerNumber(m_lobby, player);
+                    int playerNb = NetworkController.GetPlayerNumber(player);
                     var slot = Data[playerNb].Slots[slotNb - 1];
                     if (field == "name")
                     {
@@ -403,7 +399,7 @@ public class DatabaseController : MonoBehaviour
                 int slotNb = -1;
                 if (int.TryParse(key[3].Replace("slot-", ""), out slotNb))
                 {
-                    int playerNb = await NetworkController.GetPlayerNumber(m_lobby, player);
+                    int playerNb = NetworkController.GetPlayerNumber(player);
                     var slot = Data[playerNb].Slots[slotNb - 1];
 
                     slot.GetComponent<Slot>().Text.GetComponent<Text>().text = "";
@@ -428,22 +424,22 @@ public class DatabaseController : MonoBehaviour
         }
     }
 
-    private void OnReadyChanged(OnlineDatabaseEntry entry, ValueChangedEventArgs args)
+    private void OnReadyChanged(CloudNode entry)
     {
         if (ReadyButton == null)
             return;
 
-        if (args.Snapshot.Exists)
+        if (entry.Exists())
         {
-            string value = args.Snapshot.Value.ToString();
+            string value = entry.Get();
 
             if (value == "true")
             {
-                string[] key = entry.Key.Split('/');
+                string[] key = entry.Path.Split('/');
                 string player = key[1];
                 m_readyPlayers[player] = true;
 
-                if (player == SignIn.GetPlayerId())
+                if (player == SignIn.User.Id)
                 {
                     ConfirmReady();
                 }

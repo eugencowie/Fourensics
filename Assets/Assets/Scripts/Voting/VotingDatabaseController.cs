@@ -22,30 +22,27 @@ public class VotingDatabaseController : MonoBehaviour
 
     int playerItemsLoaded = 0;
 
-    private void Start()
+    async void Start()
     {
         NetworkController = new OnlineManager();
         
         MainScreen.SetActive(false);
         WaitScreen.SetActive(true);
 
-        NetworkController.GetPlayerScene(scene => {
+        int scene = await NetworkController.GetPlayerScene();
             if (scene > 0) {
                 m_scene = scene;
                 SetBackground();
-                NetworkController.GetPlayerLobby(lobby => {
+                string lobby = await NetworkController.GetPlayerLobby();
                     if (!string.IsNullOrEmpty(lobby)) {
-                        NetworkController.GetPlayers(lobby, players => {
+                        string[] players = await NetworkController.GetPlayers(m_lobby);
                             m_lobby = lobby;
                             DownloadItems();
                             NetworkController.RegisterCluesChanged(m_lobby, OnSlotChanged);
-                        });
                     }
                     else SceneManager.LoadScene("Lobby");
-                });
             }
             else SceneManager.LoadScene("Lobby");
-        });
 
         for (int i = 0; i < Data.Length; i++)
         {
@@ -103,14 +100,14 @@ public class VotingDatabaseController : MonoBehaviour
         }
     }
     
-    private void DownloadItems()
+    private async void DownloadItems()
     {
         int tmp = 0;
-        NetworkController.DownloadClues(m_lobby, tmp, player => {
+        Player player = await NetworkController.DownloadClues(m_lobby, tmp);
             for (int j = 0; j < player.Clues.Clues.Length; j++) {
                 int tmp2 = j;
                 var clue = player.Clues.Clues[tmp2];
-                clue.PullEntries(_ => {
+                await clue.PullEntries();
                     CheckPlayerItemsLoaded();
                     if (!string.IsNullOrEmpty(clue.Name.Value)) {
                         var slot = Data[tmp].Slots[tmp2];
@@ -151,12 +148,10 @@ public class VotingDatabaseController : MonoBehaviour
                         newObj.GetComponent<DragHandler>().enabled = false;
                         slot.GetComponent<Slot>().Text.GetComponent<Text>().text = clue.Hint.Value;
                     }
-                });
             }
-        });
     }
     
-    private void OnSlotChanged(OnlineDatabaseEntry entry, ValueChangedEventArgs args)
+    private async void OnSlotChanged(OnlineDatabaseEntry entry, ValueChangedEventArgs args)
     {
         string[] key = entry.Key.Split('/');
         if (key.Length >= 5)
@@ -172,8 +167,7 @@ public class VotingDatabaseController : MonoBehaviour
                 int slotNb = -1;
                 if (int.TryParse(key[3].Replace("slot-", ""), out slotNb))
                 {
-                    NetworkController.GetPlayerNumber(m_lobby, player, playerNb =>
-                    {
+                    int playerNb = await NetworkController.GetPlayerNumber(m_lobby, player);
                         var slot = Data[playerNb].Slots[slotNb - 1];
                         if (field == "name")
                         {
@@ -228,7 +222,6 @@ public class VotingDatabaseController : MonoBehaviour
                                 }
                             }
                         }
-                    });
                 }
             }
             else
@@ -238,8 +231,7 @@ public class VotingDatabaseController : MonoBehaviour
                 int slotNb = -1;
                 if (int.TryParse(key[3].Replace("slot-", ""), out slotNb))
                 {
-                    NetworkController.GetPlayerNumber(m_lobby, player, playerNb =>
-                    {
+                    int playerNb = await NetworkController.GetPlayerNumber(m_lobby, player);
                         var slot = Data[playerNb].Slots[slotNb - 1];
 
                         slot.GetComponent<Slot>().Text.GetComponent<Text>().text = "";
@@ -248,7 +240,6 @@ public class VotingDatabaseController : MonoBehaviour
                         {
                             Destroy(t1.gameObject);
                         }
-                    });
                 }
             }
         }

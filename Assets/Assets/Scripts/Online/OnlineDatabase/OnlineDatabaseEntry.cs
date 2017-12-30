@@ -1,5 +1,6 @@
 using Firebase.Database;
 using System;
+using System.Threading.Tasks;
 
 /// <summary>
 /// Represents a key-value pair in the database.
@@ -37,60 +38,62 @@ public class OnlineDatabaseEntry
     }
 
     /// <summary>
-    /// Checks if the key exists in the database. This is an asynchronous operation which will call
-    /// the specified action on completion.
+    /// Checks if the key exists in the database.
     /// </summary>
-    public void Exists(Action<bool> returnExists)
+    public async Task<bool> Exists()
     {
-        m_database.Exists(Key, returnExists);
+        return await m_database.Exists(Key);
     }
 
     /// <summary>
-    /// Pulls the value from the database. This is an asynchronous operation which will call the
-    /// specified action on completion.
+    /// Pulls the value from the database.
     /// </summary>
-    public void Pull(Action<bool> returnSuccess=null)
+    public async Task<bool> Pull()
     {
-        OnlineDatabase.ValidateAction(ref returnSuccess);
-
-        m_database.Pull(Key, result => {
+        string result = await m_database.Pull(Key);
             if (result != null) {
                 Value = result;
-                returnSuccess(true);
+                return true;
             }
-            else returnSuccess(false);
-        });
+            else return false;
     }
 
     /// <summary>
-    /// Pushes the value to the database. This is an asynchronous operation which will call the
-    /// specified action on completion.
+    /// Pushes the value to the database.
     /// </summary>
-    public void Push(Action<bool> returnSuccess=null)
+    public async Task<bool> Push()
     {
-        m_database.Push(Key, Value, returnSuccess);
+        return await m_database.Push(Key, Value);
     }
 
     /// <summary>
-    /// Deletes the key from the database. This is an asynchronous operation which will call
-    /// the specified action on completion.
+    /// Deletes the key from the database.
     /// </summary>
-    public void Delete(Action<bool> returnSuccess=null)
+    public async Task<bool> Delete()
     {
-        m_database.Delete(Key, success => {
+        bool success = await m_database.Delete(Key);
             if (success) Value = "";
-            returnSuccess(success);
-        });
+            return success;
     }
 
+    /// <summary>
+    /// Registers a handler for value changed events.
+    /// </summary>
     public void RegisterListener(Listener listener)
     {
+        if (m_listener != null)
+            DeregisterListener();
+
         m_listener = (_, args) => { listener(this, args); };
         m_database.RegisterListener(Key, m_listener);
     }
 
+    /// <summary>
+    /// Deregisters a handler for value changed events.
+    /// </summary>
     public void DeregisterListener()
     {
         m_database.DeregisterListener(Key, m_listener);
+        m_listener = null;
     }
 }

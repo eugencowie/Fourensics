@@ -26,7 +26,7 @@ public class VotingController : MonoBehaviour
     private string m_lobby;
     private int m_scene;
 
-    private void Start()
+    async void Start()
     {
         NetworkController = new OnlineManager();
 
@@ -34,12 +34,12 @@ public class VotingController : MonoBehaviour
         ReturnButton.SetActive(false);
         //VoteButton.SetActive(false);
 
-        NetworkController.GetPlayerScene(scene => {
+        int scene = await NetworkController.GetPlayerScene();
             if (scene > 0)
             {
                 m_scene = scene;
                 SetBackground();
-                NetworkController.GetPlayerLobby(lobby => {
+                string lobby = await NetworkController.GetPlayerLobby();
                     if (!string.IsNullOrEmpty(lobby)) {
                         m_lobby = lobby;
                         ResetButton.SetActive(true);
@@ -48,10 +48,8 @@ public class VotingController : MonoBehaviour
                         DiscardSuspects();
                     }
                     else SceneManager.LoadScene("Lobby");
-                });
             }
             else SceneManager.LoadScene("Lobby");
-        });
     }
 
     private void DiscardSuspects()
@@ -139,14 +137,13 @@ public class VotingController : MonoBehaviour
         }
     }
 
-    public void ConfirmVote()
+    public async void ConfirmVote()
     {
         var current = Suspects.First(s => s.gameObject.activeSelf);
         if (current != null)
         {
-            NetworkController.SubmitVote(current.Name.text, success => {
-                SceneManager.LoadScene("VotingWait");
-            });
+            await NetworkController.SubmitVote(current.Name.text);
+            SceneManager.LoadScene("VotingWait");
         }
     }
 }

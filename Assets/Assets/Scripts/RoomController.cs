@@ -30,7 +30,7 @@ public class RoomController : MonoBehaviour
     public GameObject mainScreen;
     public GameObject welcomeScreen;
 
-    private void Start()
+    async void Start()
     {
         Debug.Log("Seen welcome? " + StaticRoom.SeenWelcome);
         if (StaticRoom.SeenWelcome)
@@ -45,19 +45,17 @@ public class RoomController : MonoBehaviour
         ReadyButton.SetActive(false);
         DatabaseButton.SetActive(false);
 
-        NetworkController.GetPlayerLobby(room => {
+        string room = await NetworkController.GetPlayerLobby();
             if (!string.IsNullOrEmpty(room)) {
-                NetworkController.GetPlayers(room, players => {
+                string[] players = await NetworkController.GetPlayers(room);
                     m_roomCode = room;
                     foreach (var player in players) m_readyPlayers[player] = false;
                     NetworkController.RegisterReadyChanged(room, OnReadyChanged);
                     NetworkController.RegisterCluesChanged(room, OnSlotChanged);
                     ReadyButton.SetActive(true);
                     DatabaseButton.SetActive(true);
-                });
             }
             else SceneManager.LoadScene("Lobby");
-        });
     }
     
     public void DatabaseButtonPressed()
@@ -98,23 +96,22 @@ public class RoomController : MonoBehaviour
         }
     }
 
-    public void ConfirmLeave()
+    public async void ConfirmLeave()
     {
-        NetworkController.LeaveLobby(m_roomCode, _ => {
+        await NetworkController.LeaveLobby(m_roomCode);
             SceneManager.LoadScene("Lobby");
-        });
 
         //NetworkController.LeaveLobby(m_roomCode, success => {
         //    if (success) SceneManager.LoadScene("Lobby");
         //});
     }
     
-    public void ConfirmReady()
+    public async void ConfirmReady()
     {
         if (ReadyButton.activeSelf)
         {
             ReadyButton.SetActive(false);
-            NetworkController.ReadyUp(success => {
+            bool success = await NetworkController.ReadyUp();
                 ReadyButton.SetActive(true);
                 if (success)
                 {
@@ -125,11 +122,10 @@ public class RoomController : MonoBehaviour
                         if (text != null) text.text = "Waiting...";
                     }
                 }
-            });
         }
     }
 
-    private void OnSlotChanged(OnlineDatabaseEntry entry, ValueChangedEventArgs args)
+    private async void OnSlotChanged(OnlineDatabaseEntry entry, ValueChangedEventArgs args)
     {
         string[] keys = entry.Key.Split('/');
         if (keys.Length >= 5)
@@ -143,7 +139,7 @@ public class RoomController : MonoBehaviour
                 int slot;
                 if (!string.IsNullOrEmpty(value) && int.TryParse(keys[3].Replace("slot-", ""), out slot))
                 {
-                    NetworkController.GetPlayerNumber(m_roomCode, keys[1], player => {
+                    int player = await NetworkController.GetPlayerNumber(m_roomCode, keys[1]);
                         if (DatabaseButton != null && !StaticClues.SeenSlots.Any(s => s.Equals(new SlotData(player.ToString(), slot.ToString(), value)))) {
                             foreach (Transform t in DatabaseButton.transform) {
                                 if (t.gameObject.name == "Alert") {
@@ -151,7 +147,6 @@ public class RoomController : MonoBehaviour
                                 }
                             }
                         }
-                    });
                 }
             }
         }

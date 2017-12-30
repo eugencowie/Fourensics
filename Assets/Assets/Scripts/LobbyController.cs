@@ -44,7 +44,7 @@ public class LobbyController : MonoBehaviour
 
     private OnlineManager Network;
 
-    private void Start()
+    async void Start()
     {
         //StaticInventory.Hints.Clear();
         //StaticSuspects.DiscardedSuspects.Clear();
@@ -65,7 +65,7 @@ public class LobbyController : MonoBehaviour
 
         SwitchPanel(WaitPanel);
 
-        Network.GetPlayerLobby(room => {
+        string room = await Network.GetPlayerLobby();
             if (string.IsNullOrEmpty(room)) {
                 StaticClues.Reset();
                 StaticInventory.Reset();
@@ -79,7 +79,6 @@ public class LobbyController : MonoBehaviour
                 RegisterOnLobbyStateChanged(room);
                 SwitchPanel(LobbyPanel);
             }
-        });
     }
 
     /// <summary>
@@ -93,13 +92,13 @@ public class LobbyController : MonoBehaviour
     /// <summary>
     /// Called when the submit button in the join panel is pressed.
     /// </summary>
-    public void SubmitButtonPressed()
+    public async void SubmitButtonPressed()
     {
         if (!string.IsNullOrEmpty(CodeField.text))
         {
             SwitchPanel(WaitPanel);
 
-            Network.JoinLobby(CodeField.text.ToUpper(), MaxPlayers, success => {
+            bool success = await Network.JoinLobby(CodeField.text.ToUpper(), MaxPlayers);
                 if (!success) {
                     CodeField.text = "";
                     SwitchPanel(JoinPanel);
@@ -110,7 +109,6 @@ public class LobbyController : MonoBehaviour
                     StartButton.SetActive(false);
                     SwitchPanel(LobbyPanel);
                 }
-            });
         }
     }
 
@@ -125,17 +123,17 @@ public class LobbyController : MonoBehaviour
     /// <summary>
     /// Called when the create button in the start panel is pressed.
     /// </summary>
-    public void CreateButtonPressed()
+    public async void CreateButtonPressed()
     {
         SwitchPanel(WaitPanel);
 
-        Network.CreateLobbyCode(code => {
+        string code = await Network.CreateLobbyCode();
             if (string.IsNullOrEmpty(code)) SwitchPanel(StartPanel);
             else {
-                Network.CreateLobby(code, createSuccess => {
+                bool createSuccess = await Network.CreateLobby(code);
                     if (!createSuccess) SwitchPanel(StartPanel);
                     else {
-                        Network.JoinLobby(code, MaxPlayers, joinSuccess => {
+                        bool joinSuccess = await Network.JoinLobby(code, MaxPlayers);
                             if (!joinSuccess) SwitchPanel(StartPanel);
                             else {
                                 CodeLabel.text = code;
@@ -144,42 +142,38 @@ public class LobbyController : MonoBehaviour
                                 StartButton.SetActive(true);
                                 SwitchPanel(LobbyPanel);
                             }
-                        });
                     }
-                });
             }
-        });
     }
 
     /// <summary>
     /// Called when the start button in the lobby panel is pressed.
     /// </summary>
-    public void StartButtonPressed()
+    public async void StartButtonPressed()
     {
         SwitchPanel(WaitPanel);
 
-        Network.CanStartGame(CodeLabel.text, MaxPlayers, error => {
+        LobbyError error = await Network.CanStartGame(CodeLabel.text, MaxPlayers);
             if (error != LobbyError.None) {
                 if (error == LobbyError.TooFewPlayers) StatusLabel.text = "too few players, requires " + MaxPlayers;
                 else if (error == LobbyError.TooManyPlayers) StatusLabel.text = "too many players, requires " + MaxPlayers;
                 else StatusLabel.text = "unknown error";
                 SwitchPanel(LobbyPanel);
             }
-            else Network.AssignPlayerScenes(CodeLabel.text, _ => {
+            else { await Network.AssignPlayerScenes(CodeLabel.text);
                 StaticInventory.Hints.Clear();
-                Network.SetLobbyState(CodeLabel.text, LobbyState.InGame);
-            }); 
-        });
+                await Network.SetLobbyState(CodeLabel.text, LobbyState.InGame);
+            }
     }
 
     /// <summary>
     /// Called when the leave button in the lobby panel is pressed.
     /// </summary>
-    public void LeaveButtonPressed()
+    public async void LeaveButtonPressed()
     {
         SwitchPanel(WaitPanel);
 
-        Network.LeaveLobby(CodeLabel.text, success => {
+        bool success = await Network.LeaveLobby(CodeLabel.text);
             if (success) {
                 DeregisterOnLobbyStateChanged(CodeLabel.text);
                 DeregisterOnPlayersChanged(CodeLabel.text);
@@ -187,7 +181,6 @@ public class LobbyController : MonoBehaviour
                 SwitchPanel(StartPanel);
             }
             else SwitchPanel(LobbyPanel);
-        });
     }
 
     public void CodeFieldChanged(string s)
@@ -239,7 +232,7 @@ public class LobbyController : MonoBehaviour
         Network.DeregisterListener(roomStateKey, OnLobbyStateChanged);
     }
 
-    private void OnLobbyStateChanged(object sender, ValueChangedEventArgs args)
+    private async void OnLobbyStateChanged(object sender, ValueChangedEventArgs args)
     {
         if (args.Snapshot.Exists)
         {
@@ -250,13 +243,12 @@ public class LobbyController : MonoBehaviour
                 LobbyState state = (LobbyState)statusNr;
                 if (state == LobbyState.InGame)
                 {
-                    Network.GetPlayerScene(scene => {
+                    int scene = await Network.GetPlayerScene();
                         if (scene >= 1 && scene <= 4) {
                             DeregisterOnLobbyStateChanged(CodeLabel.text);
                             DeregisterOnPlayersChanged(CodeLabel.text);
                             SceneManager.LoadScene(scene);
                         }
-                    });
                 }
             }
         }

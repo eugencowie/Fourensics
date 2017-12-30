@@ -25,7 +25,7 @@ public class GameOverController : MonoBehaviour
 
     private Text m_winOrLoseText;
 
-    private void Start()
+    async void Start()
     {
         NetworkController = new OnlineManager();
 
@@ -34,16 +34,14 @@ public class GameOverController : MonoBehaviour
         WinVideo.loopPointReached += VideoLoopPointReached;
         LoseVideo.loopPointReached += VideoLoopPointReached;
 
-        NetworkController.GetPlayerLobby(room => {
+        string room = await NetworkController.GetPlayerLobby();
             if (!string.IsNullOrEmpty(room)) {
-                NetworkController.GetPlayers(room, players => {
+                string[] players = await NetworkController.GetPlayers(m_roomCode);
                     m_roomCode = room;
                     foreach (var player in players) m_votedPlayers[player] = "";
                     NetworkController.RegisterVoteChanged(room, OnVoteChanged);
-                });
             }
             else SceneManager.LoadScene("Lobby");
-        });
     }
 
     private void VideoLoopPointReached(VideoPlayer source)
@@ -53,11 +51,10 @@ public class GameOverController : MonoBehaviour
         ResetButton.SetActive(true);
     }
 
-    public void ResetButtonPressed()
+    public async void ResetButtonPressed()
     {
-        NetworkController.LeaveLobby(m_roomCode, _ => {
+        await NetworkController.LeaveLobby(m_roomCode);
             SceneManager.LoadScene("Lobby");
-        });
     }
 
     private void OnVoteChanged(OnlineDatabaseEntry entry, ValueChangedEventArgs args)

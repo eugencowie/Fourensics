@@ -10,20 +10,18 @@ public class VotingWaitController : MonoBehaviour
     private string m_roomCode;
     private Dictionary<string, string> m_votedPlayers = new Dictionary<string, string>();
 
-    private void Start()
+    async void Start()
     {
         NetworkController = new OnlineManager();
 
-        NetworkController.GetPlayerLobby(room => {
+        string room = await NetworkController.GetPlayerLobby();
             if (!string.IsNullOrEmpty(room)) {
-                NetworkController.GetPlayers(room, players => {
+                string[] players = await NetworkController.GetPlayers(m_roomCode);
                     m_roomCode = room;
                     foreach (var player in players) m_votedPlayers[player] = "";
                     NetworkController.RegisterVoteChanged(room, OnVoteChanged);
-                });
             }
             else SceneManager.LoadScene("Lobby");
-        });
     }
 
     private void OnVoteChanged(OnlineDatabaseEntry entry, ValueChangedEventArgs args)

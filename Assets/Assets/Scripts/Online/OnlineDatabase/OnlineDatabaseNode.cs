@@ -1,5 +1,4 @@
-using Firebase.Database;
-using System;
+using System.Threading.Tasks;
 
 /// <summary>
 /// Represents a node in the database which contains a collection of database entries.
@@ -31,77 +30,71 @@ public abstract class OnlineDatabaseNode
     public abstract OnlineDatabaseEntry[] Entries { get; }
 
     /// <summary>
-    /// Checks if the key exists in the database. This is an asynchronous operation which will call
-    /// the specified action on completion.
+    /// Checks if the key exists in the database.
     /// </summary>
-    public void Exists(Action<bool> returnExists)
+    public async Task<bool> Exists()
     {
-        Database.Exists(Key, returnExists);
+        return await Database.Exists(Key);
     }
 
     /// <summary>
-    /// Deletes the key from the database. This is an asynchronous operation which will call
-    /// the specified action on completion.
+    /// Deletes the key from the database.
     /// </summary>
-    public void Delete(Action<bool> returnSuccess=null)
+    public async Task<bool> Delete()
     {
-        Database.Delete(Key, success => {
+        bool success = await Database.Delete(Key);
             if (success) {
                 foreach (var entry in Entries)
                     entry.Value = "";
             }
-            returnSuccess(success);
-        });
+            return success;
     }
 
     /// <summary>
-    /// Pulls all entries from the database. This is an asynchronous operation which will call
-    /// the specified action on completion.
+    /// Pulls all entries from the database.
     /// </summary>
-    public void PullEntries(Action<bool> returnSuccess=null)
+    public async Task<bool> PullEntries()
     {
-        OnlineDatabase.ValidateAction(ref returnSuccess);
-
-        Action<bool> returnHandler = ReturnHandler(Entries.Length, returnSuccess);
-
+        bool success = true;
         foreach (var entry in Entries)
         {
-            entry.Pull(returnHandler);
+            if (await entry.Pull() == false)
+                success = false;
         }
+        return success;
     }
 
     /// <summary>
-    /// Pushes all entries to the database. This is an asynchronous operation which will call
-    /// the specified action on completion.
+    /// Pushes all entries to the database.
     /// </summary>
-    public void PushEntries(Action<bool> returnSuccess=null)
+    public async Task<bool> PushEntries()
     {
-        OnlineDatabase.ValidateAction(ref returnSuccess);
-
-        Action<bool> returnHandler = ReturnHandler(Entries.Length, returnSuccess);
-
+        bool success = true;
         foreach (var entry in Entries)
         {
-            entry.Push(returnHandler);
+            if (await entry.Push() == false)
+                success = false;
         }
+        return success;
     }
 
     /// <summary>
-    /// Deletes all entries from the database. This is an asynchronous operation which will call
-    /// the specified action on completion.
+    /// Deletes all entries from the database.
     /// </summary>
-    public void DeleteEntries(Action<bool> returnSuccess=null)
+    public async Task<bool> DeleteEntries()
     {
-        OnlineDatabase.ValidateAction(ref returnSuccess);
-
-        Action<bool> returnHandler = ReturnHandler(Entries.Length, returnSuccess);
-
+        bool success = true;
         foreach (var entry in Entries)
         {
-            entry.Delete(returnHandler);
+            if (await entry.Delete() == false)
+                success = false;
         }
+        return success;
     }
 
+    /// <summary>
+    /// Registers a handler for value changed events.
+    /// </summary>
     public void RegisterListeners(OnlineDatabaseEntry.Listener listener)
     {
         foreach (var entry in Entries)
@@ -110,22 +103,14 @@ public abstract class OnlineDatabaseNode
         }
     }
 
+    /// <summary>
+    /// Deregisters a handler for value changed events.
+    /// </summary>
     public void DeregisterListeners()
     {
         foreach (var entry in Entries)
         {
             entry.DeregisterListener();
         }
-    }
-
-    private Action<bool> ReturnHandler(int count, Action<bool> returnSuccess)
-    {
-        int progress = 0;
-        bool total = true;
-        return success => {
-            progress++;
-            if (!success) total = false;
-            if (progress >= count-1) returnSuccess(total);
-        };
     }
 }

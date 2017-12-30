@@ -1,4 +1,4 @@
-﻿using Firebase;
+using Firebase;
 using Firebase.Auth;
 using Firebase.Database;
 using Firebase.Unity.Editor;

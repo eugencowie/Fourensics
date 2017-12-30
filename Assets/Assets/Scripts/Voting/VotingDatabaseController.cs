@@ -1,4 +1,4 @@
-﻿using Firebase.Database;
+using Firebase.Database;
 using System;
 using System.Collections;
 using System.Collections.Generic;

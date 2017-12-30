@@ -419,7 +419,7 @@ public class DatabaseController : MonoBehaviour
     {
         playerItemsLoaded++;
 
-        if (playerItemsLoaded >= 24)
+        //if (playerItemsLoaded >= 24)
         {
             WaitScreen.SetActive(false);
             MainScreen.SetActive(true);

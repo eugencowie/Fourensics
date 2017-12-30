@@ -3,7 +3,7 @@ using UnityEngine;
 public class FPSController : MonoBehaviour
 {
     private float deltaTime = 0.0f;
-    
+
     private void Update()
     {
         deltaTime += (Time.deltaTime - deltaTime) * 0.1f;

@@ -39,7 +39,7 @@ public class LobbyController : MonoBehaviour
     public GameObject WaitPanel;
     public GameObject StartButton;
 
-    [Range(1,4)]
+    [Range(1, 4)]
     public int MaxPlayers = 4;
 
     private OnlineManager Network;
@@ -66,19 +66,22 @@ public class LobbyController : MonoBehaviour
         SwitchPanel(WaitPanel);
 
         string room = await Network.GetPlayerLobby();
-            if (string.IsNullOrEmpty(room)) {
-                StaticClues.Reset();
-                StaticInventory.Reset();
-                StaticRoom.Reset();
-                StaticSlot.Reset();
-                StaticSuspects.Reset();
-                SwitchPanel(StartPanel);
-            } else {
-                CodeLabel.text = room;
-                RegisterOnPlayersChanged(room);
-                RegisterOnLobbyStateChanged(room);
-                SwitchPanel(LobbyPanel);
-            }
+        if (string.IsNullOrEmpty(room))
+        {
+            StaticClues.Reset();
+            StaticInventory.Reset();
+            StaticRoom.Reset();
+            StaticSlot.Reset();
+            StaticSuspects.Reset();
+            SwitchPanel(StartPanel);
+        }
+        else
+        {
+            CodeLabel.text = room;
+            RegisterOnPlayersChanged(room);
+            RegisterOnLobbyStateChanged(room);
+            SwitchPanel(LobbyPanel);
+        }
     }
 
     /// <summary>
@@ -99,16 +102,19 @@ public class LobbyController : MonoBehaviour
             SwitchPanel(WaitPanel);
 
             bool success = await Network.JoinLobby(CodeField.text.ToUpper(), MaxPlayers);
-                if (!success) {
-                    CodeField.text = "";
-                    SwitchPanel(JoinPanel);
-                } else {
-                    CodeLabel.text = CodeField.text.ToUpper();
-                    RegisterOnPlayersChanged(CodeLabel.text);
-                    RegisterOnLobbyStateChanged(CodeLabel.text);
-                    StartButton.SetActive(false);
-                    SwitchPanel(LobbyPanel);
-                }
+            if (!success)
+            {
+                CodeField.text = "";
+                SwitchPanel(JoinPanel);
+            }
+            else
+            {
+                CodeLabel.text = CodeField.text.ToUpper();
+                RegisterOnPlayersChanged(CodeLabel.text);
+                RegisterOnLobbyStateChanged(CodeLabel.text);
+                StartButton.SetActive(false);
+                SwitchPanel(LobbyPanel);
+            }
         }
     }
 
@@ -128,22 +134,25 @@ public class LobbyController : MonoBehaviour
         SwitchPanel(WaitPanel);
 
         string code = await Network.CreateLobbyCode();
-            if (string.IsNullOrEmpty(code)) SwitchPanel(StartPanel);
-            else {
-                bool createSuccess = await Network.CreateLobby(code);
-                    if (!createSuccess) SwitchPanel(StartPanel);
-                    else {
-                        bool joinSuccess = await Network.JoinLobby(code, MaxPlayers);
-                            if (!joinSuccess) SwitchPanel(StartPanel);
-                            else {
-                                CodeLabel.text = code;
-                                RegisterOnPlayersChanged(code);
-                                RegisterOnLobbyStateChanged(code);
-                                StartButton.SetActive(true);
-                                SwitchPanel(LobbyPanel);
-                            }
-                    }
+        if (string.IsNullOrEmpty(code)) SwitchPanel(StartPanel);
+        else
+        {
+            bool createSuccess = await Network.CreateLobby(code);
+            if (!createSuccess) SwitchPanel(StartPanel);
+            else
+            {
+                bool joinSuccess = await Network.JoinLobby(code, MaxPlayers);
+                if (!joinSuccess) SwitchPanel(StartPanel);
+                else
+                {
+                    CodeLabel.text = code;
+                    RegisterOnPlayersChanged(code);
+                    RegisterOnLobbyStateChanged(code);
+                    StartButton.SetActive(true);
+                    SwitchPanel(LobbyPanel);
+                }
             }
+        }
     }
 
     /// <summary>
@@ -154,16 +163,19 @@ public class LobbyController : MonoBehaviour
         SwitchPanel(WaitPanel);
 
         LobbyError error = await Network.CanStartGame(CodeLabel.text, MaxPlayers);
-            if (error != LobbyError.None) {
-                if (error == LobbyError.TooFewPlayers) StatusLabel.text = "too few players, requires " + MaxPlayers;
-                else if (error == LobbyError.TooManyPlayers) StatusLabel.text = "too many players, requires " + MaxPlayers;
-                else StatusLabel.text = "unknown error";
-                SwitchPanel(LobbyPanel);
-            }
-            else { await Network.AssignPlayerScenes(CodeLabel.text);
-                StaticInventory.Hints.Clear();
-                await Network.SetLobbyState(CodeLabel.text, LobbyState.InGame);
-            }
+        if (error != LobbyError.None)
+        {
+            if (error == LobbyError.TooFewPlayers) StatusLabel.text = "too few players, requires " + MaxPlayers;
+            else if (error == LobbyError.TooManyPlayers) StatusLabel.text = "too many players, requires " + MaxPlayers;
+            else StatusLabel.text = "unknown error";
+            SwitchPanel(LobbyPanel);
+        }
+        else
+        {
+            await Network.AssignPlayerScenes(CodeLabel.text);
+            StaticInventory.Hints.Clear();
+            await Network.SetLobbyState(CodeLabel.text, LobbyState.InGame);
+        }
     }
 
     /// <summary>
@@ -174,13 +186,14 @@ public class LobbyController : MonoBehaviour
         SwitchPanel(WaitPanel);
 
         bool success = await Network.LeaveLobby(CodeLabel.text);
-            if (success) {
-                DeregisterOnLobbyStateChanged(CodeLabel.text);
-                DeregisterOnPlayersChanged(CodeLabel.text);
-                CodeLabel.text = "_____";
-                SwitchPanel(StartPanel);
-            }
-            else SwitchPanel(LobbyPanel);
+        if (success)
+        {
+            DeregisterOnLobbyStateChanged(CodeLabel.text);
+            DeregisterOnPlayersChanged(CodeLabel.text);
+            CodeLabel.text = "_____";
+            SwitchPanel(StartPanel);
+        }
+        else SwitchPanel(LobbyPanel);
     }
 
     public void CodeFieldChanged(string s)
@@ -244,11 +257,12 @@ public class LobbyController : MonoBehaviour
                 if (state == LobbyState.InGame)
                 {
                     int scene = await Network.GetPlayerScene();
-                        if (scene >= 1 && scene <= 4) {
-                            DeregisterOnLobbyStateChanged(CodeLabel.text);
-                            DeregisterOnPlayersChanged(CodeLabel.text);
-                            SceneManager.LoadScene(scene);
-                        }
+                    if (scene >= 1 && scene <= 4)
+                    {
+                        DeregisterOnLobbyStateChanged(CodeLabel.text);
+                        DeregisterOnPlayersChanged(CodeLabel.text);
+                        SceneManager.LoadScene(scene);
+                    }
                 }
             }
         }

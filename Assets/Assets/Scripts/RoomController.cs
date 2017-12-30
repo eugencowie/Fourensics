@@ -1,5 +1,4 @@
 using Firebase.Database;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -46,18 +45,19 @@ public class RoomController : MonoBehaviour
         DatabaseButton.SetActive(false);
 
         string room = await NetworkController.GetPlayerLobby();
-            if (!string.IsNullOrEmpty(room)) {
-                string[] players = await NetworkController.GetPlayers(room);
-                    m_roomCode = room;
-                    foreach (var player in players) m_readyPlayers[player] = false;
-                    NetworkController.RegisterReadyChanged(room, OnReadyChanged);
-                    NetworkController.RegisterCluesChanged(room, OnSlotChanged);
-                    ReadyButton.SetActive(true);
-                    DatabaseButton.SetActive(true);
-            }
-            else SceneManager.LoadScene("Lobby");
+        if (!string.IsNullOrEmpty(room))
+        {
+            string[] players = await NetworkController.GetPlayers(room);
+            m_roomCode = room;
+            foreach (var player in players) m_readyPlayers[player] = false;
+            NetworkController.RegisterReadyChanged(room, OnReadyChanged);
+            NetworkController.RegisterCluesChanged(room, OnSlotChanged);
+            ReadyButton.SetActive(true);
+            DatabaseButton.SetActive(true);
+        }
+        else SceneManager.LoadScene("Lobby");
     }
-    
+
     public void DatabaseButtonPressed()
     {
         if (DatabaseButton.activeSelf)
@@ -66,7 +66,7 @@ public class RoomController : MonoBehaviour
             SceneManager.LoadScene("Database");
         }
     }
-    
+
     private void OnReadyChanged(OnlineDatabaseEntry entry, ValueChangedEventArgs args)
     {
         if (ReadyButton == null)
@@ -99,29 +99,29 @@ public class RoomController : MonoBehaviour
     public async void ConfirmLeave()
     {
         await NetworkController.LeaveLobby(m_roomCode);
-            SceneManager.LoadScene("Lobby");
+        SceneManager.LoadScene("Lobby");
 
         //NetworkController.LeaveLobby(m_roomCode, success => {
         //    if (success) SceneManager.LoadScene("Lobby");
         //});
     }
-    
+
     public async void ConfirmReady()
     {
         if (ReadyButton.activeSelf)
         {
             ReadyButton.SetActive(false);
             bool success = await NetworkController.ReadyUp();
-                ReadyButton.SetActive(true);
-                if (success)
+            ReadyButton.SetActive(true);
+            if (success)
+            {
+                ReadyButton.GetComponent<Image>().color = Color.yellow;
+                foreach (Transform t in ReadyButton.gameObject.transform)
                 {
-                    ReadyButton.GetComponent<Image>().color = Color.yellow;
-                    foreach (Transform t in ReadyButton.gameObject.transform)
-                    {
-                        var text = t.GetComponent<Text>();
-                        if (text != null) text.text = "Waiting...";
-                    }
+                    var text = t.GetComponent<Text>();
+                    if (text != null) text.text = "Waiting...";
                 }
+            }
         }
     }
 
@@ -140,13 +140,16 @@ public class RoomController : MonoBehaviour
                 if (!string.IsNullOrEmpty(value) && int.TryParse(keys[3].Replace("slot-", ""), out slot))
                 {
                     int player = await NetworkController.GetPlayerNumber(m_roomCode, keys[1]);
-                        if (DatabaseButton != null && !StaticClues.SeenSlots.Any(s => s.Equals(new SlotData(player.ToString(), slot.ToString(), value)))) {
-                            foreach (Transform t in DatabaseButton.transform) {
-                                if (t.gameObject.name == "Alert") {
-                                    t.gameObject.SetActive(true);
-                                }
+                    if (DatabaseButton != null && !StaticClues.SeenSlots.Any(s => s.Equals(new SlotData(player.ToString(), slot.ToString(), value))))
+                    {
+                        foreach (Transform t in DatabaseButton.transform)
+                        {
+                            if (t.gameObject.name == "Alert")
+                            {
+                                t.gameObject.SetActive(true);
                             }
                         }
+                    }
                 }
             }
         }

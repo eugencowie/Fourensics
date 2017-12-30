@@ -1,7 +1,4 @@
 using Firebase.Database;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -25,24 +22,26 @@ public class VotingDatabaseController : MonoBehaviour
     async void Start()
     {
         NetworkController = new OnlineManager();
-        
+
         MainScreen.SetActive(false);
         WaitScreen.SetActive(true);
 
         int scene = await NetworkController.GetPlayerScene();
-            if (scene > 0) {
-                m_scene = scene;
-                SetBackground();
-                string lobby = await NetworkController.GetPlayerLobby();
-                    if (!string.IsNullOrEmpty(lobby)) {
-                        string[] players = await NetworkController.GetPlayers(m_lobby);
-                            m_lobby = lobby;
-                            DownloadItems();
-                            NetworkController.RegisterCluesChanged(m_lobby, OnSlotChanged);
-                    }
-                    else SceneManager.LoadScene("Lobby");
+        if (scene > 0)
+        {
+            m_scene = scene;
+            SetBackground();
+            string lobby = await NetworkController.GetPlayerLobby();
+            if (!string.IsNullOrEmpty(lobby))
+            {
+                string[] players = await NetworkController.GetPlayers(m_lobby);
+                m_lobby = lobby;
+                DownloadItems();
+                NetworkController.RegisterCluesChanged(m_lobby, OnSlotChanged);
             }
             else SceneManager.LoadScene("Lobby");
+        }
+        else SceneManager.LoadScene("Lobby");
 
         for (int i = 0; i < Data.Length; i++)
         {
@@ -52,7 +51,7 @@ public class VotingDatabaseController : MonoBehaviour
 
         PlayerButtonPressed(Data[0]);
     }
-    
+
     private void SetBackground()
     {
         if (m_scene <= Backgrounds.Length)
@@ -87,7 +86,7 @@ public class VotingDatabaseController : MonoBehaviour
         }
         data.CluePanel.SetActive(true);
     }
-    
+
     private void CheckPlayerItemsLoaded()
     {
         playerItemsLoaded++;
@@ -99,58 +98,60 @@ public class VotingDatabaseController : MonoBehaviour
             MainScreen.SetActive(true);
         }
     }
-    
+
     private async void DownloadItems()
     {
         int tmp = 0;
         Player player = await NetworkController.DownloadClues(m_lobby, tmp);
-            for (int j = 0; j < player.Clues.Clues.Length; j++) {
-                int tmp2 = j;
-                var clue = player.Clues.Clues[tmp2];
-                await clue.PullEntries();
-                    CheckPlayerItemsLoaded();
-                    if (!string.IsNullOrEmpty(clue.Name.Value)) {
-                        var slot = Data[tmp].Slots[tmp2];
-                        foreach (Transform t in slot.transform) if (t.gameObject.name == clue.Name.Value) Destroy(t.gameObject);
-                        var newObj = Instantiate(ButtonTemplate, ButtonTemplate.transform.parent);
-                        newObj.SetActive(true);
-                        newObj.name = clue.Name.Value;
-                        newObj.transform.SetParent(slot.transform);
-                        if (!string.IsNullOrEmpty(clue.Image.Value))
+        for (int j = 0; j < player.Clues.Clues.Length; j++)
+        {
+            int tmp2 = j;
+            var clue = player.Clues.Clues[tmp2];
+            await clue.PullEntries();
+            CheckPlayerItemsLoaded();
+            if (!string.IsNullOrEmpty(clue.Name.Value))
+            {
+                var slot = Data[tmp].Slots[tmp2];
+                foreach (Transform t in slot.transform) if (t.gameObject.name == clue.Name.Value) Destroy(t.gameObject);
+                var newObj = Instantiate(ButtonTemplate, ButtonTemplate.transform.parent);
+                newObj.SetActive(true);
+                newObj.name = clue.Name.Value;
+                newObj.transform.SetParent(slot.transform);
+                if (!string.IsNullOrEmpty(clue.Image.Value))
+                {
+                    foreach (Transform t in newObj.transform)
+                    {
+                        if (t.gameObject.GetComponent<Text>() != null)
                         {
-                            foreach (Transform t in newObj.transform)
-                            {
-                                if (t.gameObject.GetComponent<Text>() != null)
-                                {
-                                    t.gameObject.GetComponent<Text>().text = clue.Name.Value;
-                                }
-                                if (t.gameObject.GetComponent<Image>() != null)
-                                {
-                                    t.gameObject.GetComponent<Image>().sprite = Resources.Load<Sprite>(clue.Image.Value);
-                                }
-                            }
+                            t.gameObject.GetComponent<Text>().text = clue.Name.Value;
                         }
-                        else
+                        if (t.gameObject.GetComponent<Image>() != null)
                         {
-                            foreach (Transform t in newObj.transform)
-                            {
-                                if (t.gameObject.GetComponent<Text>() != null)
-                                {
-                                    t.gameObject.GetComponent<Text>().text = clue.Name.Value;
-                                    t.gameObject.GetComponent<Text>().gameObject.SetActive(true);
-                                }
-                                if (t.gameObject.GetComponent<Image>() != null)
-                                {
-                                    t.gameObject.GetComponent<Image>().gameObject.SetActive(false);
-                                }
-                            }
+                            t.gameObject.GetComponent<Image>().sprite = Resources.Load<Sprite>(clue.Image.Value);
                         }
-                        newObj.GetComponent<DragHandler>().enabled = false;
-                        slot.GetComponent<Slot>().Text.GetComponent<Text>().text = clue.Hint.Value;
                     }
+                }
+                else
+                {
+                    foreach (Transform t in newObj.transform)
+                    {
+                        if (t.gameObject.GetComponent<Text>() != null)
+                        {
+                            t.gameObject.GetComponent<Text>().text = clue.Name.Value;
+                            t.gameObject.GetComponent<Text>().gameObject.SetActive(true);
+                        }
+                        if (t.gameObject.GetComponent<Image>() != null)
+                        {
+                            t.gameObject.GetComponent<Image>().gameObject.SetActive(false);
+                        }
+                    }
+                }
+                newObj.GetComponent<DragHandler>().enabled = false;
+                slot.GetComponent<Slot>().Text.GetComponent<Text>().text = clue.Hint.Value;
             }
+        }
     }
-    
+
     private async void OnSlotChanged(OnlineDatabaseEntry entry, ValueChangedEventArgs args)
     {
         string[] key = entry.Key.Split('/');
@@ -168,60 +169,60 @@ public class VotingDatabaseController : MonoBehaviour
                 if (int.TryParse(key[3].Replace("slot-", ""), out slotNb))
                 {
                     int playerNb = await NetworkController.GetPlayerNumber(m_lobby, player);
-                        var slot = Data[playerNb].Slots[slotNb - 1];
-                        if (field == "name")
+                    var slot = Data[playerNb].Slots[slotNb - 1];
+                    if (field == "name")
+                    {
+                        foreach (Transform t in slot.transform) if (t.gameObject.name == value) Destroy(t.gameObject);
+                        var newObj = Instantiate(ButtonTemplate, ButtonTemplate.transform.parent);
+                        newObj.SetActive(true);
+                        newObj.name = value;
+                        newObj.transform.SetParent(slot.transform);
+                        foreach (Transform t in newObj.transform)
                         {
-                            foreach (Transform t in slot.transform) if (t.gameObject.name == value) Destroy(t.gameObject);
-                            var newObj = Instantiate(ButtonTemplate, ButtonTemplate.transform.parent);
-                            newObj.SetActive(true);
-                            newObj.name = value;
-                            newObj.transform.SetParent(slot.transform);
-                            foreach (Transform t in newObj.transform)
+                            if (t.gameObject.GetComponent<Text>() != null)
                             {
-                                if (t.gameObject.GetComponent<Text>() != null)
-                                {
-                                    t.gameObject.GetComponent<Text>().text = value;
-                                }
+                                t.gameObject.GetComponent<Text>().text = value;
                             }
-                            newObj.GetComponent<DragHandler>().enabled = false;
                         }
-                        else if (field == "hint")
+                        newObj.GetComponent<DragHandler>().enabled = false;
+                    }
+                    else if (field == "hint")
+                    {
+                        slot.GetComponent<Slot>().Text.GetComponent<Text>().text = value;
+                    }
+                    else if (field == "image")
+                    {
+                        if (!string.IsNullOrEmpty(value))
                         {
-                            slot.GetComponent<Slot>().Text.GetComponent<Text>().text = value;
-                        }
-                        else if (field == "image")
-                        {
-                            if (!string.IsNullOrEmpty(value))
+                            foreach (Transform t1 in slot.transform)
                             {
-                                foreach (Transform t1 in slot.transform)
+                                foreach (Transform t in t1)
                                 {
-                                    foreach (Transform t in t1)
+                                    if (t.gameObject.GetComponent<Image>() != null)
                                     {
-                                        if (t.gameObject.GetComponent<Image>() != null)
-                                        {
-                                            t.gameObject.GetComponent<Image>().sprite = Resources.Load<Sprite>(value);
-                                        }
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                foreach (Transform t1 in slot.transform)
-                                {
-                                    foreach (Transform t in t1)
-                                    {
-                                        if (t.gameObject.GetComponent<Image>() != null)
-                                        {
-                                            t.gameObject.GetComponent<Image>().gameObject.SetActive(false);
-                                        }
-                                        if (t.gameObject.GetComponent<Text>() != null)
-                                        {
-                                            t.gameObject.GetComponent<Text>().gameObject.SetActive(true); // TODO: REMOVE TEMP FIX
-                                        }
+                                        t.gameObject.GetComponent<Image>().sprite = Resources.Load<Sprite>(value);
                                     }
                                 }
                             }
                         }
+                        else
+                        {
+                            foreach (Transform t1 in slot.transform)
+                            {
+                                foreach (Transform t in t1)
+                                {
+                                    if (t.gameObject.GetComponent<Image>() != null)
+                                    {
+                                        t.gameObject.GetComponent<Image>().gameObject.SetActive(false);
+                                    }
+                                    if (t.gameObject.GetComponent<Text>() != null)
+                                    {
+                                        t.gameObject.GetComponent<Text>().gameObject.SetActive(true); // TODO: REMOVE TEMP FIX
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
             else
@@ -232,14 +233,14 @@ public class VotingDatabaseController : MonoBehaviour
                 if (int.TryParse(key[3].Replace("slot-", ""), out slotNb))
                 {
                     int playerNb = await NetworkController.GetPlayerNumber(m_lobby, player);
-                        var slot = Data[playerNb].Slots[slotNb - 1];
+                    var slot = Data[playerNb].Slots[slotNb - 1];
 
-                        slot.GetComponent<Slot>().Text.GetComponent<Text>().text = "";
+                    slot.GetComponent<Slot>().Text.GetComponent<Text>().text = "";
 
-                        foreach (Transform t1 in slot.transform)
-                        {
-                            Destroy(t1.gameObject);
-                        }
+                    foreach (Transform t1 in slot.transform)
+                    {
+                        Destroy(t1.gameObject);
+                    }
                 }
             }
         }

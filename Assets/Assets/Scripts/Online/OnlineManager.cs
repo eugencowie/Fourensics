@@ -31,13 +31,14 @@ public class OnlineManager
     {
         // If 'players/{0}/lobby' exists and 'lobbies/{1}' exists, return lobby code.
         bool success = await m_player.Lobby.Pull();
-            if (success) {
-                m_lobby = new Lobby(m_database, m_player.Lobby.Value);
-                bool exists = await m_lobby.Exists();
-                    if (exists) return m_lobby.Id;
-                    else { await m_player.Delete(); return null; }
-            }
-            else return null;
+        if (success)
+        {
+            m_lobby = new Lobby(m_database, m_player.Lobby.Value);
+            bool exists = await m_lobby.Exists();
+            if (exists) return m_lobby.Id;
+            else { await m_player.Delete(); return null; }
+        }
+        else return null;
     }
 
     /// <summary>
@@ -48,12 +49,13 @@ public class OnlineManager
     {
         // If 'players/{0}/scene' exists, return it.
         bool success = await m_player.Scene.Pull();
-            if (success) {
-                int scene;
-                if (int.TryParse(m_player.Scene.Value, out scene)) return scene;
-                else return 0;
-            }
+        if (success)
+        {
+            int scene;
+            if (int.TryParse(m_player.Scene.Value, out scene)) return scene;
             else return 0;
+        }
+        else return 0;
     }
 
     /// <summary>
@@ -65,30 +67,35 @@ public class OnlineManager
         // player to list and push 'lobbies/{0}/players' back up.
         m_lobby = new Lobby(m_database, code);
         bool exists = await m_lobby.Exists();
-            if (exists) {
-                bool lobbySuccess = await m_lobby.Players.Pull();
-                    if (lobbySuccess) {
-                        List<string> players = m_lobby.Players.Value.Split(',').ToList();
-                        if (players.Count < maxPlayers && !players.Contains(m_player.Id)) {
-                            m_player.Lobby.Value = code;
-                            bool playerSuccess = await m_player.Lobby.Push();
-                                if (playerSuccess) {
-                                    players.Add(m_player.Id);
-                                    players.RemoveAll(s => string.IsNullOrEmpty(s));
-                                    m_lobby.Players.Value = string.Join(",", players.ToArray());
-                                    bool roomPlayersSuccess = await m_lobby.Players.Push();
-                                        if (roomPlayersSuccess) {
-                                            return await m_player.Clues.PushEntries();
-                                        }
-                                        else return false;
-                                }
-                                else return false;
+        if (exists)
+        {
+            bool lobbySuccess = await m_lobby.Players.Pull();
+            if (lobbySuccess)
+            {
+                List<string> players = m_lobby.Players.Value.Split(',').ToList();
+                if (players.Count < maxPlayers && !players.Contains(m_player.Id))
+                {
+                    m_player.Lobby.Value = code;
+                    bool playerSuccess = await m_player.Lobby.Push();
+                    if (playerSuccess)
+                    {
+                        players.Add(m_player.Id);
+                        players.RemoveAll(s => string.IsNullOrEmpty(s));
+                        m_lobby.Players.Value = string.Join(",", players.ToArray());
+                        bool roomPlayersSuccess = await m_lobby.Players.Push();
+                        if (roomPlayersSuccess)
+                        {
+                            return await m_player.Clues.PushEntries();
                         }
                         else return false;
                     }
                     else return false;
+                }
+                else return false;
             }
             else return false;
+        }
+        else return false;
     }
 
     /// <summary>
@@ -102,9 +109,9 @@ public class OnlineManager
         m_lobby.State.Value = ((int)LobbyState.Lobby).ToString();
 
         bool success1 = await m_lobby.CreatedTime.Push();
-            bool success2 = await m_lobby.Players.Push();
-                bool success3 = await m_lobby.State.Push();
-                    return (success1 && success2 && success3);
+        bool success2 = await m_lobby.Players.Push();
+        bool success3 = await m_lobby.State.Push();
+        return (success1 && success2 && success3);
     }
 
     /// <summary>
@@ -119,14 +126,18 @@ public class OnlineManager
 
         // If the generated room code already exists, try again (up to three tries).
         bool exists0 = await m_database.Exists(keys[0]);
-            if (!exists0) return codes[0];
-            else { bool exists1 = await m_database.Exists(keys[1]);
-                if (!exists1) return codes[1];
-                else { bool exists2 = await m_database.Exists(keys[2]);
-                    if (!exists2) return codes[2];
-                    else return null;
-                }
+        if (!exists0) return codes[0];
+        else
+        {
+            bool exists1 = await m_database.Exists(keys[1]);
+            if (!exists1) return codes[1];
+            else
+            {
+                bool exists2 = await m_database.Exists(keys[2]);
+                if (!exists2) return codes[2];
+                else return null;
             }
+        }
     }
 
     /// <summary>
@@ -171,14 +182,15 @@ public class OnlineManager
 
         //m_lobby = new Lobby(m_database, code); // TODO
         bool success = await m_lobby.Players.Pull();
-            if (success) {
-                List<string> players = m_lobby.Players.Value.Split(',').ToList();
-                players.RemoveAll(s => string.IsNullOrEmpty(s));
-                if (players.Count < requiredPlayers) return LobbyError.TooFewPlayers;
-                else if (players.Count > requiredPlayers) return LobbyError.TooManyPlayers;
-                else return LobbyError.None;
-            }
-            else return LobbyError.Unknown;
+        if (success)
+        {
+            List<string> players = m_lobby.Players.Value.Split(',').ToList();
+            players.RemoveAll(s => string.IsNullOrEmpty(s));
+            if (players.Count < requiredPlayers) return LobbyError.TooFewPlayers;
+            else if (players.Count > requiredPlayers) return LobbyError.TooManyPlayers;
+            else return LobbyError.None;
+        }
+        else return LobbyError.Unknown;
     }
 
     /// <summary>
@@ -198,22 +210,25 @@ public class OnlineManager
     {
         //m_lobby = new Lobby(m_database, code); // TODO
         bool success = await m_lobby.Players.Pull();
-            if (success) {
-                List<string> players = m_lobby.Players.Value.Split(',').ToList();
-                players.RemoveAll(s => string.IsNullOrEmpty(s));
-                players = players.OrderBy(_ => UnityEngine.Random.value).ToList();
-                int ourScene = -1;
-                for (int i = 0; i < players.Count; i++) {
-                    Player player = new Player(m_database, players[i]);
-                    if (player.Id == m_player.Id) {
-                        ourScene = (i+1);
-                    }
-                    player.Scene.Value = (i+1).ToString();
-                    await player.Scene.Push();
+        if (success)
+        {
+            List<string> players = m_lobby.Players.Value.Split(',').ToList();
+            players.RemoveAll(s => string.IsNullOrEmpty(s));
+            players = players.OrderBy(_ => UnityEngine.Random.value).ToList();
+            int ourScene = -1;
+            for (int i = 0; i < players.Count; i++)
+            {
+                Player player = new Player(m_database, players[i]);
+                if (player.Id == m_player.Id)
+                {
+                    ourScene = (i + 1);
                 }
-                return ourScene;
+                player.Scene.Value = (i + 1).ToString();
+                await player.Scene.Push();
             }
-            else return -1;
+            return ourScene;
+        }
+        else return -1;
     }
 
     #endregion
@@ -222,10 +237,10 @@ public class OnlineManager
 
     public async Task<bool> UploadDatabaseItem(int slot, ObjectHintData hint)
     {
-        m_player.Clues.Clues[slot-1].Name.Value = hint.Name;
-        m_player.Clues.Clues[slot-1].Hint.Value = hint.Hint;
-        m_player.Clues.Clues[slot-1].Image.Value = hint.Image;
-        return await m_player.Clues.Clues[slot-1].PushEntries();
+        m_player.Clues.Clues[slot - 1].Name.Value = hint.Name;
+        m_player.Clues.Clues[slot - 1].Hint.Value = hint.Hint;
+        m_player.Clues.Clues[slot - 1].Image.Value = hint.Image;
+        return await m_player.Clues.Clues[slot - 1].PushEntries();
     }
 
     public async Task<bool> RemoveDatabaseItem(int slot)
@@ -237,72 +252,82 @@ public class OnlineManager
     {
         Lobby lobby = new Lobby(m_database, code); // TODO
         bool success = await lobby.Players.Pull();
-            if (success) {
-                string val = lobby.Players.Value;
-                List<string> players = lobby.Players.Value.Split(',').ToList();
-                players.RemoveAll(s => string.IsNullOrEmpty(s));
-                players.Remove(m_player.Id);
-                foreach (string playerId in players) {
-                    Player player = new Player(m_database, playerId);
-                    foreach (PlayerClue clue in player.Clues.Clues) {
-                        clue.RegisterListeners(listener);
-                    }
+        if (success)
+        {
+            string val = lobby.Players.Value;
+            List<string> players = lobby.Players.Value.Split(',').ToList();
+            players.RemoveAll(s => string.IsNullOrEmpty(s));
+            players.Remove(m_player.Id);
+            foreach (string playerId in players)
+            {
+                Player player = new Player(m_database, playerId);
+                foreach (PlayerClue clue in player.Clues.Clues)
+                {
+                    clue.RegisterListeners(listener);
                 }
             }
+        }
     }
 
     public async void DeregisterCluesChanged() // TODO: make all these functions static
     {
         bool success = await m_lobby.Players.Pull();
-            if (success) {
-                List<string> players = m_lobby.Players.Value.Split(',').ToList();
-                players.RemoveAll(s => string.IsNullOrEmpty(s));
-                players.Remove(m_player.Id);
-                foreach (string playerId in players) {
-                    Player player = new Player(m_database, playerId);
-                    foreach (PlayerClue clue in player.Clues.Clues) {
-                        clue.DeregisterListeners();
-                    }
+        if (success)
+        {
+            List<string> players = m_lobby.Players.Value.Split(',').ToList();
+            players.RemoveAll(s => string.IsNullOrEmpty(s));
+            players.Remove(m_player.Id);
+            foreach (string playerId in players)
+            {
+                Player player = new Player(m_database, playerId);
+                foreach (PlayerClue clue in player.Clues.Clues)
+                {
+                    clue.DeregisterListeners();
                 }
             }
+        }
     }
 
     public async Task<int> GetPlayerNumber(string code, string player)
     {
         //m_lobby = new Lobby(m_database, code); // TODO
         bool success = await m_lobby.Players.Pull();
-            if (success) {
-                List<string> players = m_lobby.Players.Value.Split(',').ToList();
-                players.RemoveAll(s => string.IsNullOrEmpty(s));
-                players.Remove(m_player.Id);
-                players.Insert(0, m_player.Id);
-                int playerNb = players.IndexOf(player);
-                if (playerNb >= 0 && playerNb < players.Count) {
-                    return playerNb;
-                }
-                else return -1;
+        if (success)
+        {
+            List<string> players = m_lobby.Players.Value.Split(',').ToList();
+            players.RemoveAll(s => string.IsNullOrEmpty(s));
+            players.Remove(m_player.Id);
+            players.Insert(0, m_player.Id);
+            int playerNb = players.IndexOf(player);
+            if (playerNb >= 0 && playerNb < players.Count)
+            {
+                return playerNb;
             }
             else return -1;
+        }
+        else return -1;
     }
 
     public async Task<Player> DownloadClues(string code, int playerNb)
     {
         //m_lobby = new Lobby(m_database, code); // TODO
         bool success = await m_lobby.Players.Pull();
-            if (success) {
-                List<string> players = m_lobby.Players.Value.Split(',').ToList();
-                players.RemoveAll(s => string.IsNullOrEmpty(s));
-                players.Remove(m_player.Id);
-                players.Insert(0, m_player.Id);
-                if (playerNb < players.Count) {
-                    Player player = new Player(m_database, players[playerNb]);
-                    bool pullSuccess = await player.Clues.PullEntries();
-                        if (pullSuccess) return player;
-                        else return null;
-                }
+        if (success)
+        {
+            List<string> players = m_lobby.Players.Value.Split(',').ToList();
+            players.RemoveAll(s => string.IsNullOrEmpty(s));
+            players.Remove(m_player.Id);
+            players.Insert(0, m_player.Id);
+            if (playerNb < players.Count)
+            {
+                Player player = new Player(m_database, players[playerNb]);
+                bool pullSuccess = await player.Clues.PullEntries();
+                if (pullSuccess) return player;
                 else return null;
             }
             else return null;
+        }
+        else return null;
     }
 
     #endregion
@@ -313,13 +338,13 @@ public class OnlineManager
     {
         m_lobby = new Lobby(m_database, code); // TODO
         bool success = await m_lobby.Players.Pull();
-            if (success)
-            {
-                List<string> players = m_lobby.Players.Value.Split(',').ToList();
-                players.RemoveAll(s => string.IsNullOrEmpty(s));
-                return players.ToArray();
-            }
-            else return null;
+        if (success)
+        {
+            List<string> players = m_lobby.Players.Value.Split(',').ToList();
+            players.RemoveAll(s => string.IsNullOrEmpty(s));
+            return players.ToArray();
+        }
+        else return null;
     }
 
     public async Task<bool> ReadyUp()
@@ -338,60 +363,68 @@ public class OnlineManager
     {
         m_lobby = new Lobby(m_database, code); // TODO
         bool success = await m_lobby.Players.Pull();
-            if (success) {
-                List<string> players = m_lobby.Players.Value.Split(',').ToList();
-                players.RemoveAll(s => string.IsNullOrEmpty(s));
-                //players.Remove(m_player.Id);
-                foreach (string playerId in players) {
-                    Player player = new Player(m_database, playerId);
-                    player.Ready.RegisterListener(listener);
-                }
+        if (success)
+        {
+            List<string> players = m_lobby.Players.Value.Split(',').ToList();
+            players.RemoveAll(s => string.IsNullOrEmpty(s));
+            //players.Remove(m_player.Id);
+            foreach (string playerId in players)
+            {
+                Player player = new Player(m_database, playerId);
+                player.Ready.RegisterListener(listener);
             }
+        }
     }
 
     public async void DeregisterReadyChanged(string code) // TODO: make all these functions static
     {
         m_lobby = new Lobby(m_database, code); // TODO
         bool success = await m_lobby.Players.Pull();
-            if (success) {
-                List<string> players = m_lobby.Players.Value.Split(',').ToList();
-                players.RemoveAll(s => string.IsNullOrEmpty(s));
-                //players.Remove(m_player.Id);
-                foreach (string playerId in players) {
-                    Player player = new Player(m_database, playerId);
-                    player.Ready.DeregisterListener();
-                }
+        if (success)
+        {
+            List<string> players = m_lobby.Players.Value.Split(',').ToList();
+            players.RemoveAll(s => string.IsNullOrEmpty(s));
+            //players.Remove(m_player.Id);
+            foreach (string playerId in players)
+            {
+                Player player = new Player(m_database, playerId);
+                player.Ready.DeregisterListener();
             }
+        }
     }
 
     public async void RegisterVoteChanged(string code, OnlineDatabaseEntry.Listener listener)
     {
         m_lobby = new Lobby(m_database, code); // TODO
         bool success = await m_lobby.Players.Pull();
-            if (success) {
-                List<string> players = m_lobby.Players.Value.Split(',').ToList();
-                players.RemoveAll(s => string.IsNullOrEmpty(s));
-                //players.Remove(m_player.Id);
-                foreach (string playerId in players) {
-                    Player player = new Player(m_database, playerId);
-                    player.Vote.RegisterListener(listener);
-                }
+        if (success)
+        {
+            List<string> players = m_lobby.Players.Value.Split(',').ToList();
+            players.RemoveAll(s => string.IsNullOrEmpty(s));
+            //players.Remove(m_player.Id);
+            foreach (string playerId in players)
+            {
+                Player player = new Player(m_database, playerId);
+                player.Vote.RegisterListener(listener);
             }
+        }
     }
 
     public async void DeregisterVoteChanged(string code) // TODO: make all these functions static
     {
         m_lobby = new Lobby(m_database, code); // TODO
         bool success = await m_lobby.Players.Pull();
-            if (success) {
-                List<string> players = m_lobby.Players.Value.Split(',').ToList();
-                players.RemoveAll(s => string.IsNullOrEmpty(s));
-                //players.Remove(m_player.Id);
-                foreach (string playerId in players) {
-                    Player player = new Player(m_database, playerId);
-                    player.Vote.DeregisterListener();
-                }
+        if (success)
+        {
+            List<string> players = m_lobby.Players.Value.Split(',').ToList();
+            players.RemoveAll(s => string.IsNullOrEmpty(s));
+            //players.Remove(m_player.Id);
+            foreach (string playerId in players)
+            {
+                Player player = new Player(m_database, playerId);
+                player.Vote.DeregisterListener();
             }
+        }
     }
 
     #endregion
@@ -411,7 +444,7 @@ public class OnlineManager
     #endregion
 
     #region Utility methods
-    
+
     /// <summary>
     /// Generates a random five-character room code.
     /// </summary>

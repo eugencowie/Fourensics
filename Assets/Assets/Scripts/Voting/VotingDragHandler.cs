@@ -1,7 +1,5 @@
-using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class VotingDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
@@ -9,12 +7,8 @@ public class VotingDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler,
     public static GameObject itemBeingDragged;
     Vector3 startPosition;
     Transform startParent;
-    
-    public VotingSuspect Suspect;
 
-    private void Start()
-    {
-    }
+    public VotingSuspect Suspect;
 
     public void OnBeginDrag(PointerEventData eventData)
     {

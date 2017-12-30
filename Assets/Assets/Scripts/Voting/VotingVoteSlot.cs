@@ -1,8 +1,6 @@
 using UnityEngine;
-using System.Collections;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using System.Linq;
 
 public class VotingVoteSlot : MonoBehaviour, IDropHandler
 {
@@ -30,6 +28,7 @@ public class VotingVoteSlot : MonoBehaviour, IDropHandler
     //public int SlotNumber;
 
     #region IDropHandler implementation
+
     public void OnDrop(PointerEventData eventData)
     {
         if (item == null && CanDrop)
@@ -63,5 +62,6 @@ public class VotingVoteSlot : MonoBehaviour, IDropHandler
             //}
         }
     }
+
     #endregion
 }

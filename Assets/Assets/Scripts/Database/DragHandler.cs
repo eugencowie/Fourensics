@@ -1,7 +1,5 @@
-using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
@@ -9,10 +7,6 @@ public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     public static GameObject itemBeingDragged;
     Vector3 startPosition;
     Transform startParent;
-
-    private void Start()
-    {
-    }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
@@ -25,7 +19,7 @@ public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
             itemBeingDragged.GetComponent<Image>().raycastTarget = false;
         }
     }
-    
+
     public void OnDrag(PointerEventData eventData)
     {
         if (enabled)
@@ -33,7 +27,7 @@ public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
             itemBeingDragged.transform.position = eventData.position;
         }
     }
-    
+
     public void OnEndDrag(PointerEventData eventData)
     {
         if (enabled)

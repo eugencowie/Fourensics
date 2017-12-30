@@ -99,16 +99,18 @@ public class CameraTap : MonoBehaviour
         {
             // If hit object has hints, we can add them to the inventory
             ObjectHint[] hints = inspectable.gameObject.GetComponents<ObjectHint>();
-            if (hints.Length > 0) {
+            if (hints.Length > 0)
+            {
                 Inventory.AddItems(() => TapObject(inspectable.gameObject), hints);
             }
 
             Text text = HintText.GetComponent<Text>();
             text.text = "";
-            foreach (var hint in hints) {
+            foreach (var hint in hints)
+            {
                 text.text += string.Format("{0}: {1}\n", hint.Name, hint.Hint);
             }
-            
+
             if (inspectable.audioSource != null && inspectable.audioClip != null)
             {
                 inspectable.audioSource.PlayOneShot(inspectable.audioClip, 1f);
@@ -123,7 +125,8 @@ public class CameraTap : MonoBehaviour
                 HideHintPanel();
                 BlurPlane.SetActive(false);
                 if (Spotlight != null) Spotlight.SetActive(false);
-                /*enabled = */m_cameraSwipe.enabled = true;
+                /*enabled = */
+                m_cameraSwipe.enabled = true;
                 isInpecting = false;
                 Destroy(newObject);
             };
@@ -131,7 +134,8 @@ public class CameraTap : MonoBehaviour
             if (hints.Length > 0) ShowHintPanel();
             if (Spotlight != null) Spotlight.SetActive(true);
             BlurPlane.SetActive(true);
-            /*enabled = */m_cameraSwipe.enabled = false;
+            /*enabled = */
+            m_cameraSwipe.enabled = false;
             isInpecting = true;
         }
     }
@@ -142,13 +146,15 @@ public class CameraTap : MonoBehaviour
         {
             // If hit object has hints, we can add them to the inventory
             ObjectHint[] hints = zoomable.gameObject.GetComponents<ObjectHint>();
-            if (hints.Length > 0) {
+            if (hints.Length > 0)
+            {
                 Inventory.AddItems(() => TapObject(zoomable.gameObject), hints);
             }
 
             Text text = HintText.GetComponent<Text>();
             text.text = "";
-            foreach (var hint in hints) {
+            foreach (var hint in hints)
+            {
                 text.text += string.Format("{0}: {1}\n", hint.Name, hint.Hint);
             }
 
@@ -178,7 +184,8 @@ public class CameraTap : MonoBehaviour
                     HideHintPanel();
                     movement.Target = StartCamera;
                     movement.OnMoveEnded = () => {
-                        /*enabled = */m_cameraSwipe.enabled = true;
+                        /*enabled = */
+                        m_cameraSwipe.enabled = true;
                         isZoomed = false;
                         Destroy(StartCamera);
                         Destroy(movement);
@@ -197,7 +204,8 @@ public class CameraTap : MonoBehaviour
             };
 
             // Disable this component and disable the camera swipe component
-            /*enabled = */m_cameraSwipe.enabled = false;
+            /*enabled = */
+            m_cameraSwipe.enabled = false;
             isZoomed = true;
         }
     }
@@ -228,7 +236,7 @@ public class CameraTap : MonoBehaviour
         {
             hints.Peek().SetActive(false);
         }
-        
+
         var go = Instantiate(HintPanel, HintPanel.transform.parent);
         go.SetActive(true);
         hints.Push(go);

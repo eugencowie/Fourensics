@@ -43,11 +43,14 @@ public abstract class OnlineDatabaseNode
     public async Task<bool> Delete()
     {
         bool success = await Database.Delete(Key);
-            if (success) {
-                foreach (var entry in Entries)
-                    entry.Value = "";
+        if (success)
+        {
+            foreach (var entry in Entries)
+            {
+                entry.Value = "";
             }
-            return success;
+        }
+        return success;
     }
 
     /// <summary>

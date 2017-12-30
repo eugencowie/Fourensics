@@ -35,21 +35,22 @@ public class VotingController : MonoBehaviour
         //VoteButton.SetActive(false);
 
         int scene = await NetworkController.GetPlayerScene();
-            if (scene > 0)
+        if (scene > 0)
+        {
+            m_scene = scene;
+            SetBackground();
+            string lobby = await NetworkController.GetPlayerLobby();
+            if (!string.IsNullOrEmpty(lobby))
             {
-                m_scene = scene;
-                SetBackground();
-                string lobby = await NetworkController.GetPlayerLobby();
-                    if (!string.IsNullOrEmpty(lobby)) {
-                        m_lobby = lobby;
-                        ResetButton.SetActive(true);
-                        ReturnButton.SetActive(true);
-                        //VoteButton.SetActive(true);
-                        DiscardSuspects();
-                    }
-                    else SceneManager.LoadScene("Lobby");
+                m_lobby = lobby;
+                ResetButton.SetActive(true);
+                ReturnButton.SetActive(true);
+                //VoteButton.SetActive(true);
+                DiscardSuspects();
             }
             else SceneManager.LoadScene("Lobby");
+        }
+        else SceneManager.LoadScene("Lobby");
     }
 
     private void DiscardSuspects()

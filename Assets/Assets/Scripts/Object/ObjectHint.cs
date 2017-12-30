@@ -40,7 +40,7 @@ public class ObjectHint : MonoBehaviour
 public class ObjectHintData
 {
     //Saving
-    
+
     public static ObjectHintData current;
 
     public string Name = "";

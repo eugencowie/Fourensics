@@ -51,11 +51,12 @@ public class OnlineDatabaseEntry
     public async Task<bool> Pull()
     {
         string result = await m_database.Pull(Key);
-            if (result != null) {
-                Value = result;
-                return true;
-            }
-            else return false;
+        if (result != null)
+        {
+            Value = result;
+            return true;
+        }
+        else return false;
     }
 
     /// <summary>
@@ -72,8 +73,8 @@ public class OnlineDatabaseEntry
     public async Task<bool> Delete()
     {
         bool success = await m_database.Delete(Key);
-            if (success) Value = "";
-            return success;
+        if (success) Value = "";
+        return success;
     }
 
     /// <summary>

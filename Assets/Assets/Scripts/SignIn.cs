@@ -20,7 +20,7 @@ class SignIn : MonoBehaviour
         try { status = await FirebaseApp.CheckAndFixDependenciesAsync(); }
         catch (Exception e) { m_status.text = $"Dependency check failed: {e.Message}"; return; }
         if (status != DependencyStatus.Available) { m_status.text = $"Dependencies not available: {status.ToString()}"; return; }
-        
+
         if (Application.isEditor)
         {
             // Set user id to unique device identifier

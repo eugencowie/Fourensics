@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 
 /// <summary>
 /// Represents a node in the database which contains a collection of database entries.
@@ -97,7 +96,8 @@ public class PlayerClues : OnlineDatabaseNode
     /// </summary>
     public override OnlineDatabaseEntry[] Entries
     {
-        get {
+        get
+        {
             List<OnlineDatabaseEntry> list = new List<OnlineDatabaseEntry>();
             foreach (var clue in Clues) list.AddRange(clue.Entries);
             return list.ToArray();

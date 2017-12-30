@@ -35,13 +35,14 @@ public class GameOverController : MonoBehaviour
         LoseVideo.loopPointReached += VideoLoopPointReached;
 
         string room = await NetworkController.GetPlayerLobby();
-            if (!string.IsNullOrEmpty(room)) {
-                string[] players = await NetworkController.GetPlayers(m_roomCode);
-                    m_roomCode = room;
-                    foreach (var player in players) m_votedPlayers[player] = "";
-                    NetworkController.RegisterVoteChanged(room, OnVoteChanged);
-            }
-            else SceneManager.LoadScene("Lobby");
+        if (!string.IsNullOrEmpty(room))
+        {
+            string[] players = await NetworkController.GetPlayers(m_roomCode);
+            m_roomCode = room;
+            foreach (var player in players) m_votedPlayers[player] = "";
+            NetworkController.RegisterVoteChanged(room, OnVoteChanged);
+        }
+        else SceneManager.LoadScene("Lobby");
     }
 
     private void VideoLoopPointReached(VideoPlayer source)
@@ -54,7 +55,7 @@ public class GameOverController : MonoBehaviour
     public async void ResetButtonPressed()
     {
         await NetworkController.LeaveLobby(m_roomCode);
-            SceneManager.LoadScene("Lobby");
+        SceneManager.LoadScene("Lobby");
     }
 
     private void OnVoteChanged(OnlineDatabaseEntry entry, ValueChangedEventArgs args)
@@ -83,9 +84,9 @@ public class GameOverController : MonoBehaviour
                         m_votedPlayers.Remove(SignIn.GetPlayerId());
 
                         WinText.text += "\n\nYou voted for " + yourVote;
-                        for (int i=0; i<m_votedPlayers.Count; i++)
+                        for (int i = 0; i < m_votedPlayers.Count; i++)
                         {
-                            WinText.text += "\nPlayer " + (i+2) + " voted for " + m_votedPlayers.ElementAt(i).Value;
+                            WinText.text += "\nPlayer " + (i + 2) + " voted for " + m_votedPlayers.ElementAt(i).Value;
                         }
                         WaitText.gameObject.SetActive(false);
                         WinVideo.gameObject.SetActive(true);

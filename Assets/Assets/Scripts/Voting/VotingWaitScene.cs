@@ -4,17 +4,17 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class VotingWaitController : MonoBehaviour
+public class VotingWaitScene : MonoBehaviour
 {
     private OnlineManager NetworkController;
     private string m_roomCode;
     private Dictionary<string, string> m_votedPlayers = new Dictionary<string, string>();
 
-    async void Start()
+    void Start()
     {
         NetworkController = new OnlineManager();
 
-        string room = await NetworkController.GetPlayerLobby();
+        string room = LobbyScene.Lobby.Id;
         if (!string.IsNullOrEmpty(room))
         {
             string[] players = NetworkController.GetPlayers();

@@ -20,78 +20,47 @@ class OnlineManager
     #region Async methods
 
     /// <summary>
-    /// If the player is listed as being in a lobby and that lobby does exist, returns the lobby
-    /// code. Otherwise, returns null.
-    /// </summary>
-    public async Task<string> GetPlayerLobby()
-    {
-        SignIn.Lobby = await Lobby.Fetch(SignIn.User.Lobby.Value);
-        bool exists = SignIn.Lobby.State.Value != null;
-        if (exists) return SignIn.Lobby.Id;
-        else
-        {
-            SignIn.User.Lobby.Value = "";
-            SignIn.User.Scene.Value = "";
-            SignIn.User.Ready.Value = "";
-            SignIn.User.Vote.Value = "";
-            foreach (var item in SignIn.User.Items)
-            {
-                item.Name.Value = "";
-                item.Description.Value = "";
-                item.Image.Value = "";
-            }
-            return null;
-        }
-    }
-
-    /// <summary>
     /// If the player is listed as being in a scene and that scene does exist, returns the scene
     /// number. Otherwise, returns 0.
     /// </summary>
     public int GetPlayerScene()
     {
         int scene;
-        if (int.TryParse(SignIn.User.Scene.Value, out scene)) return scene;
+        if (int.TryParse(SignInScene.User.Scene.Value, out scene)) return scene;
         else return 0;
     }
 
     /// <summary>
     /// If lobby exists, updates player entry to new lobby and adds player to lobby.
     /// </summary>
-    public async Task<bool> JoinLobby(string code, int maxPlayers)
+    public static bool JoinLobby(Lobby lobby, int maxPlayers)
     {
-        Lobby lobby = await Lobby.Fetch(code);
-        bool exists = SignIn.Lobby.State.Value != null;
-        if (exists)
-        {
-            List<string> players = SignIn.Lobby.Users.Select(u => u.Value).ToList();
-            players.RemoveAll(s => string.IsNullOrEmpty(s));
-            if (players.Count < maxPlayers && !players.Contains(SignIn.User.Id))
-            {
-                SignIn.Lobby = lobby;
-                SignIn.User.Lobby.Value = code;
-                
-                players.Add(SignIn.User.Id);
-                for (int i = 0; i < players.Count; i++)
-                    SignIn.Lobby.Users[i].Value = players[i];
-                return true;
-            }
-            else return false;
-        }
-        else return false;
+        // Check if lobby exists
+        if (lobby.State.Value == null)
+            return false;
+        
+        // Get list of players in lobby
+        List<string> players = lobby.Users
+            .Where(u => u.Value != null)
+            .Select(u => u.Value)
+            .ToList();
+
+        // If player is already in room
+        if (players.Contains(SignInScene.User.Id))
+            return true;
+
+        // If too many players
+        if (players.Count >= maxPlayers)
+            return false;
+        
+        // Add player to lobby
+        players.Add(SignInScene.User.Id);
+        for (int i = 0; i < players.Count; i++)
+            lobby.Users[i].Value = players[i];
+
+        return true;
     }
-
-    /// <summary>
-    /// Creates a lobby on the server.
-    /// </summary>
-    public async void CreateLobby(string code)
-    {
-        SignIn.Lobby = await Lobby.Fetch(code);
-
-        //SignIn.Lobby.CreatedTime.Value = DateTimeOffset.UtcNow.ToString("o"));
-        SignIn.Lobby.State.Value = ((int)LobbyState.Lobby).ToString();
-    }
-
+    
     /// <summary>
     /// Attempts to generate a lobby code which is not in use. If all codes generated are in
     /// use, returns null.
@@ -118,11 +87,11 @@ class OnlineManager
     /// </summary>
     public void LeaveLobby()
     {
-        SignIn.User.Lobby.Value = "";
-        SignIn.User.Scene.Value = "";
-        SignIn.User.Ready.Value = "";
-        SignIn.User.Vote.Value = "";
-        foreach (var item in SignIn.User.Items)
+        SignInScene.User.Lobby.Value = "";
+        SignInScene.User.Scene.Value = "";
+        SignInScene.User.Ready.Value = "";
+        SignInScene.User.Vote.Value = "";
+        foreach (var item in SignInScene.User.Items)
         {
             item.Name.Value = "";
             item.Description.Value = "";
@@ -180,7 +149,7 @@ class OnlineManager
     /// </summary>
     public void SetLobbyState(LobbyState state)
     {
-        SignIn.Lobby.State.Value = ((int)state).ToString();
+        LobbyScene.Lobby.State.Value = ((int)state).ToString();
     }
 
     /// <summary>
@@ -188,14 +157,14 @@ class OnlineManager
     /// </summary>
     public async Task<int> AssignPlayerScenes(string code)
     {
-        List<string> players = SignIn.Lobby.Users.Select(u => u.Value).ToList();
+        List<string> players = LobbyScene.Lobby.Users.Select(u => u.Value).ToList();
         players.RemoveAll(s => string.IsNullOrEmpty(s));
         players = players.OrderBy(_ => UnityEngine.Random.value).ToList();
         int ourScene = -1;
         for (int i = 0; i < players.Count; i++)
         {
             User player = await User.Fetch(players[i]);
-            if (player.Id == SignIn.User.Id)
+            if (player.Id == SignInScene.User.Id)
             {
                 ourScene = (i + 1);
             }
@@ -210,9 +179,9 @@ class OnlineManager
 
     public void UploadDatabaseItem(int slot, ObjectHintData hint)
     {
-        SignIn.User.Items[slot - 1].Name.Value = hint.Name;
-        SignIn.User.Items[slot - 1].Description.Value = hint.Hint;
-        SignIn.User.Items[slot - 1].Image.Value = hint.Image;
+        SignInScene.User.Items[slot - 1].Name.Value = hint.Name;
+        SignInScene.User.Items[slot - 1].Description.Value = hint.Hint;
+        SignInScene.User.Items[slot - 1].Image.Value = hint.Image;
     }
 
     public void RemoveDatabaseItem(int slot)
@@ -222,9 +191,9 @@ class OnlineManager
 
     public async void RegisterCluesChanged(Action<CloudNode> listener)
     {
-        List<string> players = SignIn.Lobby.Users.Select(u => u.Value).ToList();
+        List<string> players = LobbyScene.Lobby.Users.Select(u => u.Value).ToList();
         players.RemoveAll(s => string.IsNullOrEmpty(s));
-        players.Remove(SignIn.User.Id);
+        players.Remove(SignInScene.User.Id);
         foreach (string playerId in players)
         {
             User player = await User.Fetch(playerId);
@@ -239,9 +208,9 @@ class OnlineManager
 
     public async void DeregisterCluesChanged(Action<CloudNode> listener) // TODO: make all these functions static
     {
-        List<string> players = SignIn.Lobby.Users.Select(u => u.Value).ToList();
+        List<string> players = LobbyScene.Lobby.Users.Select(u => u.Value).ToList();
         players.RemoveAll(s => string.IsNullOrEmpty(s));
-        players.Remove(SignIn.User.Id);
+        players.Remove(SignInScene.User.Id);
         foreach (string playerId in players)
         {
             User player = await User.Fetch(playerId);
@@ -256,10 +225,10 @@ class OnlineManager
 
     public int GetPlayerNumber(string player)
     {
-        List<string> players = SignIn.Lobby.Users.Select(u => u.Value).ToList();
+        List<string> players = LobbyScene.Lobby.Users.Select(u => u.Value).ToList();
         players.RemoveAll(s => string.IsNullOrEmpty(s));
-        players.Remove(SignIn.User.Id);
-        players.Insert(0, SignIn.User.Id);
+        players.Remove(SignInScene.User.Id);
+        players.Insert(0, SignInScene.User.Id);
         int playerNb = players.IndexOf(player);
         if (playerNb >= 0 && playerNb < players.Count)
         {
@@ -270,10 +239,10 @@ class OnlineManager
 
     public async Task<User> DownloadClues(int playerNb)
     {
-        List<string> players = SignIn.Lobby.Users.Select(u => u.Value).ToList();
+        List<string> players = LobbyScene.Lobby.Users.Select(u => u.Value).ToList();
         players.RemoveAll(s => string.IsNullOrEmpty(s));
-        players.Remove(SignIn.User.Id);
-        players.Insert(0, SignIn.User.Id);
+        players.Remove(SignInScene.User.Id);
+        players.Insert(0, SignInScene.User.Id);
         if (playerNb < players.Count)
         {
             return await User.Fetch(players[playerNb]);
@@ -287,24 +256,24 @@ class OnlineManager
 
     public string[] GetPlayers()
     {
-        List<string> players = SignIn.Lobby.Users.Select(u => u.Value).ToList();
+        List<string> players = LobbyScene.Lobby.Users.Select(u => u.Value).ToList();
         players.RemoveAll(s => string.IsNullOrEmpty(s));
         return players.ToArray();
     }
 
     public void ReadyUp()
     {
-        SignIn.User.Ready.Value = "true";
+        SignInScene.User.Ready.Value = "true";
     }
 
     public void SubmitVote(string suspect)
     {
-        SignIn.User.Vote.Value = suspect;
+        SignInScene.User.Vote.Value = suspect;
     }
 
     public async void RegisterReadyChanged(Action<CloudNode> listener)
     {
-        List<string> players = SignIn.Lobby.Users.Select(u => u.Value).ToList();
+        List<string> players = LobbyScene.Lobby.Users.Select(u => u.Value).ToList();
         players.RemoveAll(s => string.IsNullOrEmpty(s));
         //players.Remove(m_player.Id);
         foreach (string playerId in players)
@@ -316,7 +285,7 @@ class OnlineManager
 
     public async void DeregisterReadyChanged(Action<CloudNode> listener) // TODO: make all these functions static
     {
-        List<string> players = SignIn.Lobby.Users.Select(u => u.Value).ToList();
+        List<string> players = LobbyScene.Lobby.Users.Select(u => u.Value).ToList();
         players.RemoveAll(s => string.IsNullOrEmpty(s));
         //players.Remove(m_player.Id);
         foreach (string playerId in players)
@@ -328,7 +297,7 @@ class OnlineManager
 
     public async void RegisterVoteChanged(Action<CloudNode> listener)
     {
-        List<string> players = SignIn.Lobby.Users.Select(u => u.Value).ToList();
+        List<string> players = LobbyScene.Lobby.Users.Select(u => u.Value).ToList();
         players.RemoveAll(s => string.IsNullOrEmpty(s));
         //players.Remove(m_player.Id);
         foreach (string playerId in players)
@@ -340,7 +309,7 @@ class OnlineManager
 
     public async void DeregisterVoteChanged(Action<CloudNode> listener) // TODO: make all these functions static
     {
-        List<string> players = SignIn.Lobby.Users.Select(u => u.Value).ToList();
+        List<string> players = LobbyScene.Lobby.Users.Select(u => u.Value).ToList();
         players.RemoveAll(s => string.IsNullOrEmpty(s));
         //players.Remove(m_player.Id);
         foreach (string playerId in players)

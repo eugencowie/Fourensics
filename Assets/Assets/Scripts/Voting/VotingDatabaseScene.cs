@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class VotingDatabaseController : MonoBehaviour
+public class VotingDatabaseScene : MonoBehaviour
 {
     public GameObject MainScreen, WaitScreen;
 
@@ -19,7 +19,7 @@ public class VotingDatabaseController : MonoBehaviour
 
     int playerItemsLoaded = 0;
 
-    async void Start()
+    void Start()
     {
         NetworkController = new OnlineManager();
 
@@ -31,7 +31,7 @@ public class VotingDatabaseController : MonoBehaviour
         {
             m_scene = scene;
             SetBackground();
-            string lobby = await NetworkController.GetPlayerLobby();
+            string lobby = LobbyScene.Lobby.Id;
             if (!string.IsNullOrEmpty(lobby))
             {
                 string[] players = NetworkController.GetPlayers();

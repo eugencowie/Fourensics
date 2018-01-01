@@ -6,10 +6,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-class SignIn : MonoBehaviour
+class SignInScene : MonoBehaviour
 {
     public static User User { get; private set; }
-    public static Lobby Lobby { get; set; }
 
     [SerializeField] Text m_status = null;
 
@@ -23,7 +22,7 @@ class SignIn : MonoBehaviour
 
         if (Application.isEditor)
         {
-            // Set user id to unique device identifier
+            // Fetch device's user from the cloud
             User = await User.Fetch($"dev-{SystemInfo.deviceUniqueIdentifier}");
             User.Name.Value = $"Dev #{SystemInfo.deviceUniqueIdentifier.Substring(0, 7)}";
         }
@@ -47,15 +46,9 @@ class SignIn : MonoBehaviour
             try { firebaseUser = await Static.FirebaseAuth.SignInWithCredentialAsync(credential); }
             catch (Exception e) { m_status.text = $"Authentication failed: {e.Message}"; return; }
 
-            // Set user id to Firebase user id
+            // Fetch Firebase user's user from the cloud
             User = await User.Fetch(firebaseUser.UserId);
             User.Name.Value = firebaseUser.DisplayName;
-        }
-
-        if (User.Lobby.Value != null)
-        {
-            // Set lobby to user's lobby
-            Lobby = await Lobby.Fetch(User.Lobby.Value);
         }
 
         // Load the lobby scene

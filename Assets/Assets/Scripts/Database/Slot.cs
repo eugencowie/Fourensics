@@ -60,7 +60,7 @@ public class Slot : MonoBehaviour, IDropHandler
 
     public GameObject Text;
 
-    public DatabaseController DatabaseController;
+    public DatabaseScene DatabaseController;
 
     [Range(1, 6)]
     public int SlotNumber;

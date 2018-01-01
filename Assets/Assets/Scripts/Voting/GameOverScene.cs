@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.Video;
 
-public class GameOverController : MonoBehaviour
+public class GameOverScene : MonoBehaviour
 {
     public VideoPlayer WinVideo;
     public VideoPlayer LoseVideo;
@@ -25,7 +25,7 @@ public class GameOverController : MonoBehaviour
 
     private Text m_winOrLoseText;
 
-    async void Start()
+    void Start()
     {
         NetworkController = new OnlineManager();
 
@@ -34,7 +34,7 @@ public class GameOverController : MonoBehaviour
         WinVideo.loopPointReached += VideoLoopPointReached;
         LoseVideo.loopPointReached += VideoLoopPointReached;
 
-        string room = await NetworkController.GetPlayerLobby();
+        string room = LobbyScene.Lobby.Id;
         if (!string.IsNullOrEmpty(room))
         {
             string[] players = NetworkController.GetPlayers();
@@ -80,8 +80,8 @@ public class GameOverController : MonoBehaviour
 
                     if (percentage >= requiredPercentage)
                     {
-                        string yourVote = m_votedPlayers[SignIn.User.Id];
-                        m_votedPlayers.Remove(SignIn.User.Id);
+                        string yourVote = m_votedPlayers[SignInScene.User.Id];
+                        m_votedPlayers.Remove(SignInScene.User.Id);
 
                         WinText.text += "\n\nYou voted for " + yourVote;
                         for (int i = 0; i < m_votedPlayers.Count; i++)
@@ -93,7 +93,7 @@ public class GameOverController : MonoBehaviour
 
                         m_winOrLoseText = WinText;
 
-                        m_votedPlayers[SignIn.User.Id] = yourVote;
+                        m_votedPlayers[SignInScene.User.Id] = yourVote;
                     }
                     else
                     {

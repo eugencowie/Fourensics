@@ -14,7 +14,7 @@ public static class StaticSuspects
     }
 }
 
-public class VotingController : MonoBehaviour
+public class VotingScene : MonoBehaviour
 {
     [SerializeField] private GameObject ResetButton = null;
     [SerializeField] private GameObject ReturnButton = null;
@@ -26,7 +26,7 @@ public class VotingController : MonoBehaviour
     private string m_lobby;
     private int m_scene;
 
-    async void Start()
+    void Start()
     {
         NetworkController = new OnlineManager();
 
@@ -39,7 +39,7 @@ public class VotingController : MonoBehaviour
         {
             m_scene = scene;
             SetBackground();
-            string lobby = await NetworkController.GetPlayerLobby();
+            string lobby = LobbyScene.Lobby.Id;
             if (!string.IsNullOrEmpty(lobby))
             {
                 m_lobby = lobby;

@@ -15,7 +15,7 @@ public static class StaticRoom
     }
 }
 
-public class RoomController : MonoBehaviour
+public class RoomScene : MonoBehaviour
 {
     [SerializeField] private GameObject ReadyButton = null;
     [SerializeField] private GameObject DatabaseButton = null;
@@ -29,9 +29,8 @@ public class RoomController : MonoBehaviour
     public GameObject mainScreen;
     public GameObject welcomeScreen;
 
-    async void Start()
+    void Start()
     {
-        Debug.Log("Seen welcome? " + StaticRoom.SeenWelcome);
         if (StaticRoom.SeenWelcome)
         {
             mainScreen.SetActive(true);
@@ -44,7 +43,7 @@ public class RoomController : MonoBehaviour
         ReadyButton.SetActive(false);
         DatabaseButton.SetActive(false);
 
-        string room = await NetworkController.GetPlayerLobby();
+        string room = LobbyScene.Lobby.Id;
         if (!string.IsNullOrEmpty(room))
         {
             string[] players = NetworkController.GetPlayers();
@@ -82,7 +81,7 @@ public class RoomController : MonoBehaviour
                 string player = key[1];
                 m_readyPlayers[player] = true;
 
-                if (player == SignIn.User.Id)
+                if (player == SignInScene.User.Id)
                 {
                     ConfirmReady();
                 }

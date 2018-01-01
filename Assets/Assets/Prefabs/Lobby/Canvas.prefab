@@ -536,16 +536,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a8b11a0edeffb3429dd4ce57ed20cdb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CodeLabelObject: {fileID: 1315395095670258}
-  CodeFieldObject: {fileID: 1614422251164556}
-  PlayersLabelObject: {fileID: 1697756155946048}
-  StatusLabelObject: {fileID: 1820677900549146}
-  StartPanel: {fileID: 1446923679108446}
-  JoinPanel: {fileID: 1240997915698482}
-  LobbyPanel: {fileID: 1905877158955814}
-  WaitPanel: {fileID: 1384532237354004}
-  StartButton: {fileID: 1106743841472276}
-  MaxPlayers: 4
+  m_codeLabel: {fileID: 114592465544825092}
+  m_codeField: {fileID: 114217731705505856}
+  m_playersLabel: {fileID: 114233057581992266}
+  m_startPanel: {fileID: 1446923679108446}
+  m_joinPanel: {fileID: 1240997915698482}
+  m_lobbyPanel: {fileID: 1905877158955814}
+  m_waitPanel: {fileID: 1384532237354004}
+  m_startButton: {fileID: 1106743841472276}
 --- !u!114 &114148256416310502
 MonoBehaviour:
   m_ObjectHideFlags: 1

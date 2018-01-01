@@ -45,7 +45,7 @@ public static class StaticClues
     }
 }
 
-public class DatabaseController : MonoBehaviour
+public class DatabaseScene : MonoBehaviour
 {
     public GameObject MainScreen, WaitScreen;
 
@@ -63,7 +63,7 @@ public class DatabaseController : MonoBehaviour
 
     int playerItemsLoaded = 0;
 
-    async void Start()
+    void Start()
     {
         NetworkController = new OnlineManager();
 
@@ -75,7 +75,7 @@ public class DatabaseController : MonoBehaviour
         {
             m_scene = scene;
             SetBackground();
-            string lobby = await NetworkController.GetPlayerLobby();
+            string lobby = LobbyScene.Lobby.Id;
             if (!string.IsNullOrEmpty(lobby))
             {
                 string[] players = NetworkController.GetPlayers();
@@ -439,7 +439,7 @@ public class DatabaseController : MonoBehaviour
                 string player = key[1];
                 m_readyPlayers[player] = true;
 
-                if (player == SignIn.User.Id)
+                if (player == SignInScene.User.Id)
                 {
                     ConfirmReady();
                 }

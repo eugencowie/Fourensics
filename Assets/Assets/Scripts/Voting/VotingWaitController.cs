@@ -27,13 +27,13 @@ public class VotingWaitController : MonoBehaviour
 
     private void OnVoteChanged(CloudNode entry)
     {
-        if (entry.Exists())
+        if (entry.Value != null)
         {
-            string value = entry.Get();
+            string value = entry.Value;
 
             if (!string.IsNullOrEmpty(value))
             {
-                string[] key = entry.Path.Split('/');
+                string[] key = entry.Key.Split('/');
                 string player = key[1];
                 m_votedPlayers[player] = value;
 

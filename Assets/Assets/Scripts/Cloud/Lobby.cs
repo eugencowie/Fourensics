@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 
 class Lobby
@@ -7,25 +8,18 @@ class Lobby
     public CloudNode State { get; private set; }
     public CloudNode[] Users { get; private set; }
 
-    public Lobby(string id)
+    Lobby(string id)
     {
         Id = id;
-        State = new CloudNode($"lobbies/{id}/state");
-        Users = new CloudNode[4] {
-            new CloudNode($"lobbies/{id}/users/0"),
-            new CloudNode($"lobbies/{id}/users/1"),
-            new CloudNode($"lobbies/{id}/users/2"),
-            new CloudNode($"lobbies/{id}/users/3")
-        };
     }
+
+    public static Lobby Create(string id) => new Lobby(id) {
+        State = CloudNode.Create($"lobbies/{id}/state"),
+        Users = "0123".Select(n => CloudNode.Create($"lobbies/{id}/users/{n}")).ToArray()
+    };
 
     public static async Task<Lobby> Fetch(string id) => new Lobby(id) {
         State = await CloudNode.Fetch($"lobbies/{id}/state"),
-        Users = new CloudNode[4] {
-            await CloudNode.Fetch($"lobbies/{id}/users/0"),
-            await CloudNode.Fetch($"lobbies/{id}/users/1"),
-            await CloudNode.Fetch($"lobbies/{id}/users/2"),
-            await CloudNode.Fetch($"lobbies/{id}/users/3")
-        }
+        Users = await Task.WhenAll("0123".Select(n => CloudNode.Fetch($"lobbies/{id}/users/{n}")))
     };
 }

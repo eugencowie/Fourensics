@@ -25,7 +25,7 @@ class SignIn : MonoBehaviour
         {
             // Set user id to unique device identifier
             User = await User.Fetch($"dev-{SystemInfo.deviceUniqueIdentifier}");
-            User.Name.Set($"Dev #{SystemInfo.deviceUniqueIdentifier.Substring(0, 7)}");
+            User.Name.Value = $"Dev #{SystemInfo.deviceUniqueIdentifier.Substring(0, 7)}";
         }
         else
         {
@@ -49,13 +49,13 @@ class SignIn : MonoBehaviour
 
             // Set user id to Firebase user id
             User = await User.Fetch(firebaseUser.UserId);
-            User.Name.Set(firebaseUser.DisplayName);
+            User.Name.Value = firebaseUser.DisplayName;
         }
 
-        if (User.Lobby.Exists())
+        if (User.Lobby.Value != null)
         {
             // Set lobby to user's lobby
-            Lobby = await Lobby.Fetch(User.Lobby.Get());
+            Lobby = await Lobby.Fetch(User.Lobby.Value);
         }
 
         // Load the lobby scene

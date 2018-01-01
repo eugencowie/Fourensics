@@ -2,55 +2,65 @@ using Firebase.Database;
 using System;
 using System.Threading.Tasks;
 
+/// <summary>
+/// Represents a node in the cloud-hosted database.
+/// </summary>
 class CloudNode
 {
-    public event Action<CloudNode> OnValueChanged;
+    /// <summary>
+    /// The name of the node in the database.
+    /// </summary>
+    public string Key { get; }
 
-    public string Path { get; }
-
-    DatabaseReference m_reference;
-    string m_value;
-
-    public CloudNode(string path)
+    /// <summary>
+    /// Gets or sets the value in the database.
+    /// </summary>
+    public string Value
     {
-        Path = path;
-
-        m_reference = Static.FirebaseDatabase.RootReference.Child(path);
-        m_value = null;
-
-        m_reference.ValueChanged += ValueChanged;
+        get { return m_value; }
+        set { m_reference.SetValueAsync(m_value = value); }
     }
 
-    ~CloudNode()
-    {
-        m_reference.ValueChanged -= ValueChanged;
-    }
+    /// <summary>
+    /// Event handler for when the value changes in the database.
+    /// </summary>
+    public event Action<CloudNode> ValueChanged;
 
-    void ValueChanged(object sender, ValueChangedEventArgs args)
-    {
-        m_value = (string)args.Snapshot.Value;
-        OnValueChanged?.Invoke(this);
-    }
+    /// <summary>
+    /// Creates and sets the value of a new node in the cloud-hosted database.
+    /// </summary>
+    public static CloudNode Create(string path, string value = null) => new CloudNode(path) {
+        Value = value
+    };
 
-    public bool Exists()
-    {
-        return (m_value != null);
-    }
-
-    public string Get()
-    {
-        return m_value;
-    }
-
-    public void Set(string value)
-    {
-        m_reference.SetValueAsync(m_value = value);
-    }
-
+    /// <summary>
+    /// Fetches the value of an existing node in the cloud-hosted database.
+    /// </summary>
     public static async Task<CloudNode> Fetch(string path)
     {
         CloudNode node = new CloudNode(path);
         node.m_value = (string)(await node.m_reference.GetValueAsync()).Value;
         return node;
+    }
+
+    DatabaseReference m_reference;
+    string m_value;
+
+    CloudNode(string key)
+    {
+        Key = key;
+        m_reference = Static.FirebaseDatabase.RootReference.Child(key);
+        m_reference.ValueChanged += OnValueChanged;
+    }
+
+    ~CloudNode()
+    {
+        m_reference.ValueChanged -= OnValueChanged;
+    }
+
+    void OnValueChanged(object sender, ValueChangedEventArgs args)
+    {
+        m_value = (string)args.Snapshot.Value;
+        ValueChanged?.Invoke(this);
     }
 }

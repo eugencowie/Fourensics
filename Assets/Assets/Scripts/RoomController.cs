@@ -72,13 +72,13 @@ public class RoomController : MonoBehaviour
         if (ReadyButton == null)
             return;
 
-        if (entry.Exists())
+        if (entry.Value != null)
         {
-            string value = entry.Get();
+            string value = entry.Value;
 
             if (value == "true")
             {
-                string[] key = entry.Path.Split('/');
+                string[] key = entry.Key.Split('/');
                 string player = key[1];
                 m_readyPlayers[player] = true;
 
@@ -124,14 +124,14 @@ public class RoomController : MonoBehaviour
 
     private void OnSlotChanged(CloudNode entry)
     {
-        string[] keys = entry.Path.Split('/');
+        string[] keys = entry.Key.Split('/');
         if (keys.Length >= 5)
         {
             string field = keys[4];
 
-            if (entry.Exists() && field == "name")
+            if (entry.Value != null && field == "name")
             {
-                string value = entry.Get();
+                string value = entry.Value;
 
                 int slot;
                 if (!string.IsNullOrEmpty(value) && int.TryParse(keys[3].Replace("slot-", ""), out slot))

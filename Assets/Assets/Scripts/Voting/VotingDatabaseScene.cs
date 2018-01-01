@@ -26,7 +26,7 @@ public class VotingDatabaseScene : MonoBehaviour
         MainScreen.SetActive(false);
         WaitScreen.SetActive(true);
 
-        int scene = NetworkController.GetPlayerScene();
+        int scene = (int)(SignInScene.User.Scene.Value ?? 0);
         if (scene > 0)
         {
             m_scene = scene;

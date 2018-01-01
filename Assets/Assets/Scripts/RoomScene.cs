@@ -66,16 +66,16 @@ public class RoomScene : MonoBehaviour
         }
     }
 
-    private void OnReadyChanged(CloudNode entry)
+    private void OnReadyChanged(CloudNode<bool> entry)
     {
         if (ReadyButton == null)
             return;
 
         if (entry.Value != null)
         {
-            string value = entry.Value;
+            bool value = entry.Value ?? false;
 
-            if (value == "true")
+            if (value == true)
             {
                 string[] key = entry.Key.Split('/');
                 string player = key[1];
@@ -110,7 +110,7 @@ public class RoomScene : MonoBehaviour
         if (ReadyButton.activeSelf)
         {
             ReadyButton.SetActive(false);
-            NetworkController.ReadyUp();
+            SignInScene.User.Ready.Value = true;
             ReadyButton.SetActive(true);
             ReadyButton.GetComponent<Image>().color = Color.yellow;
             foreach (Transform t in ReadyButton.gameObject.transform)

@@ -135,7 +135,7 @@ class LobbyScene : MonoBehaviour
         else
         {
             Lobby lobby = Lobby.Create(code);
-            lobby.State.Value = ((int)LobbyState.Lobby).ToString();
+            lobby.State.Value = (int)LobbyState.Lobby;
 
             bool joinSuccess = OnlineManager.JoinLobby(lobby, m_maxPlayers);
             if (!joinSuccess) SwitchPanel(m_startPanel);
@@ -157,21 +157,10 @@ class LobbyScene : MonoBehaviour
     public async void StartButtonPressed()
     {
         SwitchPanel(m_waitPanel);
-
-        //LobbyError error = await Network.CanStartGame(CodeLabel.text, MaxPlayers);
-        //if (error != LobbyError.None)
-        //{
-        //    if (error == LobbyError.TooFewPlayers) StatusLabel.text = "too few players, requires " + MaxPlayers;
-        //    else if (error == LobbyError.TooManyPlayers) StatusLabel.text = "too many players, requires " + MaxPlayers;
-        //    else StatusLabel.text = "unknown error";
-        //    SwitchPanel(LobbyPanel);
-        //}
-        //else
-        //{
+        
         await m_network.AssignPlayerScenes(m_codeLabel.text);
         StaticInventory.Hints.Clear();
-        m_network.SetLobbyState(LobbyState.InGame);
-        //}
+        Lobby.State.Value = (int)LobbyState.InGame;
     }
 
     /// <summary>
@@ -248,7 +237,7 @@ class LobbyScene : MonoBehaviour
                 LobbyState state = (LobbyState)statusNr;
                 if (state == LobbyState.InGame)
                 {
-                    int scene = m_network.GetPlayerScene();
+                    int scene = (int)(SignInScene.User.Scene.Value ?? 0);
                     if (scene >= 1 && scene <= 4)
                     {
                         DeregisterOnLobbyStateChanged(m_codeLabel.text);

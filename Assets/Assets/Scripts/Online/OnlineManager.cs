@@ -20,17 +20,6 @@ class OnlineManager
     #region Async methods
 
     /// <summary>
-    /// If the player is listed as being in a scene and that scene does exist, returns the scene
-    /// number. Otherwise, returns 0.
-    /// </summary>
-    public int GetPlayerScene()
-    {
-        int scene;
-        if (int.TryParse(SignInScene.User.Scene.Value, out scene)) return scene;
-        else return 0;
-    }
-
-    /// <summary>
     /// If lobby exists, updates player entry to new lobby and adds player to lobby.
     /// </summary>
     public static bool JoinLobby(Lobby lobby, int maxPlayers)
@@ -88,8 +77,8 @@ class OnlineManager
     public void LeaveLobby()
     {
         SignInScene.User.Lobby.Value = "";
-        SignInScene.User.Scene.Value = "";
-        SignInScene.User.Ready.Value = "";
+        SignInScene.User.Scene.Value = 0;
+        SignInScene.User.Ready.Value = false;
         SignInScene.User.Vote.Value = "";
         foreach (var item in SignInScene.User.Items)
         {
@@ -97,61 +86,8 @@ class OnlineManager
             item.Description.Value = "";
             item.Image.Value = "";
         }
-
-        // Delete 'players/{0}', pull 'lobbies/{1}/players', remove the player from list and push
-        // 'lobbies/{1}/players' back up (unless there are no players left, then delete the lobby).
-        /*m_player.Delete(success1 => {
-            if (success1) {
-                //m_lobby = new Lobby(m_database, code); // TODO
-                m_lobby.Players.Pull(success2 => {
-                    if (success2) {
-                        //List<string> layers = m_lobby.Players.Value.Split(',').ToList();
-                        //layers.Remove(m_player.Id);
-                        //layers.RemoveAll(s => string.IsNullOrEmpty(s));
-                        //if (layers.Count > 0) {
-                        //    m_lobby.Players.Value = string.Join(",", layers.ToArray());
-                        //    m_lobby.Players.Push(returnSuccess);
-                        //} else {
-                            m_lobby.Delete(returnSuccess);
-                        //}
-                    }
-                    else returnSuccess(false);
-                });
-            }
-            else returnSuccess(false);
-        });*/
     }
-
-    /*
-    /// <summary>
-    /// Checks if the lobby has the required number of players.
-    /// </summary>
-    public LobbyError CanStartGame()
-    {
-        // TODO: remove this in final build
-        return LobbyError.None;
-        
-        bool success = await m_lobby.Players.Pull();
-        if (success)
-        {
-            List<string> players = SignIn.Lobby.Users.Select(u => u.Value).ToList();
-            players.RemoveAll(s => string.IsNullOrEmpty(s));
-            if (players.Count < requiredPlayers) return LobbyError.TooFewPlayers;
-            else if (players.Count > requiredPlayers) return LobbyError.TooManyPlayers;
-            else return LobbyError.None;
-        }
-        else return LobbyError.Unknown;
-    }
-    */
-
-    /// <summary>
-    /// Pushes a new lobby state to the server.
-    /// </summary>
-    public void SetLobbyState(LobbyState state)
-    {
-        LobbyScene.Lobby.State.Value = ((int)state).ToString();
-    }
-
+    
     /// <summary>
     ///
     /// </summary>
@@ -168,7 +104,7 @@ class OnlineManager
             {
                 ourScene = (i + 1);
             }
-            player.Scene.Value = (i + 1).ToString();
+            player.Scene.Value = i + 1;
         }
         return ourScene;
     }
@@ -260,18 +196,8 @@ class OnlineManager
         players.RemoveAll(s => string.IsNullOrEmpty(s));
         return players.ToArray();
     }
-
-    public void ReadyUp()
-    {
-        SignInScene.User.Ready.Value = "true";
-    }
-
-    public void SubmitVote(string suspect)
-    {
-        SignInScene.User.Vote.Value = suspect;
-    }
-
-    public async void RegisterReadyChanged(Action<CloudNode> listener)
+    
+    public async void RegisterReadyChanged(Action<CloudNode<bool>> listener)
     {
         List<string> players = LobbyScene.Lobby.Users.Select(u => u.Value).ToList();
         players.RemoveAll(s => string.IsNullOrEmpty(s));
@@ -283,7 +209,7 @@ class OnlineManager
         }
     }
 
-    public async void DeregisterReadyChanged(Action<CloudNode> listener) // TODO: make all these functions static
+    public async void DeregisterReadyChanged(Action<CloudNode<bool>> listener) // TODO: make all these functions static
     {
         List<string> players = LobbyScene.Lobby.Users.Select(u => u.Value).ToList();
         players.RemoveAll(s => string.IsNullOrEmpty(s));

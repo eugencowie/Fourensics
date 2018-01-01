@@ -70,7 +70,7 @@ public class DatabaseScene : MonoBehaviour
         MainScreen.SetActive(false);
         WaitScreen.SetActive(true);
 
-        int scene = NetworkController.GetPlayerScene();
+        int scene = (int)(SignInScene.User.Scene.Value ?? 0);
         if (scene > 0)
         {
             m_scene = scene;
@@ -114,7 +114,7 @@ public class DatabaseScene : MonoBehaviour
         if (ReadyButton.activeSelf)
         {
             ReadyButton.SetActive(false);
-            NetworkController.ReadyUp();
+            SignInScene.User.Ready.Value = true;
             ReadyButton.SetActive(true);
             ReadyButton.GetComponent<Image>().color = Color.yellow;
             foreach (Transform t in ReadyButton.gameObject.transform)
@@ -424,16 +424,16 @@ public class DatabaseScene : MonoBehaviour
         }
     }
 
-    private void OnReadyChanged(CloudNode entry)
+    private void OnReadyChanged(CloudNode<bool> entry)
     {
         if (ReadyButton == null)
             return;
 
         if (entry.Value != null)
         {
-            string value = entry.Value;
+            bool value = entry.Value ?? false;
 
-            if (value == "true")
+            if (value == true)
             {
                 string[] key = entry.Key.Split('/');
                 string player = key[1];

@@ -34,7 +34,7 @@ public class VotingScene : MonoBehaviour
         ReturnButton.SetActive(false);
         //VoteButton.SetActive(false);
 
-        int scene = NetworkController.GetPlayerScene();
+        int scene = (int)(SignInScene.User.Scene.Value ?? 0);
         if (scene > 0)
         {
             m_scene = scene;
@@ -143,7 +143,7 @@ public class VotingScene : MonoBehaviour
         var current = Suspects.First(s => s.gameObject.activeSelf);
         if (current != null)
         {
-            NetworkController.SubmitVote(current.Name.text);
+            SignInScene.User.Vote.Value = current.Name.text;
             SceneManager.LoadScene("VotingWait");
         }
     }

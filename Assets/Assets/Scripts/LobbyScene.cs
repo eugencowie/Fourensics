@@ -5,13 +5,7 @@ using UnityEngine.UI;
 
 class LobbyScene : MonoBehaviour
 {
-    public static Lobby Lobby
-    {
-        get { return m_lobby; }
-        private set { SignInScene.User.Lobby.Value = (m_lobby = value).Id; }
-    }
-
-    static Lobby m_lobby;
+    public static Lobby Lobby => SignInScene.User.Lobby.Value;
 
     [SerializeField] Text m_codeLabel = null;
     [SerializeField] InputField m_codeField = null;
@@ -27,7 +21,7 @@ class LobbyScene : MonoBehaviour
 
     OnlineManager m_network;
 
-    async void Start()
+    void Start()
     {
         // Initialise online manager
         m_network = new OnlineManager();
@@ -54,13 +48,10 @@ class LobbyScene : MonoBehaviour
             return;
         }
 
-        // Fetch user's lobby from the cloud
-        Lobby = await Lobby.Fetch(SignInScene.User.Lobby.Value);
-
         // Show main screen if user's lobby is invalid
         if (Lobby.State.Value == null)
         {
-            Lobby = null;
+            SignInScene.User.Lobby.Value = null;
             StaticClues.Reset();
             StaticInventory.Reset();
             StaticRoom.Reset();
@@ -105,7 +96,7 @@ class LobbyScene : MonoBehaviour
             }
             else
             {
-                Lobby = lobby;
+                SignInScene.User.Lobby.Value = lobby;
                 m_codeLabel.text = m_codeField.text.ToUpper();
                 RegisterOnPlayersChanged(m_codeLabel.text);
                 RegisterOnLobbyStateChanged(m_codeLabel.text);
@@ -141,7 +132,7 @@ class LobbyScene : MonoBehaviour
             if (!joinSuccess) SwitchPanel(m_startPanel);
             else
             {
-                Lobby = lobby;
+                SignInScene.User.Lobby.Value = lobby;
                 m_codeLabel.text = code;
                 RegisterOnPlayersChanged(code);
                 RegisterOnLobbyStateChanged(code);
@@ -157,7 +148,7 @@ class LobbyScene : MonoBehaviour
     public async void StartButtonPressed()
     {
         SwitchPanel(m_waitPanel);
-        
+
         await m_network.AssignPlayerScenes(m_codeLabel.text);
         StaticInventory.Hints.Clear();
         Lobby.State.Value = (int)LobbyState.InGame;

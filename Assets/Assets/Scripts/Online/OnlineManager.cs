@@ -27,7 +27,7 @@ class OnlineManager
         // Check if lobby exists
         if (lobby.State.Value == null)
             return false;
-        
+
         // Get list of players in lobby
         List<string> players = lobby.Users
             .Where(u => u.Value != null)
@@ -41,7 +41,7 @@ class OnlineManager
         // If too many players
         if (players.Count >= maxPlayers)
             return false;
-        
+
         // Add player to lobby
         players.Add(SignInScene.User.Id);
         for (int i = 0; i < players.Count; i++)
@@ -49,7 +49,7 @@ class OnlineManager
 
         return true;
     }
-    
+
     /// <summary>
     /// Attempts to generate a lobby code which is not in use. If all codes generated are in
     /// use, returns null.
@@ -76,18 +76,18 @@ class OnlineManager
     /// </summary>
     public void LeaveLobby()
     {
-        SignInScene.User.Lobby.Value = "";
+        SignInScene.User.Lobby.Value = null;
         SignInScene.User.Scene.Value = 0;
         SignInScene.User.Ready.Value = false;
-        SignInScene.User.Vote.Value = "";
+        SignInScene.User.Vote.Value = null;
         foreach (var item in SignInScene.User.Items)
         {
-            item.Name.Value = "";
-            item.Description.Value = "";
-            item.Image.Value = "";
+            item.Name.Value = null;
+            item.Description.Value = null;
+            item.Image.Value = null;
         }
     }
-    
+
     /// <summary>
     ///
     /// </summary>
@@ -196,7 +196,7 @@ class OnlineManager
         players.RemoveAll(s => string.IsNullOrEmpty(s));
         return players.ToArray();
     }
-    
+
     public async void RegisterReadyChanged(Action<CloudNode<bool>> listener)
     {
         List<string> players = LobbyScene.Lobby.Users.Select(u => u.Value).ToList();

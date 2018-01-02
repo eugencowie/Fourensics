@@ -1,7 +1,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 
-class Lobby
+class Lobby : ICloudNode
 {
     public string Id { get; }
 

@@ -1,7 +1,6 @@
 using Firebase.Database;
 using System;
 using System.Threading.Tasks;
-using UnityEngine;
 
 /// <summary>
 /// Represents a node in the cloud-hosted database.

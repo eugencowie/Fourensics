@@ -12,8 +12,7 @@ public class VotingDatabaseScene : MonoBehaviour
     [SerializeField] private GameObject ButtonTemplate = null;
     [SerializeField] private GameObject[] Backgrounds = new GameObject[4];
     [SerializeField] private Data[] Data = new Data[4];
-
-    private OnlineManager NetworkController;
+    
     private string m_lobby;
     private int m_scene;
 
@@ -21,8 +20,6 @@ public class VotingDatabaseScene : MonoBehaviour
 
     void Start()
     {
-        NetworkController = new OnlineManager();
-
         MainScreen.SetActive(false);
         WaitScreen.SetActive(true);
 
@@ -34,10 +31,10 @@ public class VotingDatabaseScene : MonoBehaviour
             string lobby = LobbyScene.Lobby.Id;
             if (!string.IsNullOrEmpty(lobby))
             {
-                string[] players = NetworkController.GetPlayers();
+                string[] players = OnlineManager.GetPlayers();
                 m_lobby = lobby;
                 DownloadItems();
-                NetworkController.RegisterCluesChanged(OnSlotChanged);
+                OnlineManager.RegisterCluesChanged(OnSlotChanged);
             }
             else SceneManager.LoadScene("Lobby");
         }
@@ -102,7 +99,7 @@ public class VotingDatabaseScene : MonoBehaviour
     private async void DownloadItems()
     {
         int tmp = 0;
-        User player = await NetworkController.DownloadClues(tmp);
+        User player = await OnlineManager.DownloadClues(tmp);
         for (int j = 0; j < player.Items.Length; j++)
         {
             int tmp2 = j;
@@ -167,7 +164,7 @@ public class VotingDatabaseScene : MonoBehaviour
                 int slotNb = -1;
                 if (int.TryParse(key[3].Replace("slot-", ""), out slotNb))
                 {
-                    int playerNb = NetworkController.GetPlayerNumber(player);
+                    int playerNb = OnlineManager.GetPlayerNumber(player);
                     var slot = Data[playerNb].Slots[slotNb - 1];
                     if (field == "name")
                     {
@@ -231,7 +228,7 @@ public class VotingDatabaseScene : MonoBehaviour
                 int slotNb = -1;
                 if (int.TryParse(key[3].Replace("slot-", ""), out slotNb))
                 {
-                    int playerNb = NetworkController.GetPlayerNumber(player);
+                    int playerNb = OnlineManager.GetPlayerNumber(player);
                     var slot = Data[playerNb].Slots[slotNb - 1];
 
                     slot.GetComponent<Slot>().Text.GetComponent<Text>().text = "";

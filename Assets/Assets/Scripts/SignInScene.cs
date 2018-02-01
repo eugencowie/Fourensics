@@ -22,7 +22,7 @@ class SignInScene : MonoBehaviour
 
         if (Application.isEditor)
         {
-            // Fetch device's user from the cloud
+            // Fetch user from the cloud using device id
             User = await User.Fetch($"dev-{SystemInfo.deviceUniqueIdentifier}");
             User.Name.Value = $"Dev #{SystemInfo.deviceUniqueIdentifier.Substring(0, 7)}";
         }
@@ -46,7 +46,7 @@ class SignInScene : MonoBehaviour
             try { firebaseUser = await Static.FirebaseAuth.SignInWithCredentialAsync(credential); }
             catch (Exception e) { m_status.text = $"Authentication failed: {e.Message}"; return; }
 
-            // Fetch Firebase user's user from the cloud
+            // Fetch user from the cloud using Firebase user id
             User = await User.Fetch(firebaseUser.UserId);
             User.Name.Value = firebaseUser.DisplayName;
         }

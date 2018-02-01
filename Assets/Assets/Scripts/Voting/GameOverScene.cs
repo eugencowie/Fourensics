@@ -18,8 +18,7 @@ public class GameOverScene : MonoBehaviour
 
     [Range(0, 100)]
     public int RequiredVotePercentage = 51;
-
-    private OnlineManager NetworkController;
+    
     private string m_roomCode;
     private Dictionary<string, string> m_votedPlayers = new Dictionary<string, string>();
 
@@ -27,8 +26,6 @@ public class GameOverScene : MonoBehaviour
 
     void Start()
     {
-        NetworkController = new OnlineManager();
-
         ResetButton.SetActive(false);
 
         WinVideo.loopPointReached += VideoLoopPointReached;
@@ -37,10 +34,10 @@ public class GameOverScene : MonoBehaviour
         string room = LobbyScene.Lobby.Id;
         if (!string.IsNullOrEmpty(room))
         {
-            string[] players = NetworkController.GetPlayers();
+            string[] players = OnlineManager.GetPlayers();
             m_roomCode = room;
             foreach (var player in players) m_votedPlayers[player] = "";
-            NetworkController.RegisterVoteChanged(OnVoteChanged);
+            OnlineManager.RegisterVoteChanged(OnVoteChanged);
         }
         else SceneManager.LoadScene("Lobby");
     }
@@ -54,7 +51,7 @@ public class GameOverScene : MonoBehaviour
 
     public void ResetButtonPressed()
     {
-        NetworkController.LeaveLobby();
+        OnlineManager.LeaveLobby();
         SceneManager.LoadScene("Lobby");
     }
 

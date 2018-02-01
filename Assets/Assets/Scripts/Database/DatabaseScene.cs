@@ -54,8 +54,7 @@ public class DatabaseScene : MonoBehaviour
     [SerializeField] private GameObject ButtonTemplate = null;
     [SerializeField] private GameObject[] Backgrounds = new GameObject[4];
     [SerializeField] private List<Data> Data = new List<Data>();
-
-    private OnlineManager NetworkController;
+    
     private string m_lobby;
     private int m_scene;
 
@@ -65,8 +64,6 @@ public class DatabaseScene : MonoBehaviour
 
     void Start()
     {
-        NetworkController = new OnlineManager();
-
         MainScreen.SetActive(false);
         WaitScreen.SetActive(true);
 
@@ -78,12 +75,12 @@ public class DatabaseScene : MonoBehaviour
             string lobby = LobbyScene.Lobby.Id;
             if (!string.IsNullOrEmpty(lobby))
             {
-                string[] players = NetworkController.GetPlayers();
+                string[] players = OnlineManager.GetPlayers();
                 m_lobby = lobby;
                 foreach (var player in players) m_readyPlayers[player] = false;
                 DownloadItems();
-                NetworkController.RegisterCluesChanged(OnSlotChanged);
-                NetworkController.RegisterReadyChanged(OnReadyChanged);
+                OnlineManager.RegisterCluesChanged(OnSlotChanged);
+                OnlineManager.RegisterReadyChanged(OnReadyChanged);
             }
             else SceneManager.LoadScene("Lobby");
         }
@@ -130,8 +127,8 @@ public class DatabaseScene : MonoBehaviour
         if (ReturnButton.activeSelf)
         {
             ReturnButton.SetActive(false);
-            NetworkController.DeregisterCluesChanged(OnSlotChanged);
-            NetworkController.DeregisterReadyChanged(OnReadyChanged);
+            OnlineManager.DeregisterCluesChanged(OnSlotChanged);
+            OnlineManager.DeregisterReadyChanged(OnReadyChanged);
             SceneManager.LoadScene(m_scene);
         }
     }
@@ -140,8 +137,8 @@ public class DatabaseScene : MonoBehaviour
     {
         if (!m_readyPlayers.Any(p => p.Value == false))
         {
-            NetworkController.DeregisterCluesChanged(OnSlotChanged);
-            NetworkController.DeregisterReadyChanged(OnReadyChanged);
+            OnlineManager.DeregisterCluesChanged(OnSlotChanged);
+            OnlineManager.DeregisterReadyChanged(OnReadyChanged);
             SceneManager.LoadScene("Voting");
         }
     }
@@ -233,21 +230,21 @@ public class DatabaseScene : MonoBehaviour
 
     public void UploadItem(int slot, ObjectHintData hint)
     {
-        NetworkController.UploadDatabaseItem(slot, hint);
+        OnlineManager.UploadDatabaseItem(slot, hint);
     }
 
     public void RemoveItem(int slot)
     {
         //if (!m_readyPlayers.Any(p => p.Value == false))
         //{
-        NetworkController.RemoveDatabaseItem(slot);
+        OnlineManager.RemoveDatabaseItem(slot);
         //}
     }
 
     private async void DownloadItems()
     {
         int tmp = 0;
-        User player = await NetworkController.DownloadClues(tmp);
+        User player = await OnlineManager.DownloadClues(tmp);
         for (int j = 0; j < player.Items.Length; j++)
         {
             int tmp2 = j;
@@ -326,7 +323,7 @@ public class DatabaseScene : MonoBehaviour
                 int slotNb = -1;
                 if (!string.IsNullOrEmpty(value) && int.TryParse(key[3].Replace("slot-", ""), out slotNb))
                 {
-                    int playerNb = NetworkController.GetPlayerNumber(player);
+                    int playerNb = OnlineManager.GetPlayerNumber(player);
                     var slot = Data[playerNb].Slots[slotNb - 1];
                     if (field == "name")
                     {
@@ -399,7 +396,7 @@ public class DatabaseScene : MonoBehaviour
                 int slotNb = -1;
                 if (int.TryParse(key[3].Replace("slot-", ""), out slotNb))
                 {
-                    int playerNb = NetworkController.GetPlayerNumber(player);
+                    int playerNb = OnlineManager.GetPlayerNumber(player);
                     var slot = Data[playerNb].Slots[slotNb - 1];
 
                     slot.GetComponent<Slot>().Text.GetComponent<Text>().text = "";

@@ -21,15 +21,12 @@ public class VotingScene : MonoBehaviour
     //[SerializeField] private GameObject VoteButton = null;
     [SerializeField] private GameObject[] Backgrounds = new GameObject[4];
     [SerializeField] private VotingSuspect[] Suspects = new VotingSuspect[8];
-
-    private OnlineManager NetworkController;
+    
     private string m_lobby;
     private int m_scene;
 
     void Start()
     {
-        NetworkController = new OnlineManager();
-
         ResetButton.SetActive(false);
         ReturnButton.SetActive(false);
         //VoteButton.SetActive(false);

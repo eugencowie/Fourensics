@@ -6,25 +6,17 @@ using UnityEngine;
 /// <summary>
 /// Provides direct low-level access to the Firebase database.
 /// </summary>
-public class OnlineDatabase
+static class OnlineDatabase
 {
     /// <summary>
     /// Reference to the Firebase database root node.
     /// </summary>
-    private DatabaseReference m_root;
-
-    /// <summary>
-    /// Initialises the database.
-    /// </summary>
-    public OnlineDatabase()
-    {
-        m_root = Static.FirebaseDatabase.RootReference;
-    }
+    private static DatabaseReference m_root => Static.FirebaseDatabase.RootReference;
 
     /// <summary>
     /// Checks if data exists in the database.
     /// </summary>
-    public async Task<bool> Exists(string path)
+    public static async Task<bool> Exists(string path)
     {
         DataSnapshot data;
         try { data = await m_root.Child(path).GetValueAsync(); }
@@ -35,7 +27,7 @@ public class OnlineDatabase
     /// <summary>
     /// Pulls data from the database.
     /// </summary>
-    public async Task<string> Pull(string path)
+    public static async Task<string> Pull(string path)
     {
         DataSnapshot data;
         try { data = await m_root.Child(path).GetValueAsync(); }
@@ -46,7 +38,7 @@ public class OnlineDatabase
     /// <summary>
     /// Pushes data to the database.
     /// </summary>
-    public async Task<bool> Push(string path, string data)
+    public static async Task<bool> Push(string path, string data)
     {
         try { await m_root.Child(path).SetValueAsync(data); }
         catch { return false; }
@@ -56,7 +48,7 @@ public class OnlineDatabase
     /// <summary>
     /// Deletes data from the database.
     /// </summary>
-    public async Task<bool> Delete(string path)
+    public static async Task<bool> Delete(string path)
     {
         return await Push(path, null);
     }
@@ -64,7 +56,7 @@ public class OnlineDatabase
     /// <summary>
     /// Registers a handler for value changed events.
     /// </summary>
-    public void RegisterListener(string path, EventHandler<ValueChangedEventArgs> listener)
+    public static void RegisterListener(string path, EventHandler<ValueChangedEventArgs> listener)
     {
         Static.FirebaseDatabase.GetReference(path).ValueChanged += listener;
     }
@@ -72,7 +64,7 @@ public class OnlineDatabase
     /// <summary>
     /// Deregisters a handler for value changed events.
     /// </summary>
-    public void DeregisterListener(string path, EventHandler<ValueChangedEventArgs> listener)
+    public static void DeregisterListener(string path, EventHandler<ValueChangedEventArgs> listener)
     {
         Static.FirebaseDatabase.GetReference(path).ValueChanged -= listener;
     }
@@ -82,16 +74,14 @@ public class OnlineDatabase
     /// </summary>
     public static async void RunTests()
     {
-        OnlineDatabase db = new OnlineDatabase();
+        Debug.Assert(await Exists("test/does/not/exist") == false);
 
-        Debug.Assert(await db.Exists("test/does/not/exist") == false);
+        Debug.Assert(await Push("test/data/key", "value") == true);
+        Debug.Assert(await Exists("test/data") == true);
+        Debug.Assert(await Exists("test/data/key") == true);
+        Debug.Assert(await Pull("test/data/key") == "value");
 
-        Debug.Assert(await db.Push("test/data/key", "value") == true);
-        Debug.Assert(await db.Exists("test/data") == true);
-        Debug.Assert(await db.Exists("test/data/key") == true);
-        Debug.Assert(await db.Pull("test/data/key") == "value");
-
-        Debug.Assert(await db.Delete("test") == true);
-        Debug.Assert(await db.Exists("test") == false);
+        Debug.Assert(await Delete("test") == true);
+        Debug.Assert(await Exists("test") == false);
     }
 }

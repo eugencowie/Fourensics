@@ -10,7 +10,6 @@ class LobbyScene : MonoBehaviour
     [SerializeField] Text m_codeLabel = null;
     [SerializeField] InputField m_codeField = null;
     [SerializeField] Text m_playersLabel = null;
-
     [SerializeField] GameObject m_startPanel = null;
     [SerializeField] GameObject m_joinPanel = null;
     [SerializeField] GameObject m_lobbyPanel = null;
@@ -19,13 +18,8 @@ class LobbyScene : MonoBehaviour
 
     const int m_maxPlayers = 4;
 
-    OnlineManager m_network;
-
     void Start()
     {
-        // Initialise online manager
-        m_network = new OnlineManager();
-
         // Show please wait screen
         SwitchPanel(m_waitPanel);
 
@@ -121,7 +115,7 @@ class LobbyScene : MonoBehaviour
     {
         SwitchPanel(m_waitPanel);
 
-        string code = await m_network.CreateLobbyCode();
+        string code = await OnlineManager.CreateLobbyCode();
         if (string.IsNullOrEmpty(code)) SwitchPanel(m_startPanel);
         else
         {
@@ -149,7 +143,7 @@ class LobbyScene : MonoBehaviour
     {
         SwitchPanel(m_waitPanel);
 
-        await m_network.AssignPlayerScenes(m_codeLabel.text);
+        await OnlineManager.AssignPlayerScenes(m_codeLabel.text);
         StaticInventory.Hints.Clear();
         Lobby.State.Value = (int)LobbyState.InGame;
     }
@@ -161,7 +155,7 @@ class LobbyScene : MonoBehaviour
     {
         SwitchPanel(m_waitPanel);
 
-        m_network.LeaveLobby();
+        OnlineManager.LeaveLobby();
         DeregisterOnLobbyStateChanged(m_codeLabel.text);
         DeregisterOnPlayersChanged(m_codeLabel.text);
         m_codeLabel.text = "_____";
@@ -188,13 +182,13 @@ class LobbyScene : MonoBehaviour
     void RegisterOnPlayersChanged(string lobby)
     {
         string roomPlayersKey = string.Format("lobbies/{0}/players", lobby);
-        m_network.RegisterListener(roomPlayersKey, OnPlayersChanged);
+        OnlineManager.RegisterListener(roomPlayersKey, OnPlayersChanged);
     }
 
     void DeregisterOnPlayersChanged(string lobby)
     {
         string roomPlayersKey = string.Format("lobbies/{0}/players", lobby);
-        m_network.DeregisterListener(roomPlayersKey, OnPlayersChanged);
+        OnlineManager.DeregisterListener(roomPlayersKey, OnPlayersChanged);
     }
 
     void OnPlayersChanged(object sender, ValueChangedEventArgs args)
@@ -208,13 +202,13 @@ class LobbyScene : MonoBehaviour
     void RegisterOnLobbyStateChanged(string lobby)
     {
         string roomStateKey = string.Format("lobbies/{0}/state", lobby);
-        m_network.RegisterListener(roomStateKey, OnLobbyStateChanged);
+        OnlineManager.RegisterListener(roomStateKey, OnLobbyStateChanged);
     }
 
     void DeregisterOnLobbyStateChanged(string lobby)
     {
         string roomStateKey = string.Format("lobbies/{0}/state", lobby);
-        m_network.DeregisterListener(roomStateKey, OnLobbyStateChanged);
+        OnlineManager.DeregisterListener(roomStateKey, OnLobbyStateChanged);
     }
 
     void OnLobbyStateChanged(object sender, ValueChangedEventArgs args)

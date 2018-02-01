@@ -6,21 +6,18 @@ using UnityEngine.SceneManagement;
 
 public class VotingWaitScene : MonoBehaviour
 {
-    private OnlineManager NetworkController;
     private string m_roomCode;
     private Dictionary<string, string> m_votedPlayers = new Dictionary<string, string>();
 
     void Start()
     {
-        NetworkController = new OnlineManager();
-
         string room = LobbyScene.Lobby.Id;
         if (!string.IsNullOrEmpty(room))
         {
-            string[] players = NetworkController.GetPlayers();
+            string[] players = OnlineManager.GetPlayers();
             m_roomCode = room;
             foreach (var player in players) m_votedPlayers[player] = "";
-            NetworkController.RegisterVoteChanged(OnVoteChanged);
+            OnlineManager.RegisterVoteChanged(OnVoteChanged);
         }
         else SceneManager.LoadScene("Lobby");
     }
@@ -39,7 +36,7 @@ public class VotingWaitScene : MonoBehaviour
 
                 if (!m_votedPlayers.Any(p => string.IsNullOrEmpty(p.Value)))
                 {
-                    NetworkController.DeregisterVoteChanged(OnVoteChanged);
+                    OnlineManager.DeregisterVoteChanged(OnVoteChanged);
                     SceneManager.LoadScene("GameOver");
                 }
             }

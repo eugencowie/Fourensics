@@ -9,11 +9,6 @@ public class OnlineDatabaseEntry
 {
     public delegate void Listener(OnlineDatabaseEntry entry, ValueChangedEventArgs args);
 
-    /// <summary>
-    /// Reference to the database.
-    /// </summary>
-    private readonly OnlineDatabase m_database;
-
     private EventHandler<ValueChangedEventArgs> m_listener;
 
     /// <summary>
@@ -29,9 +24,8 @@ public class OnlineDatabaseEntry
     /// <summary>
     /// Initialises the database entry.
     /// </summary>
-    public OnlineDatabaseEntry(OnlineDatabase database, string key)
+    public OnlineDatabaseEntry(string key)
     {
-        m_database = database;
         m_listener = null;
         Key = key;
         Value = "";
@@ -42,7 +36,7 @@ public class OnlineDatabaseEntry
     /// </summary>
     public async Task<bool> Exists()
     {
-        return await m_database.Exists(Key);
+        return await OnlineDatabase.Exists(Key);
     }
 
     /// <summary>
@@ -50,7 +44,7 @@ public class OnlineDatabaseEntry
     /// </summary>
     public async Task<bool> Pull()
     {
-        string result = await m_database.Pull(Key);
+        string result = await OnlineDatabase.Pull(Key);
         if (result != null)
         {
             Value = result;
@@ -64,7 +58,7 @@ public class OnlineDatabaseEntry
     /// </summary>
     public async Task<bool> Push()
     {
-        return await m_database.Push(Key, Value);
+        return await OnlineDatabase.Push(Key, Value);
     }
 
     /// <summary>
@@ -72,7 +66,7 @@ public class OnlineDatabaseEntry
     /// </summary>
     public async Task<bool> Delete()
     {
-        bool success = await m_database.Delete(Key);
+        bool success = await OnlineDatabase.Delete(Key);
         if (success) Value = "";
         return success;
     }
@@ -86,7 +80,7 @@ public class OnlineDatabaseEntry
             DeregisterListener();
 
         m_listener = (_, args) => { listener(this, args); };
-        m_database.RegisterListener(Key, m_listener);
+        OnlineDatabase.RegisterListener(Key, m_listener);
     }
 
     /// <summary>
@@ -94,7 +88,7 @@ public class OnlineDatabaseEntry
     /// </summary>
     public void DeregisterListener()
     {
-        m_database.DeregisterListener(Key, m_listener);
+        OnlineDatabase.DeregisterListener(Key, m_listener);
         m_listener = null;
     }
 }

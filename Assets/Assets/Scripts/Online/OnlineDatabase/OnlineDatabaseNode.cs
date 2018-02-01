@@ -3,13 +3,8 @@ using System.Threading.Tasks;
 /// <summary>
 /// Represents a node in the database which contains a collection of database entries.
 /// </summary>
-public abstract class OnlineDatabaseNode
+abstract class OnlineDatabaseNode
 {
-    /// <summary>
-    /// Reference to the database.
-    /// </summary>
-    protected readonly OnlineDatabase Database;
-
     /// <summary>
     /// The full path to the node in the database.
     /// </summary>
@@ -18,9 +13,8 @@ public abstract class OnlineDatabaseNode
     /// <summary>
     /// Initialises the database node.
     /// </summary>
-    public OnlineDatabaseNode(OnlineDatabase database, string key)
+    public OnlineDatabaseNode(string key)
     {
-        Database = database;
         Key = key;
     }
 
@@ -34,7 +28,7 @@ public abstract class OnlineDatabaseNode
     /// </summary>
     public async Task<bool> Exists()
     {
-        return await Database.Exists(Key);
+        return await OnlineDatabase.Exists(Key);
     }
 
     /// <summary>
@@ -42,7 +36,7 @@ public abstract class OnlineDatabaseNode
     /// </summary>
     public async Task<bool> Delete()
     {
-        bool success = await Database.Delete(Key);
+        bool success = await OnlineDatabase.Delete(Key);
         if (success)
         {
             foreach (var entry in Entries)

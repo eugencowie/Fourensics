@@ -19,9 +19,7 @@ public class RoomScene : MonoBehaviour
 {
     [SerializeField] private GameObject ReadyButton = null;
     [SerializeField] private GameObject DatabaseButton = null;
-
-    private OnlineManager NetworkController;
-
+    
     private string m_roomCode;
 
     private Dictionary<string, bool> m_readyPlayers = new Dictionary<string, bool>();
@@ -37,20 +35,18 @@ public class RoomScene : MonoBehaviour
             welcomeScreen.SetActive(false);
         }
         StaticRoom.SeenWelcome = true;
-
-        NetworkController = new OnlineManager();
-
+        
         ReadyButton.SetActive(false);
         DatabaseButton.SetActive(false);
 
         string room = LobbyScene.Lobby.Id;
         if (!string.IsNullOrEmpty(room))
         {
-            string[] players = NetworkController.GetPlayers();
+            string[] players = OnlineManager.GetPlayers();
             m_roomCode = room;
             foreach (var player in players) m_readyPlayers[player] = false;
-            NetworkController.RegisterReadyChanged(OnReadyChanged);
-            NetworkController.RegisterCluesChanged(OnSlotChanged);
+            OnlineManager.RegisterReadyChanged(OnReadyChanged);
+            OnlineManager.RegisterCluesChanged(OnSlotChanged);
             ReadyButton.SetActive(true);
             DatabaseButton.SetActive(true);
         }
@@ -97,7 +93,7 @@ public class RoomScene : MonoBehaviour
 
     public void ConfirmLeave()
     {
-        NetworkController.LeaveLobby();
+        OnlineManager.LeaveLobby();
         SceneManager.LoadScene("Lobby");
 
         //NetworkController.LeaveLobby(m_roomCode, success => {
@@ -135,7 +131,7 @@ public class RoomScene : MonoBehaviour
                 int slot;
                 if (!string.IsNullOrEmpty(value) && int.TryParse(keys[3].Replace("slot-", ""), out slot))
                 {
-                    int player = NetworkController.GetPlayerNumber(keys[1]);
+                    int player = OnlineManager.GetPlayerNumber(keys[1]);
                     if (DatabaseButton != null && !StaticClues.SeenSlots.Any(s => s.Equals(new SlotData(player.ToString(), slot.ToString(), value))))
                     {
                         foreach (Transform t in DatabaseButton.transform)

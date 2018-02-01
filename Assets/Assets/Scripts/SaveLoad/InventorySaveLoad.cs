@@ -7,7 +7,7 @@ public class InventorySaveLoad : MonoBehaviour
 {
     private void Awake()
     {
-        DontDestroyOnLoad(gameObject);
+        DontDestroyOnLoad(gameObject.transform.parent.gameObject);
         Load();
     }
 

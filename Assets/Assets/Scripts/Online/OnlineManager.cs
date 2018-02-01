@@ -8,15 +8,8 @@ public enum LobbyState { Lobby, InGame, Voting, Finished }
 
 public enum LobbyError { None, Unknown, TooFewPlayers, TooManyPlayers }
 
-class OnlineManager
+static class OnlineManager
 {
-    private OnlineDatabase m_database;
-
-    public OnlineManager()
-    {
-        m_database = new OnlineDatabase();
-    }
-
     #region Async methods
 
     /// <summary>
@@ -54,14 +47,14 @@ class OnlineManager
     /// Attempts to generate a lobby code which is not in use. If all codes generated are in
     /// use, returns null.
     /// </summary>
-    public async Task<string> CreateLobbyCode()
+    public static async Task<string> CreateLobbyCode()
     {
         for (int i = 0; i < 3; i++)
         {
             string code = GenerateRandomCode();
             string key = $"lobbies/{code}/state";
 
-            if (!await m_database.Exists(key))
+            if (!await OnlineDatabase.Exists(key))
             {
                 return code;
             }
@@ -74,7 +67,7 @@ class OnlineManager
     /// Deletes the player entry and removes the player from the lobby. If no players are left in the
     /// lobby, deletes the lobby.
     /// </summary>
-    public void LeaveLobby()
+    public static void LeaveLobby()
     {
         SignInScene.User.Lobby.Value = null;
         SignInScene.User.Scene.Value = 0;
@@ -91,7 +84,7 @@ class OnlineManager
     /// <summary>
     ///
     /// </summary>
-    public async Task<int> AssignPlayerScenes(string code)
+    public static async Task<int> AssignPlayerScenes(string code)
     {
         List<string> players = LobbyScene.Lobby.Users.Select(u => u.Value).ToList();
         players.RemoveAll(s => string.IsNullOrEmpty(s));
@@ -113,19 +106,19 @@ class OnlineManager
 
     #region Async database methods
 
-    public void UploadDatabaseItem(int slot, ObjectHintData hint)
+    public static void UploadDatabaseItem(int slot, ObjectHintData hint)
     {
         SignInScene.User.Items[slot - 1].Name.Value = hint.Name;
         SignInScene.User.Items[slot - 1].Description.Value = hint.Hint;
         SignInScene.User.Items[slot - 1].Image.Value = hint.Image;
     }
 
-    public void RemoveDatabaseItem(int slot)
+    public static void RemoveDatabaseItem(int slot)
     {
         UploadDatabaseItem(slot, new ObjectHintData("", "", ""));
     }
 
-    public async void RegisterCluesChanged(Action<CloudNode> listener)
+    public static async void RegisterCluesChanged(Action<CloudNode> listener)
     {
         List<string> players = LobbyScene.Lobby.Users.Select(u => u.Value).ToList();
         players.RemoveAll(s => string.IsNullOrEmpty(s));
@@ -142,7 +135,7 @@ class OnlineManager
         }
     }
 
-    public async void DeregisterCluesChanged(Action<CloudNode> listener) // TODO: make all these functions static
+    public static async void DeregisterCluesChanged(Action<CloudNode> listener) // TODO: make all these functions static
     {
         List<string> players = LobbyScene.Lobby.Users.Select(u => u.Value).ToList();
         players.RemoveAll(s => string.IsNullOrEmpty(s));
@@ -159,7 +152,7 @@ class OnlineManager
         }
     }
 
-    public int GetPlayerNumber(string player)
+    public static int GetPlayerNumber(string player)
     {
         List<string> players = LobbyScene.Lobby.Users.Select(u => u.Value).ToList();
         players.RemoveAll(s => string.IsNullOrEmpty(s));
@@ -173,7 +166,7 @@ class OnlineManager
         else return -1;
     }
 
-    public async Task<User> DownloadClues(int playerNb)
+    public static async Task<User> DownloadClues(int playerNb)
     {
         List<string> players = LobbyScene.Lobby.Users.Select(u => u.Value).ToList();
         players.RemoveAll(s => string.IsNullOrEmpty(s));
@@ -190,14 +183,14 @@ class OnlineManager
 
     #region Async voting methods
 
-    public string[] GetPlayers()
+    public static string[] GetPlayers()
     {
         List<string> players = LobbyScene.Lobby.Users.Select(u => u.Value).ToList();
         players.RemoveAll(s => string.IsNullOrEmpty(s));
         return players.ToArray();
     }
 
-    public async void RegisterReadyChanged(Action<CloudNode<bool>> listener)
+    public static async void RegisterReadyChanged(Action<CloudNode<bool>> listener)
     {
         List<string> players = LobbyScene.Lobby.Users.Select(u => u.Value).ToList();
         players.RemoveAll(s => string.IsNullOrEmpty(s));
@@ -209,7 +202,7 @@ class OnlineManager
         }
     }
 
-    public async void DeregisterReadyChanged(Action<CloudNode<bool>> listener) // TODO: make all these functions static
+    public static async void DeregisterReadyChanged(Action<CloudNode<bool>> listener) // TODO: make all these functions static
     {
         List<string> players = LobbyScene.Lobby.Users.Select(u => u.Value).ToList();
         players.RemoveAll(s => string.IsNullOrEmpty(s));
@@ -221,7 +214,7 @@ class OnlineManager
         }
     }
 
-    public async void RegisterVoteChanged(Action<CloudNode> listener)
+    public static async void RegisterVoteChanged(Action<CloudNode> listener)
     {
         List<string> players = LobbyScene.Lobby.Users.Select(u => u.Value).ToList();
         players.RemoveAll(s => string.IsNullOrEmpty(s));
@@ -233,7 +226,7 @@ class OnlineManager
         }
     }
 
-    public async void DeregisterVoteChanged(Action<CloudNode> listener) // TODO: make all these functions static
+    public static async void DeregisterVoteChanged(Action<CloudNode> listener) // TODO: make all these functions static
     {
         List<string> players = LobbyScene.Lobby.Users.Select(u => u.Value).ToList();
         players.RemoveAll(s => string.IsNullOrEmpty(s));
@@ -249,14 +242,14 @@ class OnlineManager
 
     #region Listeners
 
-    public void RegisterListener(string path, EventHandler<ValueChangedEventArgs> listener)
+    public static void RegisterListener(string path, EventHandler<ValueChangedEventArgs> listener)
     {
-        m_database.RegisterListener(path, listener);
+        OnlineDatabase.RegisterListener(path, listener);
     }
 
-    public void DeregisterListener(string path, EventHandler<ValueChangedEventArgs> listener)
+    public static void DeregisterListener(string path, EventHandler<ValueChangedEventArgs> listener)
     {
-        m_database.DeregisterListener(path, listener);
+        OnlineDatabase.DeregisterListener(path, listener);
     }
 
     #endregion

@@ -1,11 +1,7 @@
+/*
 using Firebase.Database;
 using System;
 using System.Threading.Tasks;
-
-interface ICloudNode
-{
-    string Id { get; }
-}
 
 /// <summary>
 /// Represents a reference to a node in the cloud-hosted database.
@@ -77,4 +73,10 @@ class CloudRef<T> where T : class, ICloudNode
         m_value = await m_factory?.Invoke((string)args.Snapshot.Value);
         ValueChanged?.Invoke(this);
     }
+}
+*/
+
+interface ICloudNode
+{
+    string Id { get; }
 }

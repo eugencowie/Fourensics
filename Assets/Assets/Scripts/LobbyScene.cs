@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 class LobbyScene : MonoBehaviour
 {
-    public static Lobby Lobby => SignInScene.User.Lobby.Value;
+    public static Lobby Lobby { get; set; }
 
     [SerializeField] Text m_codeLabel = null;
     [SerializeField] InputField m_codeField = null;
@@ -18,7 +18,7 @@ class LobbyScene : MonoBehaviour
 
     const int m_maxPlayers = 4;
 
-    void Start()
+    async void Start()
     {
         // Show please wait screen
         SwitchPanel(m_waitPanel);
@@ -41,25 +41,30 @@ class LobbyScene : MonoBehaviour
             SwitchPanel(m_startPanel);
             return;
         }
-
-        // Show main screen if user's lobby is invalid
-        if (Lobby.State.Value == null)
+        else
         {
-            SignInScene.User.Lobby.Value = null;
-            StaticClues.Reset();
-            StaticInventory.Reset();
-            StaticRoom.Reset();
-            StaticSlot.Reset();
-            StaticSuspects.Reset();
-            SwitchPanel(m_startPanel);
-            return;
-        }
+            // Get user's lobby
+            Lobby = await Lobby.Fetch(SignInScene.User.Lobby.Value);
 
-        // Show lobby screen
-        m_codeLabel.text = Lobby.Id;
-        RegisterOnPlayersChanged(Lobby.Id);
-        RegisterOnLobbyStateChanged(Lobby.Id);
-        SwitchPanel(m_lobbyPanel);
+            // Show main screen if user's lobby is invalid
+            if (Lobby.State.Value == null)
+            {
+                SignInScene.User.Lobby.Value = null;
+                StaticClues.Reset();
+                StaticInventory.Reset();
+                StaticRoom.Reset();
+                StaticSlot.Reset();
+                StaticSuspects.Reset();
+                SwitchPanel(m_startPanel);
+                return;
+            }
+
+            // Show lobby screen
+            m_codeLabel.text = Lobby.Id;
+            RegisterOnPlayersChanged(Lobby.Id);
+            RegisterOnLobbyStateChanged(Lobby.Id);
+            SwitchPanel(m_lobbyPanel);
+        }
     }
 
     /// <summary>
@@ -90,7 +95,8 @@ class LobbyScene : MonoBehaviour
             }
             else
             {
-                SignInScene.User.Lobby.Value = lobby;
+                Lobby = lobby;
+                SignInScene.User.Lobby.Value = Lobby.Id;
                 m_codeLabel.text = m_codeField.text.ToUpper();
                 RegisterOnPlayersChanged(m_codeLabel.text);
                 RegisterOnLobbyStateChanged(m_codeLabel.text);
@@ -126,7 +132,8 @@ class LobbyScene : MonoBehaviour
             if (!joinSuccess) SwitchPanel(m_startPanel);
             else
             {
-                SignInScene.User.Lobby.Value = lobby;
+                Lobby = lobby;
+                SignInScene.User.Lobby.Value = Lobby.Id;
                 m_codeLabel.text = code;
                 RegisterOnPlayersChanged(code);
                 RegisterOnLobbyStateChanged(code);

@@ -6,7 +6,7 @@ class User : ICloudNode
     public string Id { get; }
 
     public CloudNode Name { get; private set; }
-    public CloudRef<Lobby> Lobby { get; private set; }
+    public CloudNode Lobby { get; private set; }
     public CloudNode<long> Scene { get; private set; }
     public CloudNode<bool> Ready { get; private set; }
     public CloudNode Vote { get; private set; }
@@ -19,7 +19,7 @@ class User : ICloudNode
 
     public static User Create(string id) => new User(id) {
         Name = CloudNode.Create($"users/{id}/name"),
-        Lobby = CloudRef<Lobby>.Create($"users/{id}/lobby", lobbyId => global::Lobby.Fetch(lobbyId)),
+        Lobby = CloudNode.Create($"users/{id}/lobby"),
         Scene = CloudNode<long>.Create($"users/{id}/scene"),
         Ready = CloudNode<bool>.Create($"users/{id}/ready"),
         Vote = CloudNode.Create($"users/{id}/vote"),
@@ -28,7 +28,7 @@ class User : ICloudNode
 
     public static async Task<User> Fetch(string id) => new User(id) {
         Name = await CloudNode.Fetch($"users/{id}/name"),
-        Lobby = await CloudRef<Lobby>.Fetch($"users/{id}/lobby", lobbyId => global::Lobby.Fetch(lobbyId)),
+        Lobby = await CloudNode.Fetch($"users/{id}/lobby"),
         Scene = await CloudNode<long>.Fetch($"users/{id}/scene"),
         Ready = await CloudNode<bool>.Fetch($"users/{id}/ready"),
         Vote = await CloudNode.Fetch($"users/{id}/vote"),

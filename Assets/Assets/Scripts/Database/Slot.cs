@@ -39,7 +39,7 @@ public static class StaticSlot
     }
 }
 
-public class Slot : MonoBehaviour, IDropHandler
+class Slot : MonoBehaviour, IDropHandler
 {
     public GameObject item
     {
@@ -60,6 +60,9 @@ public class Slot : MonoBehaviour, IDropHandler
 
     public GameObject Text;
     public Button EditButton;
+
+    public GameObject MainScreen;
+    public EditItemText EditItemText;
 
     public DatabaseScene DatabaseController;
 
@@ -106,7 +109,24 @@ public class Slot : MonoBehaviour, IDropHandler
                 Text.GetComponent<Text>().text = hint.Hint;
                 EditButton.gameObject.SetActive(true);
                 EditButton.onClick.AddListener(() => {
-                    Debug.Log("Edit button clicked: " + hint.Hint);//TODO
+                    MainScreen.SetActive(false);
+                    EditItemText.gameObject.SetActive(true);
+                    EditItemText.SetTextField(hint.Hint);
+                    EditItemText.OnCancel = () => {
+                        EditItemText.OnCancel = null;
+                        EditItemText.OnSubmit = null;
+                        EditItemText.gameObject.SetActive(false);
+                        MainScreen.SetActive(true);
+                    };
+                    EditItemText.OnSubmit = newText => {
+                        EditItemText.OnCancel = null;
+                        EditItemText.OnSubmit = null;
+                        EditItemText.gameObject.SetActive(false);
+                        MainScreen.SetActive(true);
+                        hint.Hint = newText;
+                        Text.GetComponent<Text>().text = hint.Hint;
+                        DatabaseController.UploadItem(SlotNumber, hint);
+                    };
                 });
 
                 DatabaseController.UploadItem(SlotNumber, hint);

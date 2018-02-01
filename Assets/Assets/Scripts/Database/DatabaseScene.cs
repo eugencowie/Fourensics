@@ -49,6 +49,7 @@ public class DatabaseScene : MonoBehaviour
 {
     public GameObject MainScreen, WaitScreen;
 
+    [SerializeField] private EditItemText EditScreen = null;
     [SerializeField] private GameObject ReadyButton = null;
     [SerializeField] private GameObject ReturnButton = null;
     [SerializeField] private GameObject ButtonTemplate = null;
@@ -323,7 +324,23 @@ public class DatabaseScene : MonoBehaviour
                 slot.GetComponent<Slot>().Text.GetComponent<Text>().text = clue.Description.Value;
                 slot.GetComponent<Slot>().EditButton.gameObject.SetActive(true);
                 slot.GetComponent<Slot>().EditButton.onClick.AddListener(() => {
-                    Debug.Log("Edit button clicked: " + clue.Description.Value); // TODO
+                    MainScreen.SetActive(false);
+                    EditScreen.gameObject.SetActive(true);
+                    EditScreen.SetTextField(clue.Description.Value);
+                    EditScreen.OnCancel = () => {
+                        EditScreen.OnCancel = null;
+                        EditScreen.OnSubmit = null;
+                        EditScreen.gameObject.SetActive(false);
+                        MainScreen.SetActive(true);
+                    };
+                    EditScreen.OnSubmit = newText => {
+                        EditScreen.OnCancel = null;
+                        EditScreen.OnSubmit = null;
+                        EditScreen.gameObject.SetActive(false);
+                        MainScreen.SetActive(true);
+                        clue.Description.Value = newText;
+                        slot.GetComponent<Slot>().Text.GetComponent<Text>().text = clue.Description.Value;
+                    };
                 });
             }
         }

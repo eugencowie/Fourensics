@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -14,44 +14,40 @@ public static class StaticSuspects
     }
 }
 
-public class VotingController : MonoBehaviour
+public class VotingScene : MonoBehaviour
 {
     [SerializeField] private GameObject ResetButton = null;
     [SerializeField] private GameObject ReturnButton = null;
     //[SerializeField] private GameObject VoteButton = null;
     [SerializeField] private GameObject[] Backgrounds = new GameObject[4];
     [SerializeField] private VotingSuspect[] Suspects = new VotingSuspect[8];
-
-    private OnlineManager NetworkController;
+    
     private string m_lobby;
     private int m_scene;
 
-    private void Start()
+    void Start()
     {
-        NetworkController = new OnlineManager();
-
         ResetButton.SetActive(false);
         ReturnButton.SetActive(false);
         //VoteButton.SetActive(false);
 
-        NetworkController.GetPlayerScene(scene => {
-            if (scene > 0)
+        int scene = (int)(SignInScene.User.Scene.Value ?? 0);
+        if (scene > 0)
+        {
+            m_scene = scene;
+            SetBackground();
+            string lobby = LobbyScene.Lobby.Id;
+            if (!string.IsNullOrEmpty(lobby))
             {
-                m_scene = scene;
-                SetBackground();
-                NetworkController.GetPlayerLobby(lobby => {
-                    if (!string.IsNullOrEmpty(lobby)) {
-                        m_lobby = lobby;
-                        ResetButton.SetActive(true);
-                        ReturnButton.SetActive(true);
-                        //VoteButton.SetActive(true);
-                        DiscardSuspects();
-                    }
-                    else SceneManager.LoadScene("Lobby");
-                });
+                m_lobby = lobby;
+                ResetButton.SetActive(true);
+                ReturnButton.SetActive(true);
+                //VoteButton.SetActive(true);
+                DiscardSuspects();
             }
             else SceneManager.LoadScene("Lobby");
-        });
+        }
+        else SceneManager.LoadScene("Lobby");
     }
 
     private void DiscardSuspects()
@@ -144,9 +140,8 @@ public class VotingController : MonoBehaviour
         var current = Suspects.First(s => s.gameObject.activeSelf);
         if (current != null)
         {
-            NetworkController.SubmitVote(current.Name.text, success => {
-                SceneManager.LoadScene("VotingWait");
-            });
+            SignInScene.User.Vote.Value = current.Name.text;
+            SceneManager.LoadScene("VotingWait");
         }
     }
 }

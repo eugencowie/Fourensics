@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -35,7 +35,7 @@ public class ObjectInspecting : MonoBehaviour
             transform.RotateAround(transform.position, Vector3.up, movement.x * Time.deltaTime);
             transform.RotateAround(transform.position, Vector3.forward, movement.y * Time.deltaTime);
         }
-        
+
         if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
         {
             m_touchStartPos = Input.mousePosition;

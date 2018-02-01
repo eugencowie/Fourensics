@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -8,7 +8,7 @@ public class ObjectZooming : MonoBehaviour
 
     private Vector2 m_touchStartPos;
     private Vector2 m_touchEndPos;
-    
+
     private void Update()
     {
         if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 public class SoundManagerScript : MonoBehaviour
 {
@@ -8,12 +8,12 @@ public class SoundManagerScript : MonoBehaviour
     {
         if (!started)
         {
-            DontDestroyOnLoad(gameObject);
+            DontDestroyOnLoad(gameObject.transform.parent.gameObject);
             started = true;
         }
         else
         {
-            DestroyImmediate(gameObject);
+            DestroyImmediate(gameObject.transform.parent.gameObject);
         }
     }
 }

@@ -1,8 +1,8 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 public class DatabasePageController : MonoBehaviour
 {
-    public DatabaseController Database;
+    public DatabaseScene Database;
     public GameObject PanelAbove;
     public GameObject PanelBelow;
 

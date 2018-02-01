@@ -1,9 +1,7 @@
-﻿using UnityEngine;
-using System.Collections;
+using System.Linq;
+using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using System.Linq;
-
 
 public static class StaticSlot
 {
@@ -41,17 +39,19 @@ public static class StaticSlot
     }
 }
 
-public class Slot : MonoBehaviour, IDropHandler {
-	public GameObject item
+public class Slot : MonoBehaviour, IDropHandler
+{
+    public GameObject item
     {
-		get
+        get
         {
-			if(transform.childCount>0){
-				return transform.GetChild (0).gameObject;
-			}
-			return null;
-		}
-	}
+            if (transform.childCount > 0)
+            {
+                return transform.GetChild(0).gameObject;
+            }
+            return null;
+        }
+    }
 
     public bool CanDrop = false;
 
@@ -60,9 +60,9 @@ public class Slot : MonoBehaviour, IDropHandler {
 
     public GameObject Text;
 
-    public DatabaseController DatabaseController;
+    public DatabaseScene DatabaseController;
 
-    [Range(1,6)]
+    [Range(1, 6)]
     public int SlotNumber;
 
     private void Start()
@@ -71,8 +71,8 @@ public class Slot : MonoBehaviour, IDropHandler {
     }
 
     #region IDropHandler implementation
-    public void OnDrop (PointerEventData eventData)
-	{
+    public void OnDrop(PointerEventData eventData)
+    {
         if (item == null && CanDrop)
         {
             string newName = DragHandler.itemBeingDragged.name;
@@ -84,11 +84,12 @@ public class Slot : MonoBehaviour, IDropHandler {
                 GameObject newObject = Instantiate(DragHandler.itemBeingDragged, DragHandler.itemBeingDragged.transform.parent);
                 newObject.name = DragHandler.itemBeingDragged.name;
                 newObject.transform.SetParent(transform);
-                
+
                 newObject.GetComponent<Image>().raycastTarget = true;
 
                 newObject.GetComponent<Button>().onClick.AddListener(() => {
-                    if (CanDrop && StaticSlot.TimesRemoved < StaticSlot.MaxRemovals) {
+                    if (CanDrop && StaticSlot.TimesRemoved < StaticSlot.MaxRemovals)
+                    {
                         Text.GetComponent<Text>().text = "";
                         DatabaseController.RemoveItem(SlotNumber);
                         Destroy(newObject);
@@ -104,6 +105,6 @@ public class Slot : MonoBehaviour, IDropHandler {
                 DatabaseController.UploadItem(SlotNumber, hint);
             }
         }
-	}
-	#endregion
+    }
+    #endregion
 }

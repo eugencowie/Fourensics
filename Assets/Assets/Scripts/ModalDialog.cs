@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class ModalDialog : MonoBehaviour
@@ -8,7 +8,7 @@ public class ModalDialog : MonoBehaviour
     public GameObject WaitScreen;
 
     public Button.ButtonClickedEvent OnConfirm;
-    
+
     public void HideDialog()
     {
         SwitchTo(MainScreen);

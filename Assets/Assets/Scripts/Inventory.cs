@@ -1,13 +1,11 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-
-public static class StaticInventory{
-    
+public static class StaticInventory
+{
     [SerializeField]
     public static List<ObjectHintData> Hints = new List<ObjectHintData>();
 
@@ -38,16 +36,16 @@ public class Inventory : MonoBehaviour
         }
 
         m_buttons.Clear();
-        
+
         foreach (var item in StaticInventory.Hints)
         {
             AddItem(null, item);
         }
     }
 
-    private void Update()
+    /*private void Update()
     {
-        /*if (Input.GetMouseButtonDown(0) && EventSystem.current.IsPointerOverGameObject())
+        if (Input.GetMouseButtonDown(0) && EventSystem.current.IsPointerOverGameObject())
         {
             m_touchOrigin = Input.mousePosition;
             m_isSwiping = true;
@@ -68,9 +66,9 @@ public class Inventory : MonoBehaviour
             {
                 Scroll(movement);
             }
-        }*/
-    }
-    
+        }
+    }*/
+
     public void AddItem(UnityAction itemAction, ObjectHintData item)
     {
         if (!m_buttons.Any(b => b.name == item.Name))
@@ -122,7 +120,7 @@ public class Inventory : MonoBehaviour
                                 t2.gameObject.GetComponent<Text>().gameObject.SetActive(true); // TODO: REMOVE TEMP FIX
                                 t.gameObject.GetComponent<Image>().gameObject.SetActive(false);
                             }
-                        }  
+                        }
                     }
                 }
             }
@@ -136,7 +134,7 @@ public class Inventory : MonoBehaviour
             ScrollTo(maxScrollAmount);
         }
     }
-    
+
     public void AddItems(UnityAction itemAction, ObjectHint[] items)
     {
         foreach (var item in items)

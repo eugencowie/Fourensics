@@ -1,9 +1,7 @@
-﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class FancyInventory : MonoBehaviour
@@ -121,7 +119,7 @@ public class FancyInventory : MonoBehaviour
                     }
                 }
             }
-            
+
 
             // Set button text
             foreach (Transform t in newSlot.transform)
@@ -152,7 +150,7 @@ public class FancyInventory : MonoBehaviour
                     }
                 }
             }
-            
+
             // Activate button
             newSlot.SetActive(true);
             m_buttons.Add(newSlot);

@@ -1,4 +1,4 @@
-﻿using Firebase.Database;
+using Firebase.Database;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.Video;
 
-public class GameOverController : MonoBehaviour
+public class GameOverScene : MonoBehaviour
 {
     public VideoPlayer WinVideo;
     public VideoPlayer LoseVideo;
@@ -18,32 +18,40 @@ public class GameOverController : MonoBehaviour
 
     [Range(0, 100)]
     public int RequiredVotePercentage = 51;
-
-    private OnlineManager NetworkController;
+    
     private string m_roomCode;
     private Dictionary<string, string> m_votedPlayers = new Dictionary<string, string>();
 
     private Text m_winOrLoseText;
 
-    private void Start()
+    void Start()
     {
-        NetworkController = new OnlineManager();
+        if (LobbyScene.Lobby == null)
+        {
+            SceneManager.LoadScene("Lobby");
+            return;
+        }
 
         ResetButton.SetActive(false);
 
         WinVideo.loopPointReached += VideoLoopPointReached;
         LoseVideo.loopPointReached += VideoLoopPointReached;
 
-        NetworkController.GetPlayerLobby(room => {
-            if (!string.IsNullOrEmpty(room)) {
-                NetworkController.GetPlayers(room, players => {
-                    m_roomCode = room;
-                    foreach (var player in players) m_votedPlayers[player] = "";
-                    NetworkController.RegisterVoteChanged(room, OnVoteChanged);
-                });
-            }
-            else SceneManager.LoadScene("Lobby");
-        });
+        string room = LobbyScene.Lobby.Id;
+        if (!string.IsNullOrEmpty(room))
+        {
+            m_roomCode = room;
+            foreach (var player in CloudManager.AllUsers) m_votedPlayers[player] = "";
+            RegisterListeners();
+            OnVoteChanged(SignInScene.User.Vote);
+        }
+        else SceneManager.LoadScene("Lobby");
+    }
+
+    private async void RegisterListeners()
+    {
+        foreach (User user in await CloudManager.FetchUsers(CloudManager.AllUsers))
+            user.Vote.ValueChanged += OnVoteChanged;
     }
 
     private void VideoLoopPointReached(VideoPlayer source)
@@ -55,16 +63,15 @@ public class GameOverController : MonoBehaviour
 
     public void ResetButtonPressed()
     {
-        NetworkController.LeaveLobby(m_roomCode, _ => {
-            SceneManager.LoadScene("Lobby");
-        });
+        CloudManager.LeaveLobby();
+        SceneManager.LoadScene("Lobby");
     }
 
-    private void OnVoteChanged(OnlineDatabaseEntry entry, ValueChangedEventArgs args)
+    private void OnVoteChanged(CloudNode entry)
     {
-        if (args.Snapshot.Exists)
+        if (entry.Value != null)
         {
-            string value = args.Snapshot.Value.ToString();
+            string value = entry.Value;
 
             if (!string.IsNullOrEmpty(value))
             {
@@ -82,20 +89,20 @@ public class GameOverController : MonoBehaviour
 
                     if (percentage >= requiredPercentage)
                     {
-                        string yourVote = m_votedPlayers[SignIn.GetPlayerId()];
-                        m_votedPlayers.Remove(SignIn.GetPlayerId());
+                        string yourVote = m_votedPlayers[SignInScene.User.Id];
+                        m_votedPlayers.Remove(SignInScene.User.Id);
 
                         WinText.text += "\n\nYou voted for " + yourVote;
-                        for (int i=0; i<m_votedPlayers.Count; i++)
+                        for (int i = 0; i < m_votedPlayers.Count; i++)
                         {
-                            WinText.text += "\nPlayer " + (i+2) + " voted for " + m_votedPlayers.ElementAt(i).Value;
+                            WinText.text += "\nPlayer " + (i + 2) + " voted for " + m_votedPlayers.ElementAt(i).Value;
                         }
                         WaitText.gameObject.SetActive(false);
                         WinVideo.gameObject.SetActive(true);
 
                         m_winOrLoseText = WinText;
 
-                        m_votedPlayers[SignIn.GetPlayerId()] = yourVote;
+                        m_votedPlayers[SignInScene.User.Id] = yourVote;
                     }
                     else
                     {

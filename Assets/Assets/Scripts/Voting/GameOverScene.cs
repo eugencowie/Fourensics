@@ -26,6 +26,12 @@ public class GameOverScene : MonoBehaviour
 
     void Start()
     {
+        if (LobbyScene.Lobby == null)
+        {
+            SceneManager.LoadScene("Lobby");
+            return;
+        }
+
         ResetButton.SetActive(false);
 
         WinVideo.loopPointReached += VideoLoopPointReached;
@@ -34,12 +40,18 @@ public class GameOverScene : MonoBehaviour
         string room = LobbyScene.Lobby.Id;
         if (!string.IsNullOrEmpty(room))
         {
-            string[] players = OnlineManager.GetPlayers();
             m_roomCode = room;
-            foreach (var player in players) m_votedPlayers[player] = "";
-            OnlineManager.RegisterVoteChanged(OnVoteChanged);
+            foreach (var player in CloudManager.AllUsers) m_votedPlayers[player] = "";
+            RegisterListeners();
+            OnVoteChanged(SignInScene.User.Vote);
         }
         else SceneManager.LoadScene("Lobby");
+    }
+
+    private async void RegisterListeners()
+    {
+        foreach (User user in await CloudManager.FetchUsers(CloudManager.AllUsers))
+            user.Vote.ValueChanged += OnVoteChanged;
     }
 
     private void VideoLoopPointReached(VideoPlayer source)
@@ -51,7 +63,7 @@ public class GameOverScene : MonoBehaviour
 
     public void ResetButtonPressed()
     {
-        OnlineManager.LeaveLobby();
+        CloudManager.LeaveLobby();
         SceneManager.LoadScene("Lobby");
     }
 

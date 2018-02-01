@@ -1,7 +1,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 
-class User : ICloudNode
+class User
 {
     public string Id { get; }
 

@@ -4,14 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-public enum LobbyState { Lobby, InGame, Voting, Finished }
-
-public enum LobbyError { None, Unknown, TooFewPlayers, TooManyPlayers }
-
-static class OnlineManager
+static class CloudManager
 {
-    #region Async methods
-
     /// <summary>
     /// If lobby exists, updates player entry to new lobby and adds player to lobby.
     /// </summary>
@@ -43,6 +37,14 @@ static class OnlineManager
         return true;
     }
 
+    private static async Task<bool> Exists(string path)
+    {
+        DataSnapshot data;
+        try { data = await Cloud.Database.RootReference.Child(path).GetValueAsync(); }
+        catch { return false; }
+        return data.Exists;
+    }
+
     /// <summary>
     /// Attempts to generate a lobby code which is not in use. If all codes generated are in
     /// use, returns null.
@@ -54,7 +56,7 @@ static class OnlineManager
             string code = GenerateRandomCode();
             string key = $"lobbies/{code}/state";
 
-            if (!await OnlineDatabase.Exists(key))
+            if (!await Exists(key))
             {
                 return code;
             }
@@ -101,11 +103,7 @@ static class OnlineManager
         }
         return ourScene;
     }
-
-    #endregion
-
-    #region Async database methods
-
+    
     public static void UploadDatabaseItem(int slot, ObjectHintData hint)
     {
         SignInScene.User.Items[slot - 1].Name.Value = hint.Name;
@@ -116,40 +114,6 @@ static class OnlineManager
     public static void RemoveDatabaseItem(int slot)
     {
         UploadDatabaseItem(slot, new ObjectHintData("", "", ""));
-    }
-
-    public static async void RegisterCluesChanged(Action<CloudNode> listener)
-    {
-        List<string> players = LobbyScene.Lobby.Users.Select(u => u.Value).ToList();
-        players.RemoveAll(s => string.IsNullOrEmpty(s));
-        players.Remove(SignInScene.User.Id);
-        foreach (string playerId in players)
-        {
-            User player = await User.Fetch(playerId);
-            foreach (var clue in player.Items)
-            {
-                clue.Name.ValueChanged += listener;
-                clue.Description.ValueChanged += listener;
-                clue.Image.ValueChanged += listener;
-            }
-        }
-    }
-
-    public static async void DeregisterCluesChanged(Action<CloudNode> listener) // TODO: make all these functions static
-    {
-        List<string> players = LobbyScene.Lobby.Users.Select(u => u.Value).ToList();
-        players.RemoveAll(s => string.IsNullOrEmpty(s));
-        players.Remove(SignInScene.User.Id);
-        foreach (string playerId in players)
-        {
-            User player = await User.Fetch(playerId);
-            foreach (var clue in player.Items)
-            {
-                clue.Name.ValueChanged -= listener;
-                clue.Description.ValueChanged -= listener;
-                clue.Image.ValueChanged -= listener;
-            }
-        }
     }
 
     public static int GetPlayerNumber(string player)
@@ -178,84 +142,21 @@ static class OnlineManager
         }
         else return null;
     }
+    
+    public static IEnumerable<string> AllUsers => LobbyScene.Lobby.Users
+            .Where(user => !string.IsNullOrWhiteSpace(user.Value))
+            .Select(user => user.Value);
 
-    #endregion
-
-    #region Async voting methods
-
-    public static string[] GetPlayers()
+    public static IEnumerable<string> OtherUsers => LobbyScene.Lobby.Users
+            .Where(user => !string.IsNullOrWhiteSpace(user.Value))
+            .Where(user => user.Value != SignInScene.User.Id)
+            .Select(user => user.Value);
+    
+    public static async Task<User[]> FetchUsers(IEnumerable<string> userIds)
     {
-        List<string> players = LobbyScene.Lobby.Users.Select(u => u.Value).ToList();
-        players.RemoveAll(s => string.IsNullOrEmpty(s));
-        return players.ToArray();
+        return await Task.WhenAll(userIds.Select(id => User.Fetch(id)));
     }
-
-    public static async void RegisterReadyChanged(Action<CloudNode<bool>> listener)
-    {
-        List<string> players = LobbyScene.Lobby.Users.Select(u => u.Value).ToList();
-        players.RemoveAll(s => string.IsNullOrEmpty(s));
-        //players.Remove(m_player.Id);
-        foreach (string playerId in players)
-        {
-            User player = await User.Fetch(playerId);
-            player.Ready.ValueChanged += listener;
-        }
-    }
-
-    public static async void DeregisterReadyChanged(Action<CloudNode<bool>> listener) // TODO: make all these functions static
-    {
-        List<string> players = LobbyScene.Lobby.Users.Select(u => u.Value).ToList();
-        players.RemoveAll(s => string.IsNullOrEmpty(s));
-        //players.Remove(m_player.Id);
-        foreach (string playerId in players)
-        {
-            User player = await User.Fetch(playerId);
-            player.Ready.ValueChanged -= listener;
-        }
-    }
-
-    public static async void RegisterVoteChanged(Action<CloudNode> listener)
-    {
-        List<string> players = LobbyScene.Lobby.Users.Select(u => u.Value).ToList();
-        players.RemoveAll(s => string.IsNullOrEmpty(s));
-        //players.Remove(m_player.Id);
-        foreach (string playerId in players)
-        {
-            User player = await User.Fetch(playerId);
-            player.Vote.ValueChanged += listener;
-        }
-    }
-
-    public static async void DeregisterVoteChanged(Action<CloudNode> listener) // TODO: make all these functions static
-    {
-        List<string> players = LobbyScene.Lobby.Users.Select(u => u.Value).ToList();
-        players.RemoveAll(s => string.IsNullOrEmpty(s));
-        //players.Remove(m_player.Id);
-        foreach (string playerId in players)
-        {
-            User player = await User.Fetch(playerId);
-            player.Vote.ValueChanged -= listener;
-        }
-    }
-
-    #endregion
-
-    #region Listeners
-
-    public static void RegisterListener(string path, EventHandler<ValueChangedEventArgs> listener)
-    {
-        OnlineDatabase.RegisterListener(path, listener);
-    }
-
-    public static void DeregisterListener(string path, EventHandler<ValueChangedEventArgs> listener)
-    {
-        OnlineDatabase.DeregisterListener(path, listener);
-    }
-
-    #endregion
-
-    #region Utility methods
-
+    
     /// <summary>
     /// Generates a random five-character room code.
     /// </summary>
@@ -267,7 +168,7 @@ static class OnlineManager
 
         for (int i = 0; i < 5; i++)
         {
-            // Gets a random valid character and adds it to the room code string.
+            // Gets a random valid character and adds it to the room code string
             int randomIndex = UnityEngine.Random.Range(0, validChars.Length - 1);
             char randomChar = validChars[randomIndex];
             roomCode += randomChar;
@@ -275,6 +176,4 @@ static class OnlineManager
 
         return roomCode;
     }
-
-    #endregion
 }

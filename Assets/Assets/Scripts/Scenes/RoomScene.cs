@@ -42,15 +42,22 @@ public class RoomScene : MonoBehaviour
         string room = LobbyScene.Lobby.Id;
         if (!string.IsNullOrEmpty(room))
         {
-            string[] players = OnlineManager.GetPlayers();
             m_roomCode = room;
-            foreach (var player in players) m_readyPlayers[player] = false;
-            OnlineManager.RegisterReadyChanged(OnReadyChanged);
-            OnlineManager.RegisterCluesChanged(OnSlotChanged);
+            foreach (var player in CloudManager.AllUsers) m_readyPlayers[player] = false;
+            RegisterListeners();
             ReadyButton.SetActive(true);
             DatabaseButton.SetActive(true);
         }
         else SceneManager.LoadScene("Lobby");
+    }
+
+    private async void RegisterListeners()
+    {
+        foreach (Item clue in (await CloudManager.FetchUsers(CloudManager.OtherUsers)).Select(user => user.Items).SelectMany(item => item))
+            clue.ValueChanged += OnSlotChanged;
+
+        foreach (User user in await CloudManager.FetchUsers(CloudManager.AllUsers))
+            user.Ready.ValueChanged += OnReadyChanged;
     }
 
     public void DatabaseButtonPressed()
@@ -93,7 +100,7 @@ public class RoomScene : MonoBehaviour
 
     public void ConfirmLeave()
     {
-        OnlineManager.LeaveLobby();
+        CloudManager.LeaveLobby();
         SceneManager.LoadScene("Lobby");
 
         //NetworkController.LeaveLobby(m_roomCode, success => {
@@ -131,7 +138,7 @@ public class RoomScene : MonoBehaviour
                 int slot;
                 if (!string.IsNullOrEmpty(value) && int.TryParse(keys[3].Replace("slot-", ""), out slot))
                 {
-                    int player = OnlineManager.GetPlayerNumber(keys[1]);
+                    int player = CloudManager.GetPlayerNumber(keys[1]);
                     if (DatabaseButton != null && !StaticClues.SeenSlots.Any(s => s.Equals(new SlotData(player.ToString(), slot.ToString(), value))))
                     {
                         foreach (Transform t in DatabaseButton.transform)

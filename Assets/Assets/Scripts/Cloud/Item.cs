@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 
 class Item
@@ -5,6 +6,22 @@ class Item
     public CloudNode Name { get; private set; }
     public CloudNode Description { get; private set; }
     public CloudNode Image { get; private set; }
+    
+    public event Action<CloudNode> ValueChanged
+    {
+        add
+        {
+            Name.ValueChanged += value;
+            Description.ValueChanged += value;
+            Image.ValueChanged += value;
+        }
+        remove
+        {
+            Name.ValueChanged -= value;
+            Description.ValueChanged -= value;
+            Image.ValueChanged -= value;
+        }
+    }
 
     Item() { }
 

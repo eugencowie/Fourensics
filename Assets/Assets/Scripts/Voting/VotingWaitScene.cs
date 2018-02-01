@@ -1,4 +1,3 @@
-using Firebase.Database;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -11,15 +10,27 @@ public class VotingWaitScene : MonoBehaviour
 
     void Start()
     {
+        if (LobbyScene.Lobby == null)
+        {
+            SceneManager.LoadScene("Lobby");
+            return;
+        }
+
         string room = LobbyScene.Lobby.Id;
         if (!string.IsNullOrEmpty(room))
         {
-            string[] players = OnlineManager.GetPlayers();
             m_roomCode = room;
-            foreach (var player in players) m_votedPlayers[player] = "";
-            OnlineManager.RegisterVoteChanged(OnVoteChanged);
+            foreach (var player in CloudManager.AllUsers) m_votedPlayers[player] = "";
+            RegisterListeners();
+            OnVoteChanged(SignInScene.User.Vote);
         }
         else SceneManager.LoadScene("Lobby");
+    }
+
+    private async void RegisterListeners()
+    {
+        foreach (User user in await CloudManager.FetchUsers(CloudManager.OtherUsers))
+            user.Vote.ValueChanged += OnVoteChanged;
     }
 
     private void OnVoteChanged(CloudNode entry)
@@ -33,13 +44,19 @@ public class VotingWaitScene : MonoBehaviour
                 string[] key = entry.Key.Split('/');
                 string player = key[1];
                 m_votedPlayers[player] = value;
-
-                if (!m_votedPlayers.Any(p => string.IsNullOrEmpty(p.Value)))
-                {
-                    OnlineManager.DeregisterVoteChanged(OnVoteChanged);
-                    SceneManager.LoadScene("GameOver");
-                }
             }
         }
+
+        if (!m_votedPlayers.Any(p => string.IsNullOrEmpty(p.Value)))
+        {
+            DeregisterListeners();
+            SceneManager.LoadScene("GameOver");
+        }
+    }
+
+    private async void DeregisterListeners()
+    {
+        foreach (User user in await CloudManager.FetchUsers(CloudManager.OtherUsers))
+            user.Vote.ValueChanged -= OnVoteChanged;
     }
 }

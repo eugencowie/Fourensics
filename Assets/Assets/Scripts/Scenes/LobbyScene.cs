@@ -1,7 +1,8 @@
-using Firebase.Database;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+
+enum LobbyState { Lobby, InGame, Voting, Finished }
 
 class LobbyScene : MonoBehaviour
 {
@@ -61,8 +62,8 @@ class LobbyScene : MonoBehaviour
 
             // Show lobby screen
             m_codeLabel.text = Lobby.Id;
-            RegisterOnPlayersChanged(Lobby.Id);
-            RegisterOnLobbyStateChanged(Lobby.Id);
+            RegisterOnPlayersChanged();
+            RegisterOnLobbyStateChanged();
             SwitchPanel(m_lobbyPanel);
         }
     }
@@ -87,7 +88,7 @@ class LobbyScene : MonoBehaviour
             // Fetch lobby from cloud
             Lobby lobby = await Lobby.Fetch(m_codeField.text.ToUpper());
 
-            bool success = OnlineManager.JoinLobby(lobby, m_maxPlayers);
+            bool success = CloudManager.JoinLobby(lobby, m_maxPlayers);
             if (!success)
             {
                 m_codeField.text = "";
@@ -97,9 +98,9 @@ class LobbyScene : MonoBehaviour
             {
                 Lobby = lobby;
                 SignInScene.User.Lobby.Value = Lobby.Id;
-                m_codeLabel.text = m_codeField.text.ToUpper();
-                RegisterOnPlayersChanged(m_codeLabel.text);
-                RegisterOnLobbyStateChanged(m_codeLabel.text);
+                m_codeLabel.text = Lobby.Id;
+                RegisterOnPlayersChanged();
+                RegisterOnLobbyStateChanged();
                 m_startButton.SetActive(false);
                 SwitchPanel(m_lobbyPanel);
             }
@@ -121,22 +122,22 @@ class LobbyScene : MonoBehaviour
     {
         SwitchPanel(m_waitPanel);
 
-        string code = await OnlineManager.CreateLobbyCode();
+        string code = await CloudManager.CreateLobbyCode();
         if (string.IsNullOrEmpty(code)) SwitchPanel(m_startPanel);
         else
         {
             Lobby lobby = Lobby.Create(code);
             lobby.State.Value = (int)LobbyState.Lobby;
 
-            bool joinSuccess = OnlineManager.JoinLobby(lobby, m_maxPlayers);
+            bool joinSuccess = CloudManager.JoinLobby(lobby, m_maxPlayers);
             if (!joinSuccess) SwitchPanel(m_startPanel);
             else
             {
                 Lobby = lobby;
                 SignInScene.User.Lobby.Value = Lobby.Id;
-                m_codeLabel.text = code;
-                RegisterOnPlayersChanged(code);
-                RegisterOnLobbyStateChanged(code);
+                m_codeLabel.text = Lobby.Id;
+                RegisterOnPlayersChanged();
+                RegisterOnLobbyStateChanged();
                 m_startButton.SetActive(true);
                 SwitchPanel(m_lobbyPanel);
             }
@@ -150,7 +151,7 @@ class LobbyScene : MonoBehaviour
     {
         SwitchPanel(m_waitPanel);
 
-        await OnlineManager.AssignPlayerScenes(m_codeLabel.text);
+        await CloudManager.AssignPlayerScenes(m_codeLabel.text);
         StaticInventory.Hints.Clear();
         Lobby.State.Value = (int)LobbyState.InGame;
     }
@@ -162,9 +163,9 @@ class LobbyScene : MonoBehaviour
     {
         SwitchPanel(m_waitPanel);
 
-        OnlineManager.LeaveLobby();
-        DeregisterOnLobbyStateChanged(m_codeLabel.text);
-        DeregisterOnPlayersChanged(m_codeLabel.text);
+        DeregisterOnLobbyStateChanged();
+        DeregisterOnPlayersChanged();
+        CloudManager.LeaveLobby();
         m_codeLabel.text = "_____";
         SwitchPanel(m_startPanel);
     }
@@ -186,54 +187,52 @@ class LobbyScene : MonoBehaviour
         panel.SetActive(true);
     }
 
-    void RegisterOnPlayersChanged(string lobby)
+    void RegisterOnPlayersChanged()
     {
-        string roomPlayersKey = string.Format("lobbies/{0}/players", lobby);
-        OnlineManager.RegisterListener(roomPlayersKey, OnPlayersChanged);
+        foreach (CloudNode user in Lobby.Users)
+            user.ValueChanged += OnPlayersChanged;
     }
 
-    void DeregisterOnPlayersChanged(string lobby)
+    void DeregisterOnPlayersChanged()
     {
-        string roomPlayersKey = string.Format("lobbies/{0}/players", lobby);
-        OnlineManager.DeregisterListener(roomPlayersKey, OnPlayersChanged);
+        foreach (CloudNode user in Lobby.Users)
+            user.ValueChanged -= OnPlayersChanged;
     }
 
-    void OnPlayersChanged(object sender, ValueChangedEventArgs args)
+    void OnPlayersChanged(CloudNode user)
     {
-        if (args.Snapshot.Exists)
+        if (user.Value != null)
         {
-            m_playersLabel.text = args.Snapshot.Value.ToString().Replace(',', '\n');
+            m_playersLabel.text = user.Value.ToString().Replace(',', '\n');
         }
     }
 
-    void RegisterOnLobbyStateChanged(string lobby)
+    void RegisterOnLobbyStateChanged()
     {
-        string roomStateKey = string.Format("lobbies/{0}/state", lobby);
-        OnlineManager.RegisterListener(roomStateKey, OnLobbyStateChanged);
+        Lobby.State.ValueChanged += OnLobbyStateChanged;
     }
 
-    void DeregisterOnLobbyStateChanged(string lobby)
+    void DeregisterOnLobbyStateChanged()
     {
-        string roomStateKey = string.Format("lobbies/{0}/state", lobby);
-        OnlineManager.DeregisterListener(roomStateKey, OnLobbyStateChanged);
+        Lobby.State.ValueChanged -= OnLobbyStateChanged;
     }
 
-    void OnLobbyStateChanged(object sender, ValueChangedEventArgs args)
+    void OnLobbyStateChanged(CloudNode<long> state)
     {
-        if (args.Snapshot.Exists)
+        if (state.Value.HasValue)
         {
-            string statusStr = args.Snapshot.Value.ToString();
+            string statusStr = state.Value.Value.ToString();
             int statusNr = -1;
             if (int.TryParse(statusStr, out statusNr))
             {
-                LobbyState state = (LobbyState)statusNr;
-                if (state == LobbyState.InGame)
+                LobbyState s = (LobbyState)statusNr;
+                if (s == LobbyState.InGame)
                 {
                     int scene = (int)(SignInScene.User.Scene.Value ?? 0);
                     if (scene >= 1 && scene <= 4)
                     {
-                        DeregisterOnLobbyStateChanged(m_codeLabel.text);
-                        DeregisterOnPlayersChanged(m_codeLabel.text);
+                        DeregisterOnLobbyStateChanged();
+                        DeregisterOnPlayersChanged();
                         SceneManager.LoadScene(scene);
                     }
                 }

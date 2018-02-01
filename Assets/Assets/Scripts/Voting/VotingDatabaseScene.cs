@@ -31,10 +31,9 @@ public class VotingDatabaseScene : MonoBehaviour
             string lobby = LobbyScene.Lobby.Id;
             if (!string.IsNullOrEmpty(lobby))
             {
-                string[] players = OnlineManager.GetPlayers();
                 m_lobby = lobby;
                 DownloadItems();
-                OnlineManager.RegisterCluesChanged(OnSlotChanged);
+                RegisterListeners();
             }
             else SceneManager.LoadScene("Lobby");
         }
@@ -47,6 +46,12 @@ public class VotingDatabaseScene : MonoBehaviour
         }
 
         PlayerButtonPressed(Data[0]);
+    }
+
+    private async void RegisterListeners()
+    {
+        foreach (Item clue in (await CloudManager.FetchUsers(CloudManager.OtherUsers)).Select(user => user.Items).SelectMany(item => item))
+            clue.ValueChanged += OnSlotChanged;
     }
 
     private void SetBackground()
@@ -99,7 +104,7 @@ public class VotingDatabaseScene : MonoBehaviour
     private async void DownloadItems()
     {
         int tmp = 0;
-        User player = await OnlineManager.DownloadClues(tmp);
+        User player = await CloudManager.DownloadClues(tmp);
         for (int j = 0; j < player.Items.Length; j++)
         {
             int tmp2 = j;
@@ -164,7 +169,7 @@ public class VotingDatabaseScene : MonoBehaviour
                 int slotNb = -1;
                 if (int.TryParse(key[3].Replace("slot-", ""), out slotNb))
                 {
-                    int playerNb = OnlineManager.GetPlayerNumber(player);
+                    int playerNb = CloudManager.GetPlayerNumber(player);
                     var slot = Data[playerNb].Slots[slotNb - 1];
                     if (field == "name")
                     {
@@ -228,7 +233,7 @@ public class VotingDatabaseScene : MonoBehaviour
                 int slotNb = -1;
                 if (int.TryParse(key[3].Replace("slot-", ""), out slotNb))
                 {
-                    int playerNb = OnlineManager.GetPlayerNumber(player);
+                    int playerNb = CloudManager.GetPlayerNumber(player);
                     var slot = Data[playerNb].Slots[slotNb - 1];
 
                     slot.GetComponent<Slot>().Text.GetComponent<Text>().text = "";

@@ -49,6 +49,7 @@ public class DatabaseScene : MonoBehaviour
 {
     public GameObject MainScreen, WaitScreen;
 
+    [SerializeField] private EditItemText EditScreen = null;
     [SerializeField] private GameObject ReadyButton = null;
     [SerializeField] private GameObject ReturnButton = null;
     [SerializeField] private GameObject ButtonTemplate = null;
@@ -64,6 +65,12 @@ public class DatabaseScene : MonoBehaviour
 
     void Start()
     {
+        if (LobbyScene.Lobby == null)
+        {
+            SceneManager.LoadScene("Lobby");
+            return;
+        }
+
         MainScreen.SetActive(false);
         WaitScreen.SetActive(true);
 
@@ -306,6 +313,8 @@ public class DatabaseScene : MonoBehaviour
                     if (StaticSlot.TimesRemoved < StaticSlot.MaxRemovals)
                     {
                         slot.GetComponent<Slot>().Text.GetComponent<Text>().text = "";
+                        slot.GetComponent<Slot>().EditButton.gameObject.SetActive(false);
+                        slot.GetComponent<Slot>().EditButton.onClick.RemoveAllListeners();
                         RemoveItem(slot.GetComponent<Slot>().SlotNumber);
                         Destroy(newObj);
                         StaticSlot.TimesRemoved++;
@@ -313,6 +322,26 @@ public class DatabaseScene : MonoBehaviour
                     else Debug.Log("YOU CANT GO THERE (EG. you have removed your maximum amount of times)");
                 });
                 slot.GetComponent<Slot>().Text.GetComponent<Text>().text = clue.Description.Value;
+                slot.GetComponent<Slot>().EditButton.gameObject.SetActive(true);
+                slot.GetComponent<Slot>().EditButton.onClick.AddListener(() => {
+                    MainScreen.SetActive(false);
+                    EditScreen.gameObject.SetActive(true);
+                    EditScreen.SetTextField(clue.Description.Value);
+                    EditScreen.OnCancel = () => {
+                        EditScreen.OnCancel = null;
+                        EditScreen.OnSubmit = null;
+                        EditScreen.gameObject.SetActive(false);
+                        MainScreen.SetActive(true);
+                    };
+                    EditScreen.OnSubmit = newText => {
+                        EditScreen.OnCancel = null;
+                        EditScreen.OnSubmit = null;
+                        EditScreen.gameObject.SetActive(false);
+                        MainScreen.SetActive(true);
+                        clue.Description.Value = newText;
+                        slot.GetComponent<Slot>().Text.GetComponent<Text>().text = clue.Description.Value;
+                    };
+                });
             }
         }
     }

@@ -39,7 +39,7 @@ public static class StaticSlot
     }
 }
 
-public class Slot : MonoBehaviour, IDropHandler
+class Slot : MonoBehaviour, IDropHandler
 {
     public GameObject item
     {
@@ -59,6 +59,10 @@ public class Slot : MonoBehaviour, IDropHandler
     public AudioClip emailAudioClip;
 
     public GameObject Text;
+    public Button EditButton;
+
+    public GameObject MainScreen;
+    public EditItemText EditItemText;
 
     public DatabaseScene DatabaseController;
 
@@ -91,6 +95,8 @@ public class Slot : MonoBehaviour, IDropHandler
                     if (CanDrop && StaticSlot.TimesRemoved < StaticSlot.MaxRemovals)
                     {
                         Text.GetComponent<Text>().text = "";
+                        EditButton.gameObject.SetActive(false);
+                        EditButton.onClick.RemoveAllListeners();
                         DatabaseController.RemoveItem(SlotNumber);
                         Destroy(newObject);
                         StaticSlot.TimesRemoved++;
@@ -101,6 +107,27 @@ public class Slot : MonoBehaviour, IDropHandler
                 newObject.GetComponent<DragHandler>().enabled = false;
 
                 Text.GetComponent<Text>().text = hint.Hint;
+                EditButton.gameObject.SetActive(true);
+                EditButton.onClick.AddListener(() => {
+                    MainScreen.SetActive(false);
+                    EditItemText.gameObject.SetActive(true);
+                    EditItemText.SetTextField(hint.Hint);
+                    EditItemText.OnCancel = () => {
+                        EditItemText.OnCancel = null;
+                        EditItemText.OnSubmit = null;
+                        EditItemText.gameObject.SetActive(false);
+                        MainScreen.SetActive(true);
+                    };
+                    EditItemText.OnSubmit = newText => {
+                        EditItemText.OnCancel = null;
+                        EditItemText.OnSubmit = null;
+                        EditItemText.gameObject.SetActive(false);
+                        MainScreen.SetActive(true);
+                        hint.Hint = newText;
+                        Text.GetComponent<Text>().text = hint.Hint;
+                        DatabaseController.UploadItem(SlotNumber, hint);
+                    };
+                });
 
                 DatabaseController.UploadItem(SlotNumber, hint);
             }

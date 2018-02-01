@@ -64,6 +64,12 @@ public class DatabaseScene : MonoBehaviour
 
     void Start()
     {
+        if (LobbyScene.Lobby == null)
+        {
+            SceneManager.LoadScene("Lobby");
+            return;
+        }
+
         MainScreen.SetActive(false);
         WaitScreen.SetActive(true);
 

@@ -11,7 +11,7 @@ static class OnlineDatabase
     /// <summary>
     /// Reference to the Firebase database root node.
     /// </summary>
-    private static DatabaseReference m_root => Static.FirebaseDatabase.RootReference;
+    private static DatabaseReference m_root => Cloud.Database.RootReference;
 
     /// <summary>
     /// Checks if data exists in the database.
@@ -58,7 +58,7 @@ static class OnlineDatabase
     /// </summary>
     public static void RegisterListener(string path, EventHandler<ValueChangedEventArgs> listener)
     {
-        Static.FirebaseDatabase.GetReference(path).ValueChanged += listener;
+        Cloud.Database.GetReference(path).ValueChanged += listener;
     }
 
     /// <summary>
@@ -66,7 +66,7 @@ static class OnlineDatabase
     /// </summary>
     public static void DeregisterListener(string path, EventHandler<ValueChangedEventArgs> listener)
     {
-        Static.FirebaseDatabase.GetReference(path).ValueChanged -= listener;
+        Cloud.Database.GetReference(path).ValueChanged -= listener;
     }
 
     /// <summary>

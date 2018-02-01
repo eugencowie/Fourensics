@@ -36,14 +36,14 @@ class SignInScene : MonoBehaviour
 
             // Sign in using Google
             GoogleSignInUser googleUser;
-            try { googleUser = await Static.GoogleSignIn.SignIn(); }
+            try { googleUser = await Cloud.Google.SignIn(); }
             catch (Exception e) { m_status.text = $"Google sign in failed: {e.Message}"; return; }
 
             // Authenticate as a Google user
             FirebaseUser firebaseUser;
-            FirebaseAuth.GetAuth(Static.FirebaseApp);
+            FirebaseAuth.GetAuth(Cloud.Firebase);
             Credential credential = GoogleAuthProvider.GetCredential(googleUser.IdToken, null);
-            try { firebaseUser = await Static.FirebaseAuth.SignInWithCredentialAsync(credential); }
+            try { firebaseUser = await Cloud.Auth.SignInWithCredentialAsync(credential); }
             catch (Exception e) { m_status.text = $"Authentication failed: {e.Message}"; return; }
 
             // Fetch user from the cloud using Firebase user id

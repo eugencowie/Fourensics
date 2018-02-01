@@ -49,7 +49,7 @@ class CloudNode
     CloudNode(string key)
     {
         Key = key;
-        m_reference = Static.FirebaseDatabase.RootReference.Child(key);
+        m_reference = Cloud.Database.RootReference.Child(key);
         m_reference.ValueChanged += OnValueChanged;
     }
 
@@ -112,7 +112,7 @@ class CloudNode<T> where T : struct
     CloudNode(string key)
     {
         Key = key;
-        m_reference = Static.FirebaseDatabase.RootReference.Child(key);
+        m_reference = Cloud.Database.RootReference.Child(key);
         m_reference.ValueChanged += OnValueChanged;
     }
 

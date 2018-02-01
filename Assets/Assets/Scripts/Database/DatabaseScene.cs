@@ -312,6 +312,8 @@ public class DatabaseScene : MonoBehaviour
                     if (StaticSlot.TimesRemoved < StaticSlot.MaxRemovals)
                     {
                         slot.GetComponent<Slot>().Text.GetComponent<Text>().text = "";
+                        slot.GetComponent<Slot>().EditButton.gameObject.SetActive(false);
+                        slot.GetComponent<Slot>().EditButton.onClick.RemoveAllListeners();
                         RemoveItem(slot.GetComponent<Slot>().SlotNumber);
                         Destroy(newObj);
                         StaticSlot.TimesRemoved++;
@@ -319,6 +321,10 @@ public class DatabaseScene : MonoBehaviour
                     else Debug.Log("YOU CANT GO THERE (EG. you have removed your maximum amount of times)");
                 });
                 slot.GetComponent<Slot>().Text.GetComponent<Text>().text = clue.Description.Value;
+                slot.GetComponent<Slot>().EditButton.gameObject.SetActive(true);
+                slot.GetComponent<Slot>().EditButton.onClick.AddListener(() => {
+                    Debug.Log("Edit button clicked: " + clue.Description.Value); // TODO
+                });
             }
         }
     }

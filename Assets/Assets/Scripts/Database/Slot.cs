@@ -59,6 +59,7 @@ public class Slot : MonoBehaviour, IDropHandler
     public AudioClip emailAudioClip;
 
     public GameObject Text;
+    public Button EditButton;
 
     public DatabaseScene DatabaseController;
 
@@ -91,6 +92,8 @@ public class Slot : MonoBehaviour, IDropHandler
                     if (CanDrop && StaticSlot.TimesRemoved < StaticSlot.MaxRemovals)
                     {
                         Text.GetComponent<Text>().text = "";
+                        EditButton.gameObject.SetActive(false);
+                        EditButton.onClick.RemoveAllListeners();
                         DatabaseController.RemoveItem(SlotNumber);
                         Destroy(newObject);
                         StaticSlot.TimesRemoved++;
@@ -101,6 +104,10 @@ public class Slot : MonoBehaviour, IDropHandler
                 newObject.GetComponent<DragHandler>().enabled = false;
 
                 Text.GetComponent<Text>().text = hint.Hint;
+                EditButton.gameObject.SetActive(true);
+                EditButton.onClick.AddListener(() => {
+                    Debug.Log("Edit button clicked: " + hint.Hint);//TODO
+                });
 
                 DatabaseController.UploadItem(SlotNumber, hint);
             }

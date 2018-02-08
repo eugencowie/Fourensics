@@ -15,11 +15,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "1066471497679-htrf1s1j5hje2g4jq93uhs0m0llq8q28.apps.googleusercontent.com",
+          "client_id": "1066471497679-fg1hu5ggjr8oq15sgqr4mlh85vvlhjgc.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.notyetinteractive.fourensics",
-            "certificate_hash": "c504753680ecbfb39ad7bda7d16180fc8ce23a17"
+            "certificate_hash": "e69ab2ee6e6bfc2c787af9e6a873b88255ec8444"
           }
         },
         {

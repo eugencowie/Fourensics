@@ -2,11 +2,10 @@ fileFormatVersion: 2
 guid: ad98e5b48888e44eb81dd5884d3a1754
 labels:
 - gvh
-- gvh_version-1.0.2
+- gvh_version-1.0.3
 timeCreated: 1500486239
 licenseType: Pro
 MonoImporter:
-  externalObjects: {}
   serializedVersion: 2
   defaultReferences: []
   executionOrder: 0

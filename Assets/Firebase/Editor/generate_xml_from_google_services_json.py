@@ -24,9 +24,14 @@ DEFAULT_OUTPUT_FILENAME = 'res/values/googleservices.xml'
 # Indicates a web client in the oauth_client list.
 OAUTH_CLIENT_TYPE_WEB = 3
 
+
 def gen_string(parent, name, text):
-  """Generate one <string /> element."""
+  """Generate one <string /> element and put into the list of keeps."""
   if text:
+    prev = parent.get('tools:keep', '')
+    if prev:
+      prev += ','
+    parent.set('tools:keep', prev + '@string/' + name)
     child = ElementTree.SubElement(parent, 'string', {
         'name': name,
         'translatable': 'false'
@@ -85,6 +90,7 @@ def main():
   jsobj = json.loads(json_string)
 
   root = ElementTree.Element('resources')
+  root.set('xmlns:tools', 'http://schemas.android.com/tools')
 
   project_info = jsobj.get('project_info')
   if project_info:
@@ -151,6 +157,8 @@ def main():
         client_id = oauth_client.get('client_id')
         if client_type and client_type == OAUTH_CLIENT_TYPE_WEB and client_id:
           gen_string(root, 'default_web_client_id', client_id)
+          # Only include the first matching OAuth web client ID.
+          break
 
     services = selected_client.get('services')
     if services:

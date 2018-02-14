@@ -94,7 +94,7 @@ static class CloudManager
         int ourScene = -1;
         for (int i = 0; i < players.Count; i++)
         {
-            User player = await User.Fetch(players[i]);
+            User player = await Cloud.Fetch<User>("users", players[i]);
             if (player.Id == SignInScene.User.Id)
             {
                 ourScene = (i + 1);
@@ -138,7 +138,7 @@ static class CloudManager
         players.Insert(0, SignInScene.User.Id);
         if (playerNb < players.Count)
         {
-            return await User.Fetch(players[playerNb]);
+            return await Cloud.Fetch<User>("users", players[playerNb]);
         }
         else return null;
     }
@@ -154,7 +154,7 @@ static class CloudManager
     
     public static async Task<User[]> FetchUsers(IEnumerable<string> userIds)
     {
-        return await Task.WhenAll(userIds.Select(id => User.Fetch(id)));
+        return await Task.WhenAll(userIds.Select(id => Cloud.Fetch<User>("users", id)));
     }
     
     /// <summary>

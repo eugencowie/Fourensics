@@ -45,7 +45,7 @@ class LobbyScene : MonoBehaviour
         else
         {
             // Get user's lobby
-            Lobby = await Lobby.Fetch(SignInScene.User.Lobby.Value);
+            Lobby = await Cloud.Fetch<Lobby>("lobbies", SignInScene.User.Lobby.Value);
 
             // Show main screen if user's lobby is invalid
             if (Lobby.State.Value == null)
@@ -86,7 +86,7 @@ class LobbyScene : MonoBehaviour
             SwitchPanel(m_waitPanel);
 
             // Fetch lobby from cloud
-            Lobby lobby = await Lobby.Fetch(m_codeField.text.ToUpper());
+            Lobby lobby = await Cloud.Fetch<Lobby>("lobbies", m_codeField.text.ToUpper());
 
             bool success = CloudManager.JoinLobby(lobby, m_maxPlayers);
             if (!success)
@@ -126,7 +126,7 @@ class LobbyScene : MonoBehaviour
         if (string.IsNullOrEmpty(code)) SwitchPanel(m_startPanel);
         else
         {
-            Lobby lobby = Lobby.Create(code);
+            Lobby lobby = Cloud.Create<Lobby>("lobbies", code);
             lobby.State.Value = (int)LobbyState.Lobby;
 
             bool joinSuccess = CloudManager.JoinLobby(lobby, m_maxPlayers);

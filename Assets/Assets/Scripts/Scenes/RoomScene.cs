@@ -53,7 +53,7 @@ public class RoomScene : MonoBehaviour
 
     private async void RegisterListeners()
     {
-        foreach (Item clue in (await CloudManager.FetchUsers(CloudManager.OtherUsers)).Select(user => user.Items).SelectMany(item => item))
+        foreach (LobbyUserItem clue in (await CloudManager.FetchUsers(CloudManager.OtherUsers)).Select(user => user.Items).SelectMany(item => item))
             clue.ValueChanged += OnSlotChanged;
 
         foreach (User user in await CloudManager.FetchUsers(CloudManager.AllUsers))

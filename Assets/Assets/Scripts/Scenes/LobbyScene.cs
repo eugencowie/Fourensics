@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -147,11 +148,11 @@ class LobbyScene : MonoBehaviour
     /// <summary>
     /// Called when the start button in the lobby panel is pressed.
     /// </summary>
-    public async void StartButtonPressed()
+    public void StartButtonPressed()
     {
         SwitchPanel(m_waitPanel);
 
-        await CloudManager.AssignPlayerScenes(m_codeLabel.text);
+        CloudManager.AssignPlayerScenes(m_codeLabel.text);
         StaticInventory.Hints.Clear();
         Lobby.State.Value = (int)LobbyState.InGame;
     }
@@ -189,13 +190,13 @@ class LobbyScene : MonoBehaviour
 
     void RegisterOnPlayersChanged()
     {
-        foreach (CloudNode user in Lobby.Users)
+        foreach (CloudNode user in Lobby.Users.Select(u => u.UserId))
             user.ValueChanged += OnPlayersChanged;
     }
 
     void DeregisterOnPlayersChanged()
     {
-        foreach (CloudNode user in Lobby.Users)
+        foreach (CloudNode user in Lobby.Users.Select(u => u.UserId))
             user.ValueChanged -= OnPlayersChanged;
     }
 
@@ -228,7 +229,7 @@ class LobbyScene : MonoBehaviour
                 LobbyState s = (LobbyState)statusNr;
                 if (s == LobbyState.InGame)
                 {
-                    int scene = (int)(SignInScene.User.Scene.Value ?? 0);
+                    int scene = (int)(Lobby.Users.First(u => u.UserId.Value == SignInScene.User.Id).Scene.Value ?? 0);
                     if (scene >= 1 && scene <= 4)
                     {
                         DeregisterOnLobbyStateChanged();

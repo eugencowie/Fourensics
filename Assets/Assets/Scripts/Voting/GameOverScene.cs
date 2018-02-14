@@ -18,7 +18,7 @@ public class GameOverScene : MonoBehaviour
 
     [Range(0, 100)]
     public int RequiredVotePercentage = 51;
-    
+
     private string m_roomCode;
     private Dictionary<string, string> m_votedPlayers = new Dictionary<string, string>();
 
@@ -43,14 +43,14 @@ public class GameOverScene : MonoBehaviour
             m_roomCode = room;
             foreach (var player in CloudManager.AllUsers) m_votedPlayers[player] = "";
             RegisterListeners();
-            OnVoteChanged(SignInScene.User.Vote);
+            OnVoteChanged(LobbyScene.Lobby.Users.First(u => u.UserId.Value == SignInScene.User.Id).Vote);
         }
         else SceneManager.LoadScene("Lobby");
     }
 
-    private async void RegisterListeners()
+    private void RegisterListeners()
     {
-        foreach (User user in await CloudManager.FetchUsers(CloudManager.AllUsers))
+        foreach (LobbyUser user in LobbyScene.Lobby.Users)
             user.Vote.ValueChanged += OnVoteChanged;
     }
 

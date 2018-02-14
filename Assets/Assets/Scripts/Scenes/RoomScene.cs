@@ -1,4 +1,3 @@
-using Firebase.Database;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -19,7 +18,7 @@ public class RoomScene : MonoBehaviour
 {
     [SerializeField] private GameObject ReadyButton = null;
     [SerializeField] private GameObject DatabaseButton = null;
-    
+
     private string m_roomCode;
 
     private Dictionary<string, bool> m_readyPlayers = new Dictionary<string, bool>();
@@ -35,7 +34,7 @@ public class RoomScene : MonoBehaviour
             welcomeScreen.SetActive(false);
         }
         StaticRoom.SeenWelcome = true;
-        
+
         ReadyButton.SetActive(false);
         DatabaseButton.SetActive(false);
 
@@ -51,12 +50,12 @@ public class RoomScene : MonoBehaviour
         else SceneManager.LoadScene("Lobby");
     }
 
-    private async void RegisterListeners()
+    private void RegisterListeners()
     {
-        foreach (LobbyUserItem clue in (await CloudManager.FetchUsers(CloudManager.OtherUsers)).Select(user => user.Items).SelectMany(item => item))
+        foreach (LobbyUserItem clue in LobbyScene.Lobby.Users.Where(u => u.UserId.Value != SignInScene.User.Id).Select(u => u.Items).SelectMany(i => i))
             clue.ValueChanged += OnSlotChanged;
 
-        foreach (User user in await CloudManager.FetchUsers(CloudManager.AllUsers))
+        foreach (LobbyUser user in LobbyScene.Lobby.Users)
             user.Ready.ValueChanged += OnReadyChanged;
     }
 
@@ -113,7 +112,7 @@ public class RoomScene : MonoBehaviour
         if (ReadyButton.activeSelf)
         {
             ReadyButton.SetActive(false);
-            SignInScene.User.Ready.Value = true;
+            LobbyScene.Lobby.Users.First(u => u.UserId.Value == SignInScene.User.Id).Ready.Value = true;
             ReadyButton.SetActive(true);
             ReadyButton.GetComponent<Image>().color = Color.yellow;
             foreach (Transform t in ReadyButton.gameObject.transform)

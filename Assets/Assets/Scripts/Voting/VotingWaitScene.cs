@@ -22,14 +22,14 @@ public class VotingWaitScene : MonoBehaviour
             m_roomCode = room;
             foreach (var player in CloudManager.AllUsers) m_votedPlayers[player] = "";
             RegisterListeners();
-            OnVoteChanged(SignInScene.User.Vote);
+            OnVoteChanged(LobbyScene.Lobby.Users.First(u => u.UserId.Value == SignInScene.User.Id).Vote);
         }
         else SceneManager.LoadScene("Lobby");
     }
 
-    private async void RegisterListeners()
+    private void RegisterListeners()
     {
-        foreach (User user in await CloudManager.FetchUsers(CloudManager.OtherUsers))
+        foreach (LobbyUser user in LobbyScene.Lobby.Users.Where(u => u.UserId.Value != SignInScene.User.Id))
             user.Vote.ValueChanged += OnVoteChanged;
     }
 
@@ -56,7 +56,7 @@ public class VotingWaitScene : MonoBehaviour
 
     private async void DeregisterListeners()
     {
-        foreach (User user in await CloudManager.FetchUsers(CloudManager.OtherUsers))
+        foreach (LobbyUser user in LobbyScene.Lobby.Users.Where(u => u.UserId.Value != SignInScene.User.Id))
             user.Vote.ValueChanged -= OnVoteChanged;
     }
 }

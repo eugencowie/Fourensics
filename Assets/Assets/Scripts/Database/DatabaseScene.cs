@@ -1,4 +1,3 @@
-using Firebase.Database;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -55,7 +54,7 @@ public class DatabaseScene : MonoBehaviour
     [SerializeField] private GameObject ButtonTemplate = null;
     [SerializeField] private GameObject[] Backgrounds = new GameObject[4];
     [SerializeField] private List<Data> Data = new List<Data>();
-    
+
     private string m_lobby;
     private int m_scene;
 
@@ -74,7 +73,7 @@ public class DatabaseScene : MonoBehaviour
         MainScreen.SetActive(false);
         WaitScreen.SetActive(true);
 
-        int scene = (int)(SignInScene.User.Scene.Value ?? 0);
+        int scene = (int)(LobbyScene.Lobby.Users.First(u => u.UserId.Value == SignInScene.User.Id).Scene.Value ?? 0);
         if (scene > 0)
         {
             m_scene = scene;
@@ -100,12 +99,12 @@ public class DatabaseScene : MonoBehaviour
         PlayerButtonPressed(Data[0]);
     }
 
-    private async void RegisterListeners()
+    private void RegisterListeners()
     {
-        foreach (LobbyUserItem clue in (await CloudManager.FetchUsers(CloudManager.OtherUsers)).Select(user => user.Items).SelectMany(item => item))
+        foreach (LobbyUserItem clue in LobbyScene.Lobby.Users.Where(u => u.UserId.Value != SignInScene.User.Id).Select(u => u.Items).SelectMany(i => i))
             clue.ValueChanged += OnSlotChanged;
 
-        foreach (User user in await CloudManager.FetchUsers(CloudManager.AllUsers))
+        foreach (LobbyUser user in LobbyScene.Lobby.Users)
             user.Ready.ValueChanged += OnReadyChanged;
     }
 
@@ -125,7 +124,7 @@ public class DatabaseScene : MonoBehaviour
         if (ReadyButton.activeSelf)
         {
             ReadyButton.SetActive(false);
-            SignInScene.User.Ready.Value = true;
+            LobbyScene.Lobby.Users.First(u => u.UserId.Value == SignInScene.User.Id).Ready.Value = true;
             ReadyButton.SetActive(true);
             ReadyButton.GetComponent<Image>().color = Color.yellow;
             foreach (Transform t in ReadyButton.gameObject.transform)
@@ -155,12 +154,12 @@ public class DatabaseScene : MonoBehaviour
         }
     }
 
-    private async void DeregisterListeners()
+    private void DeregisterListeners()
     {
-        foreach (LobbyUserItem clue in (await CloudManager.FetchUsers(CloudManager.OtherUsers)).Select(user => user.Items).SelectMany(item => item))
+        foreach (LobbyUserItem clue in LobbyScene.Lobby.Users.Where(u => u.UserId.Value != SignInScene.User.Id).Select(u => u.Items).SelectMany(i => i))
             clue.ValueChanged -= OnSlotChanged;
 
-        foreach (User user in await CloudManager.FetchUsers(CloudManager.AllUsers))
+        foreach (LobbyUser user in LobbyScene.Lobby.Users)
             user.Ready.ValueChanged -= OnReadyChanged;
     }
 
@@ -262,14 +261,14 @@ public class DatabaseScene : MonoBehaviour
         //}
     }
 
-    private async void DownloadItems()
+    private void DownloadItems()
     {
         int tmp = 0;
-        User player = await CloudManager.DownloadClues(tmp);
-        for (int j = 0; j < player.Items.Length; j++)
+        //User player = await CloudManager.DownloadClues(tmp);
+        for (int j = 0; j < LobbyScene.Lobby.Users.First(u => u.UserId.Value == SignInScene.User.Id).Items.Length; j++)
         {
             int tmp2 = j;
-            var clue = player.Items[tmp2];
+            var clue = LobbyScene.Lobby.Users.First(u => u.UserId.Value == SignInScene.User.Id).Items[tmp2];
             CheckPlayerItemsLoaded();
             if (!string.IsNullOrEmpty(clue.Name.Value))
             {

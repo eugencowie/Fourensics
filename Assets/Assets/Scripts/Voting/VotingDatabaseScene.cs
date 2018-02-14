@@ -12,7 +12,7 @@ public class VotingDatabaseScene : MonoBehaviour
     [SerializeField] private GameObject ButtonTemplate = null;
     [SerializeField] private GameObject[] Backgrounds = new GameObject[4];
     [SerializeField] private Data[] Data = new Data[4];
-    
+
     private string m_lobby;
     private int m_scene;
 
@@ -23,7 +23,7 @@ public class VotingDatabaseScene : MonoBehaviour
         MainScreen.SetActive(false);
         WaitScreen.SetActive(true);
 
-        int scene = (int)(SignInScene.User.Scene.Value ?? 0);
+        int scene = (int)(LobbyScene.Lobby.Users.First(u => u.UserId.Value == SignInScene.User.Id).Scene.Value ?? 0);
         if (scene > 0)
         {
             m_scene = scene;
@@ -48,9 +48,9 @@ public class VotingDatabaseScene : MonoBehaviour
         PlayerButtonPressed(Data[0]);
     }
 
-    private async void RegisterListeners()
+    private void RegisterListeners()
     {
-        foreach (LobbyUserItem clue in (await CloudManager.FetchUsers(CloudManager.OtherUsers)).Select(user => user.Items).SelectMany(item => item))
+        foreach (LobbyUserItem clue in LobbyScene.Lobby.Users.Where(u => u.UserId.Value != SignInScene.User.Id).Select(u => u.Items).SelectMany(i => i))
             clue.ValueChanged += OnSlotChanged;
     }
 
@@ -101,14 +101,14 @@ public class VotingDatabaseScene : MonoBehaviour
         }
     }
 
-    private async void DownloadItems()
+    private void DownloadItems()
     {
         int tmp = 0;
-        User player = await CloudManager.DownloadClues(tmp);
-        for (int j = 0; j < player.Items.Length; j++)
+        //User player = await CloudManager.DownloadClues(tmp);
+        for (int j = 0; j < LobbyScene.Lobby.Users.First(u => u.UserId.Value == SignInScene.User.Id).Items.Length; j++)
         {
             int tmp2 = j;
-            var clue = player.Items[tmp2];
+            var clue = LobbyScene.Lobby.Users.First(u => u.UserId.Value == SignInScene.User.Id).Items[tmp2];
             CheckPlayerItemsLoaded();
             if (!string.IsNullOrEmpty(clue.Name.Value))
             {

@@ -21,7 +21,7 @@ public class VotingScene : MonoBehaviour
     //[SerializeField] private GameObject VoteButton = null;
     [SerializeField] private GameObject[] Backgrounds = new GameObject[4];
     [SerializeField] private VotingSuspect[] Suspects = new VotingSuspect[8];
-    
+
     private string m_lobby;
     private int m_scene;
 
@@ -31,7 +31,7 @@ public class VotingScene : MonoBehaviour
         ReturnButton.SetActive(false);
         //VoteButton.SetActive(false);
 
-        int scene = (int)(SignInScene.User.Scene.Value ?? 0);
+        int scene = (int)(LobbyScene.Lobby.Users.First(u => u.UserId.Value == SignInScene.User.Id).Scene.Value ?? 0);
         if (scene > 0)
         {
             m_scene = scene;
@@ -140,7 +140,7 @@ public class VotingScene : MonoBehaviour
         var current = Suspects.First(s => s.gameObject.activeSelf);
         if (current != null)
         {
-            SignInScene.User.Vote.Value = current.Name.text;
+            LobbyScene.Lobby.Users.First(u => u.UserId.Value == SignInScene.User.Id).Vote.Value = current.Name.text;
             SceneManager.LoadScene("VotingWait");
         }
     }

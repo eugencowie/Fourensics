@@ -1,4 +1,3 @@
-using Firebase.Database;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -13,25 +12,37 @@ public class VotingDatabaseScene : MonoBehaviour
     [SerializeField] private GameObject[] Backgrounds = new GameObject[4];
     [SerializeField] private Data[] Data = new Data[4];
 
-    private string m_lobby;
+    private string m_lobbyCode;
     private int m_scene;
 
     int playerItemsLoaded = 0;
 
-    void Start()
+    User m_user = null;
+    Lobby m_lobby = null;
+
+    async void Start()
     {
+        m_user = await SignInScene.User();
+        m_lobby = await LobbyScene.Lobby(m_user);
+
+        if (m_lobby == null)
+        {
+            SceneManager.LoadScene("Lobby");
+            return;
+        }
+
         MainScreen.SetActive(false);
         WaitScreen.SetActive(true);
 
-        int scene = (int)(LobbyScene.Lobby.Users.First(u => u.UserId.Value == SignInScene.User.Id).Scene.Value ?? 0);
+        int scene = (int)(m_lobby.Users.First(u => u.UserId.Value == m_user.Id).Scene.Value ?? 0);
         if (scene > 0)
         {
             m_scene = scene;
             SetBackground();
-            string lobby = LobbyScene.Lobby.Id;
+            string lobby = m_lobby.Id;
             if (!string.IsNullOrEmpty(lobby))
             {
-                m_lobby = lobby;
+                m_lobbyCode = lobby;
                 DownloadItems();
                 RegisterListeners();
             }
@@ -50,7 +61,7 @@ public class VotingDatabaseScene : MonoBehaviour
 
     private void RegisterListeners()
     {
-        foreach (LobbyUserItem clue in LobbyScene.Lobby.Users.Where(u => u.UserId.Value != SignInScene.User.Id).Select(u => u.Items).SelectMany(i => i))
+        foreach (LobbyUserItem clue in m_lobby.Users.Where(u => u.UserId.Value != m_user.Id).Select(u => u.Items).SelectMany(i => i))
             clue.ValueChanged += OnSlotChanged;
     }
 
@@ -105,10 +116,10 @@ public class VotingDatabaseScene : MonoBehaviour
     {
         int tmp = 0;
         //User player = await CloudManager.DownloadClues(tmp);
-        for (int j = 0; j < LobbyScene.Lobby.Users.First(u => u.UserId.Value == SignInScene.User.Id).Items.Length; j++)
+        for (int j = 0; j < m_lobby.Users.First(u => u.UserId.Value == m_user.Id).Items.Length; j++)
         {
             int tmp2 = j;
-            var clue = LobbyScene.Lobby.Users.First(u => u.UserId.Value == SignInScene.User.Id).Items[tmp2];
+            var clue = m_lobby.Users.First(u => u.UserId.Value == m_user.Id).Items[tmp2];
             CheckPlayerItemsLoaded();
             if (!string.IsNullOrEmpty(clue.Name.Value))
             {
@@ -169,7 +180,7 @@ public class VotingDatabaseScene : MonoBehaviour
                 int slotNb = -1;
                 if (int.TryParse(key[3].Replace("slot-", ""), out slotNb))
                 {
-                    int playerNb = CloudManager.GetPlayerNumber(player);
+                    int playerNb = CloudManager.GetPlayerNumber(m_user, m_lobby, player);
                     var slot = Data[playerNb].Slots[slotNb - 1];
                     if (field == "name")
                     {
@@ -233,7 +244,7 @@ public class VotingDatabaseScene : MonoBehaviour
                 int slotNb = -1;
                 if (int.TryParse(key[3].Replace("slot-", ""), out slotNb))
                 {
-                    int playerNb = CloudManager.GetPlayerNumber(player);
+                    int playerNb = CloudManager.GetPlayerNumber(m_user, m_lobby, player);
                     var slot = Data[playerNb].Slots[slotNb - 1];
 
                     slot.GetComponent<Slot>().Text.GetComponent<Text>().text = "";

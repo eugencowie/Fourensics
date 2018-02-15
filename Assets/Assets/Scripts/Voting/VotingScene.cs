@@ -22,24 +22,36 @@ public class VotingScene : MonoBehaviour
     [SerializeField] private GameObject[] Backgrounds = new GameObject[4];
     [SerializeField] private VotingSuspect[] Suspects = new VotingSuspect[8];
 
-    private string m_lobby;
+    private string m_lobbyCode;
     private int m_scene;
 
-    void Start()
+    User m_user = null;
+    Lobby m_lobby = null;
+
+    async void Start()
     {
+        m_user = await SignInScene.User();
+        m_lobby = await LobbyScene.Lobby(m_user);
+
+        if (m_lobby == null)
+        {
+            SceneManager.LoadScene("Lobby");
+            return;
+        }
+
         ResetButton.SetActive(false);
         ReturnButton.SetActive(false);
         //VoteButton.SetActive(false);
 
-        int scene = (int)(LobbyScene.Lobby.Users.First(u => u.UserId.Value == SignInScene.User.Id).Scene.Value ?? 0);
+        int scene = (int)(m_lobby.Users.First(u => u.UserId.Value == m_user.Id).Scene.Value ?? 0);
         if (scene > 0)
         {
             m_scene = scene;
             SetBackground();
-            string lobby = LobbyScene.Lobby.Id;
+            string lobby = m_lobby.Id;
             if (!string.IsNullOrEmpty(lobby))
             {
-                m_lobby = lobby;
+                m_lobbyCode = lobby;
                 ResetButton.SetActive(true);
                 ReturnButton.SetActive(true);
                 //VoteButton.SetActive(true);
@@ -140,7 +152,7 @@ public class VotingScene : MonoBehaviour
         var current = Suspects.First(s => s.gameObject.activeSelf);
         if (current != null)
         {
-            LobbyScene.Lobby.Users.First(u => u.UserId.Value == SignInScene.User.Id).Vote.Value = current.Name.text;
+            m_lobby.Users.First(u => u.UserId.Value == m_user.Id).Vote.Value = current.Name.text;
             SceneManager.LoadScene("VotingWait");
         }
     }

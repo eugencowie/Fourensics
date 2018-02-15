@@ -24,9 +24,15 @@ public class GameOverScene : MonoBehaviour
 
     private Text m_winOrLoseText;
 
-    void Start()
+    User m_user = null;
+    Lobby m_lobby = null;
+
+    async void Start()
     {
-        if (LobbyScene.Lobby == null)
+        m_user = await SignInScene.User();
+        m_lobby = await LobbyScene.Lobby(m_user);
+
+        if (m_lobby == null)
         {
             SceneManager.LoadScene("Lobby");
             return;
@@ -37,20 +43,20 @@ public class GameOverScene : MonoBehaviour
         WinVideo.loopPointReached += VideoLoopPointReached;
         LoseVideo.loopPointReached += VideoLoopPointReached;
 
-        string room = LobbyScene.Lobby.Id;
+        string room = m_lobby.Id;
         if (!string.IsNullOrEmpty(room))
         {
             m_roomCode = room;
-            foreach (var player in CloudManager.AllUsers) m_votedPlayers[player] = "";
+            foreach (var player in CloudManager.AllUsers(m_lobby)) m_votedPlayers[player] = "";
             RegisterListeners();
-            OnVoteChanged(LobbyScene.Lobby.Users.First(u => u.UserId.Value == SignInScene.User.Id).Vote);
+            OnVoteChanged(m_lobby.Users.First(u => u.UserId.Value == m_user.Id).Vote);
         }
         else SceneManager.LoadScene("Lobby");
     }
 
     private void RegisterListeners()
     {
-        foreach (LobbyUser user in LobbyScene.Lobby.Users)
+        foreach (LobbyUser user in m_lobby.Users)
             user.Vote.ValueChanged += OnVoteChanged;
     }
 
@@ -63,7 +69,7 @@ public class GameOverScene : MonoBehaviour
 
     public void ResetButtonPressed()
     {
-        CloudManager.LeaveLobby();
+        CloudManager.LeaveLobby(m_user, m_lobby);
         SceneManager.LoadScene("Lobby");
     }
 
@@ -89,8 +95,8 @@ public class GameOverScene : MonoBehaviour
 
                     if (percentage >= requiredPercentage)
                     {
-                        string yourVote = m_votedPlayers[SignInScene.User.Id];
-                        m_votedPlayers.Remove(SignInScene.User.Id);
+                        string yourVote = m_votedPlayers[m_user.Id];
+                        m_votedPlayers.Remove(m_user.Id);
 
                         WinText.text += "\n\nYou voted for " + yourVote;
                         for (int i = 0; i < m_votedPlayers.Count; i++)
@@ -102,7 +108,7 @@ public class GameOverScene : MonoBehaviour
 
                         m_winOrLoseText = WinText;
 
-                        m_votedPlayers[SignInScene.User.Id] = yourVote;
+                        m_votedPlayers[m_user.Id] = yourVote;
                     }
                     else
                     {

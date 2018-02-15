@@ -8,28 +8,34 @@ public class VotingWaitScene : MonoBehaviour
     private string m_roomCode;
     private Dictionary<string, string> m_votedPlayers = new Dictionary<string, string>();
 
-    void Start()
+    User m_user = null;
+    Lobby m_lobby = null;
+
+    async void Start()
     {
-        if (LobbyScene.Lobby == null)
+        m_user = await SignInScene.User();
+        m_lobby = await LobbyScene.Lobby(m_user);
+
+        if (m_lobby == null)
         {
             SceneManager.LoadScene("Lobby");
             return;
         }
 
-        string room = LobbyScene.Lobby.Id;
+        string room = m_lobby.Id;
         if (!string.IsNullOrEmpty(room))
         {
             m_roomCode = room;
-            foreach (var player in CloudManager.AllUsers) m_votedPlayers[player] = "";
+            foreach (var player in CloudManager.AllUsers(m_lobby)) m_votedPlayers[player] = "";
             RegisterListeners();
-            OnVoteChanged(LobbyScene.Lobby.Users.First(u => u.UserId.Value == SignInScene.User.Id).Vote);
+            OnVoteChanged(m_lobby.Users.First(u => u.UserId.Value == m_user.Id).Vote);
         }
         else SceneManager.LoadScene("Lobby");
     }
 
     private void RegisterListeners()
     {
-        foreach (LobbyUser user in LobbyScene.Lobby.Users.Where(u => u.UserId.Value != SignInScene.User.Id))
+        foreach (LobbyUser user in m_lobby.Users.Where(u => u.UserId.Value != m_user.Id))
             user.Vote.ValueChanged += OnVoteChanged;
     }
 
@@ -54,9 +60,9 @@ public class VotingWaitScene : MonoBehaviour
         }
     }
 
-    private async void DeregisterListeners()
+    private void DeregisterListeners()
     {
-        foreach (LobbyUser user in LobbyScene.Lobby.Users.Where(u => u.UserId.Value != SignInScene.User.Id))
+        foreach (LobbyUser user in m_lobby.Users.Where(u => u.UserId.Value != m_user.Id))
             user.Vote.ValueChanged -= OnVoteChanged;
     }
 }

@@ -26,8 +26,20 @@ public class RoomScene : MonoBehaviour
     public GameObject mainScreen;
     public GameObject welcomeScreen;
 
-    void Start()
+    User m_user = null;
+    Lobby m_lobby = null;
+
+    async void Start()
     {
+        m_user = await SignInScene.User();
+        m_lobby = await LobbyScene.Lobby(m_user);
+
+        if (m_lobby == null)
+        {
+            SceneManager.LoadScene("Lobby");
+            return;
+        }
+
         if (StaticRoom.SeenWelcome)
         {
             mainScreen.SetActive(true);
@@ -38,11 +50,11 @@ public class RoomScene : MonoBehaviour
         ReadyButton.SetActive(false);
         DatabaseButton.SetActive(false);
 
-        string room = LobbyScene.Lobby.Id;
+        string room = m_lobby.Id;
         if (!string.IsNullOrEmpty(room))
         {
             m_roomCode = room;
-            foreach (var player in CloudManager.AllUsers) m_readyPlayers[player] = false;
+            foreach (var player in CloudManager.AllUsers(m_lobby)) m_readyPlayers[player] = false;
             RegisterListeners();
             ReadyButton.SetActive(true);
             DatabaseButton.SetActive(true);
@@ -52,10 +64,10 @@ public class RoomScene : MonoBehaviour
 
     private void RegisterListeners()
     {
-        foreach (LobbyUserItem clue in LobbyScene.Lobby.Users.Where(u => u.UserId.Value != SignInScene.User.Id).Select(u => u.Items).SelectMany(i => i))
+        foreach (LobbyUserItem clue in m_lobby.Users.Where(u => u.UserId.Value != m_user.Id).Select(u => u.Items).SelectMany(i => i))
             clue.ValueChanged += OnSlotChanged;
 
-        foreach (LobbyUser user in LobbyScene.Lobby.Users)
+        foreach (LobbyUser user in m_lobby.Users)
             user.Ready.ValueChanged += OnReadyChanged;
     }
 
@@ -83,7 +95,7 @@ public class RoomScene : MonoBehaviour
                 string player = key[1];
                 m_readyPlayers[player] = true;
 
-                if (player == SignInScene.User.Id)
+                if (player == m_user.Id)
                 {
                     ConfirmReady();
                 }
@@ -99,7 +111,7 @@ public class RoomScene : MonoBehaviour
 
     public void ConfirmLeave()
     {
-        CloudManager.LeaveLobby();
+        CloudManager.LeaveLobby(m_user, m_lobby);
         SceneManager.LoadScene("Lobby");
 
         //NetworkController.LeaveLobby(m_roomCode, success => {
@@ -112,7 +124,7 @@ public class RoomScene : MonoBehaviour
         if (ReadyButton.activeSelf)
         {
             ReadyButton.SetActive(false);
-            LobbyScene.Lobby.Users.First(u => u.UserId.Value == SignInScene.User.Id).Ready.Value = true;
+            m_lobby.Users.First(u => u.UserId.Value == m_user.Id).Ready.Value = true;
             ReadyButton.SetActive(true);
             ReadyButton.GetComponent<Image>().color = Color.yellow;
             foreach (Transform t in ReadyButton.gameObject.transform)
@@ -137,7 +149,7 @@ public class RoomScene : MonoBehaviour
                 int slot;
                 if (!string.IsNullOrEmpty(value) && int.TryParse(keys[3].Replace("slot-", ""), out slot))
                 {
-                    int player = CloudManager.GetPlayerNumber(keys[1]);
+                    int player = CloudManager.GetPlayerNumber(m_user, m_lobby, keys[1]);
                     if (DatabaseButton != null && !StaticClues.SeenSlots.Any(s => s.Equals(new SlotData(player.ToString(), slot.ToString(), value))))
                     {
                         foreach (Transform t in DatabaseButton.transform)

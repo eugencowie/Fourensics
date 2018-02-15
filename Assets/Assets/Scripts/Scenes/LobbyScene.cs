@@ -1,4 +1,6 @@
+using System;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -7,7 +9,23 @@ enum LobbyState { Lobby, InGame, Voting, Finished }
 
 class LobbyScene : MonoBehaviour
 {
-    public static Lobby Lobby { get; set; }
+    private static Lobby m_lobbyTMP = null;
+
+    public static async Task<Lobby> Lobby(User user)
+    {
+        if (string.IsNullOrWhiteSpace(user.Lobby.Value))
+        {
+            // User is not in a lobby
+            m_lobbyTMP = null;
+        }
+        else if (m_lobbyTMP == null)
+        {
+            // Get user's lobby
+            m_lobbyTMP = await Cloud.Fetch<Lobby>("lobbies", user.Lobby.Value);
+        }
+
+        return m_lobbyTMP;
+    }
 
     [SerializeField] Text m_codeLabel = null;
     [SerializeField] InputField m_codeField = null;
@@ -20,20 +38,20 @@ class LobbyScene : MonoBehaviour
 
     const int m_maxPlayers = 4;
 
+    User m_user = null;
+    Lobby m_lobby = null;
+
     async void Start()
     {
         // Show please wait screen
         SwitchPanel(m_waitPanel);
 
-        // Load sign-in scene if user has not yet signed in
-        if (SignInScene.User == null)
-        {
-            SceneManager.LoadScene("SignIn");
-            return;
-        }
+        // Get database objects
+        m_user = await SignInScene.User();
+        m_lobby = await Lobby(m_user);
 
         // Show main screen if user is not yet in a lobby
-        if (SignInScene.User.Lobby.Value == null)
+        if (m_lobby == null)
         {
             StaticClues.Reset();
             StaticInventory.Reset();
@@ -43,30 +61,25 @@ class LobbyScene : MonoBehaviour
             SwitchPanel(m_startPanel);
             return;
         }
-        else
+
+        // Show main screen if user's lobby is invalid
+        if (!m_lobby.State.Value.HasValue)
         {
-            // Get user's lobby
-            Lobby = await Cloud.Fetch<Lobby>("lobbies", SignInScene.User.Lobby.Value);
-
-            // Show main screen if user's lobby is invalid
-            if (Lobby.State.Value == null)
-            {
-                SignInScene.User.Lobby.Value = null;
-                StaticClues.Reset();
-                StaticInventory.Reset();
-                StaticRoom.Reset();
-                StaticSlot.Reset();
-                StaticSuspects.Reset();
-                SwitchPanel(m_startPanel);
-                return;
-            }
-
-            // Show lobby screen
-            m_codeLabel.text = Lobby.Id;
-            RegisterOnPlayersChanged();
-            RegisterOnLobbyStateChanged();
-            SwitchPanel(m_lobbyPanel);
+            m_user.Lobby.Value = null;
+            StaticClues.Reset();
+            StaticInventory.Reset();
+            StaticRoom.Reset();
+            StaticSlot.Reset();
+            StaticSuspects.Reset();
+            SwitchPanel(m_startPanel);
+            return;
         }
+
+        // Show lobby screen
+        m_codeLabel.text = m_lobby.Id;
+        RegisterOnPlayersChanged();
+        RegisterOnLobbyStateChanged();
+        SwitchPanel(m_lobbyPanel);
     }
 
     /// <summary>
@@ -89,7 +102,7 @@ class LobbyScene : MonoBehaviour
             // Fetch lobby from cloud
             Lobby lobby = await Cloud.Fetch<Lobby>("lobbies", m_codeField.text.ToUpper());
 
-            bool success = CloudManager.JoinLobby(lobby, m_maxPlayers);
+            bool success = CloudManager.JoinLobby(m_user, lobby, m_maxPlayers);
             if (!success)
             {
                 m_codeField.text = "";
@@ -97,9 +110,9 @@ class LobbyScene : MonoBehaviour
             }
             else
             {
-                Lobby = lobby;
-                SignInScene.User.Lobby.Value = Lobby.Id;
-                m_codeLabel.text = Lobby.Id;
+                m_lobby = lobby;
+                m_user.Lobby.Value = m_lobby.Id;
+                m_codeLabel.text = m_lobby.Id;
                 RegisterOnPlayersChanged();
                 RegisterOnLobbyStateChanged();
                 m_startButton.SetActive(false);
@@ -130,13 +143,13 @@ class LobbyScene : MonoBehaviour
             Lobby lobby = Cloud.Create<Lobby>("lobbies", code);
             lobby.State.Value = (int)LobbyState.Lobby;
 
-            bool joinSuccess = CloudManager.JoinLobby(lobby, m_maxPlayers);
+            bool joinSuccess = CloudManager.JoinLobby(m_user, lobby, m_maxPlayers);
             if (!joinSuccess) SwitchPanel(m_startPanel);
             else
             {
-                Lobby = lobby;
-                SignInScene.User.Lobby.Value = Lobby.Id;
-                m_codeLabel.text = Lobby.Id;
+                m_lobby = lobby;
+                m_user.Lobby.Value = m_lobby.Id;
+                m_codeLabel.text = m_lobby.Id;
                 RegisterOnPlayersChanged();
                 RegisterOnLobbyStateChanged();
                 m_startButton.SetActive(true);
@@ -152,9 +165,9 @@ class LobbyScene : MonoBehaviour
     {
         SwitchPanel(m_waitPanel);
 
-        CloudManager.AssignPlayerScenes(m_codeLabel.text);
+        CloudManager.AssignPlayerScenes(m_user, m_lobby, m_codeLabel.text);
         StaticInventory.Hints.Clear();
-        Lobby.State.Value = (int)LobbyState.InGame;
+        m_lobby.State.Value = (int)LobbyState.InGame;
     }
 
     /// <summary>
@@ -166,7 +179,7 @@ class LobbyScene : MonoBehaviour
 
         DeregisterOnLobbyStateChanged();
         DeregisterOnPlayersChanged();
-        CloudManager.LeaveLobby();
+        CloudManager.LeaveLobby(m_user, m_lobby);
         m_codeLabel.text = "_____";
         SwitchPanel(m_startPanel);
     }
@@ -190,13 +203,13 @@ class LobbyScene : MonoBehaviour
 
     void RegisterOnPlayersChanged()
     {
-        foreach (CloudNode user in Lobby.Users.Select(u => u.UserId))
+        foreach (CloudNode user in m_lobby.Users.Select(u => u.UserId))
             user.ValueChanged += OnPlayersChanged;
     }
 
     void DeregisterOnPlayersChanged()
     {
-        foreach (CloudNode user in Lobby.Users.Select(u => u.UserId))
+        foreach (CloudNode user in m_lobby.Users.Select(u => u.UserId))
             user.ValueChanged -= OnPlayersChanged;
     }
 
@@ -210,12 +223,12 @@ class LobbyScene : MonoBehaviour
 
     void RegisterOnLobbyStateChanged()
     {
-        Lobby.State.ValueChanged += OnLobbyStateChanged;
+        m_lobby.State.ValueChanged += OnLobbyStateChanged;
     }
 
     void DeregisterOnLobbyStateChanged()
     {
-        Lobby.State.ValueChanged -= OnLobbyStateChanged;
+        m_lobby.State.ValueChanged -= OnLobbyStateChanged;
     }
 
     void OnLobbyStateChanged(CloudNode<long> state)
@@ -229,7 +242,7 @@ class LobbyScene : MonoBehaviour
                 LobbyState s = (LobbyState)statusNr;
                 if (s == LobbyState.InGame)
                 {
-                    int scene = (int)(Lobby.Users.First(u => u.UserId.Value == SignInScene.User.Id).Scene.Value ?? 0);
+                    int scene = (int)(m_lobby.Users.First(u => u.UserId.Value == m_user.Id).Scene.Value ?? 0);
                     if (scene >= 1 && scene <= 4)
                     {
                         DeregisterOnLobbyStateChanged();

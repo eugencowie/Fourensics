@@ -15,10 +15,7 @@ static class CloudManager
             return false;
 
         // Get list of players in lobby
-        List<string> players = lobby.Users
-            .Where(u => u.UserId.Value != null)
-            .Select(u => u.UserId.Value)
-            .ToList();
+        List<string> players = AllUsers(lobby).ToList();
 
         // If player is already in room
         if (players.Contains(user.Id))
@@ -71,7 +68,7 @@ static class CloudManager
     public static void LeaveLobby(User user, Lobby lobby)
     {
         user.Lobby.Value = null;
-        if (lobby.Users.Any())
+        if (lobby.Users.Any(u => u.UserId.Value == user.Id))
         {
             lobby.Users.First(u => u.UserId.Value == user.Id).Scene.Value = 0;
             lobby.Users.First(u => u.UserId.Value == user.Id).Ready.Value = false;
@@ -88,10 +85,9 @@ static class CloudManager
     /// <summary>
     ///
     /// </summary>
-    public static int AssignPlayerScenes(User user, Lobby lobby, string code)
+    public static int AssignPlayerScenes(User user, Lobby lobby)
     {
-        List<string> players = lobby.Users.Select(u => u.UserId.Value).ToList();
-        players.RemoveAll(s => string.IsNullOrEmpty(s));
+        List<string> players = AllUsers(lobby).ToList();
         players = players.OrderBy(_ => UnityEngine.Random.value).ToList();
         int ourScene = -1;
         for (int i = 0; i < players.Count; i++)
@@ -119,9 +115,7 @@ static class CloudManager
 
     public static int GetPlayerNumber(User user, Lobby lobby, string player)
     {
-        List<string> players = lobby.Users.Select(u => u.UserId.Value).ToList();
-        players.RemoveAll(s => string.IsNullOrEmpty(s));
-        players.Remove(user.Id);
+        List<string> players = OtherUsers(lobby, user).ToList();
         players.Insert(0, user.Id);
         int playerNb = players.IndexOf(player);
         if (playerNb >= 0 && playerNb < players.Count)
@@ -133,9 +127,7 @@ static class CloudManager
 
     public static async Task<User> DownloadClues(User user, Lobby lobby, int playerNb)
     {
-        List<string> players = lobby.Users.Select(u => u.UserId.Value).ToList();
-        players.RemoveAll(s => string.IsNullOrEmpty(s));
-        players.Remove(user.Id);
+        List<string> players = OtherUsers(lobby, user).ToList();
         players.Insert(0, user.Id);
         if (playerNb < players.Count)
         {

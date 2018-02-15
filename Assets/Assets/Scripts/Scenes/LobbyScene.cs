@@ -165,7 +165,7 @@ class LobbyScene : MonoBehaviour
     {
         SwitchPanel(m_waitPanel);
 
-        CloudManager.AssignPlayerScenes(m_user, m_lobby, m_codeLabel.text);
+        CloudManager.AssignPlayerScenes(m_user, m_lobby);
         StaticInventory.Hints.Clear();
         m_lobby.State.Value = (int)LobbyState.InGame;
     }

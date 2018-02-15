@@ -58,10 +58,17 @@ class CloudNode
         m_reference.ValueChanged -= OnValueChanged;
     }
 
+    int m_changes = 0;
+
     void OnValueChanged(object sender, ValueChangedEventArgs args)
     {
-        m_value = (string)args.Snapshot.Value;
-        ValueChanged?.Invoke(this);
+        if (m_changes > 0)
+        {
+            m_value = (string)args.Snapshot.Value;
+            ValueChanged?.Invoke(this);
+            //Debug.Log($"Database object value changed: {Key} = {Value}");
+        }
+        m_changes++;
     }
 }
 

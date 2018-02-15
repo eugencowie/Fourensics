@@ -31,15 +31,6 @@ public class RoomScene : MonoBehaviour
 
     async void Start()
     {
-        m_user = await SignInScene.User();
-        m_lobby = await LobbyScene.Lobby(m_user);
-
-        if (m_lobby == null)
-        {
-            SceneManager.LoadScene("Lobby");
-            return;
-        }
-
         if (StaticRoom.SeenWelcome)
         {
             mainScreen.SetActive(true);
@@ -49,6 +40,14 @@ public class RoomScene : MonoBehaviour
 
         ReadyButton.SetActive(false);
         DatabaseButton.SetActive(false);
+
+        m_user = await SignInScene.User();
+        m_lobby = await LobbyScene.Lobby(m_user);
+        if (m_lobby == null)
+        {
+            SceneManager.LoadScene("Lobby");
+            return;
+        }
 
         string room = m_lobby.Id;
         if (!string.IsNullOrEmpty(room))

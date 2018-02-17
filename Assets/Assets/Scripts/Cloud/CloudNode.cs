@@ -18,7 +18,18 @@ class CloudNode
     public string Value
     {
         get { return m_value; }
-        set { m_reference.SetValueAsync(m_value = value); }
+        set { SetValue(value); }
+    }
+
+    /// <summary>
+    /// Gets or sets the value in the database.
+    /// </summary>
+    public async Task SetValue(string value)
+    {
+        m_value = value;
+        m_busy = true;
+        try { await m_reference.SetValueAsync(m_value); }
+        finally { m_busy = false; }
     }
 
     /// <summary>
@@ -45,6 +56,8 @@ class CloudNode
 
     DatabaseReference m_reference;
     string m_value;
+    bool m_busy;
+    int m_changes = 0;
 
     CloudNode(string key)
     {
@@ -58,15 +71,13 @@ class CloudNode
         m_reference.ValueChanged -= OnValueChanged;
     }
 
-    int m_changes = 0;
-
     void OnValueChanged(object sender, ValueChangedEventArgs args)
     {
-        if (m_changes > 0)
+        string value = (string)args.Snapshot.Value;
+        if (!m_busy && m_changes > 0 && m_value != value)
         {
-            m_value = (string)args.Snapshot.Value;
+            m_value = value;
             ValueChanged?.Invoke(this);
-            //Debug.Log($"Database object value changed: {Key} = {Value}");
         }
         m_changes++;
     }
@@ -88,7 +99,18 @@ class CloudNode<T> where T : struct
     public T? Value
     {
         get { return m_value; }
-        set { m_reference.SetValueAsync(m_value = value); }
+        set { SetValue(value); }
+    }
+
+    /// <summary>
+    /// Gets or sets the value in the database.
+    /// </summary>
+    public async Task SetValue(T? value)
+    {
+        m_value = value;
+        m_busy = true;
+        try { await m_reference.SetValueAsync(m_value); }
+        finally { m_busy = false; }
     }
 
     /// <summary>
@@ -115,6 +137,8 @@ class CloudNode<T> where T : struct
 
     DatabaseReference m_reference;
     T? m_value;
+    bool m_busy;
+    int m_changes = 0;
 
     CloudNode(string key)
     {
@@ -130,7 +154,12 @@ class CloudNode<T> where T : struct
 
     void OnValueChanged(object sender, ValueChangedEventArgs args)
     {
-        m_value = (T?)args.Snapshot.Value;
-        ValueChanged?.Invoke(this);
+        T? value = (T?)args.Snapshot.Value;
+        if (!m_busy && m_changes > 0 && m_value.Equals(value))
+        {
+            m_value = value;
+            ValueChanged?.Invoke(this);
+        }
+        m_changes++;
     }
 }

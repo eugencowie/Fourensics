@@ -5,28 +5,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-enum LobbyState { Lobby, InGame, Voting, Finished }
-
 class LobbyScene : MonoBehaviour
 {
-    private static Lobby m_lobbyTMP = null;
-
-    public static async Task<Lobby> Lobby(User user)
-    {
-        if (string.IsNullOrWhiteSpace(user.Lobby.Value))
-        {
-            // User is not in a lobby
-            m_lobbyTMP = null;
-        }
-        else if (m_lobbyTMP == null)
-        {
-            // Get user's lobby
-            m_lobbyTMP = await Cloud.Fetch<Lobby>("lobbies", user.Lobby.Value);
-        }
-
-        return m_lobbyTMP;
-    }
-
     [SerializeField] Text m_codeLabel = null;
     [SerializeField] InputField m_codeField = null;
     [SerializeField] Text m_playersLabel = null;
@@ -47,8 +27,8 @@ class LobbyScene : MonoBehaviour
         SwitchPanel(m_waitPanel);
 
         // Get database objects
-        m_user = await SignInScene.User();
-        m_lobby = await Lobby(m_user);
+        m_user = await User.Get();
+        m_lobby = await Lobby.Get(m_user);
 
         // Show main screen if user is not yet in a lobby
         if (m_lobby == null)

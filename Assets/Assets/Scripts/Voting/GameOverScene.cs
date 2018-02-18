@@ -29,8 +29,8 @@ public class GameOverScene : MonoBehaviour
 
     async void Start()
     {
-        m_user = await SignInScene.User();
-        m_lobby = await LobbyScene.Lobby(m_user);
+        m_user = await User.Get();
+        m_lobby = await Lobby.Get(m_user);
 
         if (m_lobby == null)
         {

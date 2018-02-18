@@ -2,6 +2,8 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
+enum LobbyState { Lobby, InGame, Voting, Finished }
+
 class Lobby : ICloudObject
 {
     public Key Key { get; private set; }
@@ -22,6 +24,19 @@ class Lobby : ICloudObject
         Key = key;
         State = await CloudNode<long>.Fetch($"{Key}/state");
         Users = await Task.WhenAll("0123".Select(n => Cloud.Fetch<LobbyUser>($"{Key}/users", n.ToString())));
+    }
+    
+    static Lobby m_instance = null;
+
+    public static async Task<Lobby> Get(User user)
+    {
+        if (string.IsNullOrWhiteSpace(user.Lobby.Value))
+            m_instance = null;
+
+        else if (m_instance == null || m_instance.Id != user.Lobby.Value)
+            m_instance = await Cloud.Fetch<Lobby>("lobbies", user.Lobby.Value);
+
+        return m_instance;
     }
 }
 

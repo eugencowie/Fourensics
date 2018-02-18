@@ -75,7 +75,7 @@ class Slot : MonoBehaviour, IDropHandler
     }
 
     #region IDropHandler implementation
-    public void OnDrop(PointerEventData eventData)
+    public async void OnDrop(PointerEventData eventData)
     {
         if (item == null && CanDrop)
         {
@@ -91,13 +91,13 @@ class Slot : MonoBehaviour, IDropHandler
 
                 newObject.GetComponent<Image>().raycastTarget = true;
 
-                newObject.GetComponent<Button>().onClick.AddListener(() => {
+                newObject.GetComponent<Button>().onClick.AddListener(async () => {
                     if (CanDrop && StaticSlot.TimesRemoved < StaticSlot.MaxRemovals)
                     {
                         Text.GetComponent<Text>().text = "";
                         EditButton.gameObject.SetActive(false);
                         EditButton.onClick.RemoveAllListeners();
-                        DatabaseController.RemoveItem(SlotNumber);
+                        await DatabaseController.RemoveItem(SlotNumber);
                         Destroy(newObject);
                         StaticSlot.TimesRemoved++;
                     }
@@ -118,18 +118,18 @@ class Slot : MonoBehaviour, IDropHandler
                         EditItemText.gameObject.SetActive(false);
                         MainScreen.SetActive(true);
                     };
-                    EditItemText.OnSubmit = newText => {
+                    EditItemText.OnSubmit = async newText => {
                         EditItemText.OnCancel = null;
                         EditItemText.OnSubmit = null;
                         EditItemText.gameObject.SetActive(false);
                         MainScreen.SetActive(true);
                         hint.Hint = newText;
                         Text.GetComponent<Text>().text = hint.Hint;
-                        DatabaseController.UploadItem(SlotNumber, hint);
+                        await DatabaseController.UploadItem(SlotNumber, hint);
                     };
                 });
 
-                DatabaseController.UploadItem(SlotNumber, hint);
+                await DatabaseController.UploadItem(SlotNumber, hint);
             }
         }
     }

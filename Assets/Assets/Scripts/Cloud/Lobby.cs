@@ -49,6 +49,8 @@ class LobbyUser : ICloudObject
     public CloudNode Vote { get; private set; }
     public LobbyUserItem[] Items { get; private set; }
 
+    public string Id => Key.Id;
+
     void ICloudObject.Create(Key key)
     {
         Key = key;

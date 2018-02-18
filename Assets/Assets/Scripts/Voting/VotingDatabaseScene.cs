@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -16,14 +17,11 @@ public class VotingDatabaseScene : MonoBehaviour
     private int m_scene;
 
     int playerItemsLoaded = 0;
-
-    User m_user = null;
-    Lobby m_lobby = null;
-
+    
     async void Start()
     {
-        m_user = await User.Get();
-        m_lobby = await Lobby.Get(m_user);
+        User m_user = await User.Get();
+        Lobby m_lobby = await Lobby.Get(m_user);
 
         if (m_lobby == null)
         {
@@ -43,8 +41,8 @@ public class VotingDatabaseScene : MonoBehaviour
             if (!string.IsNullOrEmpty(lobby))
             {
                 m_lobbyCode = lobby;
-                DownloadItems();
-                RegisterListeners();
+                await DownloadItems();
+                await RegisterListeners();
             }
             else SceneManager.LoadScene("Lobby");
         }
@@ -59,8 +57,11 @@ public class VotingDatabaseScene : MonoBehaviour
         PlayerButtonPressed(Data[0]);
     }
 
-    private void RegisterListeners()
+    private async Task RegisterListeners()
     {
+        User m_user = await User.Get();
+        Lobby m_lobby = await Lobby.Get(m_user);
+
         foreach (LobbyUserItem clue in m_lobby.Users.Where(u => u.UserId.Value != m_user.Id).Select(u => u.Items).SelectMany(i => i))
             clue.ValueChanged += OnSlotChanged;
     }
@@ -112,8 +113,11 @@ public class VotingDatabaseScene : MonoBehaviour
         }
     }
 
-    private void DownloadItems()
+    private async Task DownloadItems()
     {
+        User m_user = await User.Get();
+        Lobby m_lobby = await Lobby.Get(m_user);
+
         int tmp = 0;
         //User player = await CloudManager.DownloadClues(tmp);
         for (int j = 0; j < m_lobby.Users.First(u => u.UserId.Value == m_user.Id).Items.Length; j++)
@@ -164,12 +168,15 @@ public class VotingDatabaseScene : MonoBehaviour
         }
     }
 
-    private void OnSlotChanged(CloudNode entry)
+    private async void OnSlotChanged(CloudNode entry)
     {
+        User m_user = await User.Get();
+        Lobby m_lobby = await Lobby.Get(m_user);
+
         string[] key = entry.Key.Split('/');
         if (key.Length >= 5)
         {
-            string player = key[1];
+            string player = m_lobby.Users.First(x => x.Id == key[3]).UserId.Value;
             string field = key[4];
 
             if (entry.Value != null)
@@ -178,7 +185,7 @@ public class VotingDatabaseScene : MonoBehaviour
                 Debug.Log(entry.Key + " = " + value);
 
                 int slotNb = -1;
-                if (int.TryParse(key[3].Replace("slot-", ""), out slotNb))
+                if (int.TryParse(m_lobby.Users.First(x => x.Id == key[3]).UserId.Value.Replace("slot-", ""), out slotNb))
                 {
                     int playerNb = CloudManager.GetPlayerNumber(m_user, m_lobby, player);
                     var slot = Data[playerNb].Slots[slotNb - 1];
@@ -242,7 +249,7 @@ public class VotingDatabaseScene : MonoBehaviour
                 Debug.Log(entry.Key + " removed");
 
                 int slotNb = -1;
-                if (int.TryParse(key[3].Replace("slot-", ""), out slotNb))
+                if (int.TryParse(m_lobby.Users.First(x => x.Id == key[3]).UserId.Value.Replace("slot-", ""), out slotNb))
                 {
                     int playerNb = CloudManager.GetPlayerNumber(m_user, m_lobby, player);
                     var slot = Data[playerNb].Slots[slotNb - 1];

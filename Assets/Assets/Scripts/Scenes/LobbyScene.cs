@@ -16,10 +16,7 @@ class LobbyScene : MonoBehaviour
     [SerializeField] GameObject m_startButton = null;
 
     const int m_maxPlayers = 4;
-
-    User m_user = null;
-    Lobby m_lobby = null;
-
+    
     async void Start()
     {
         Debug.Log("LobbyScene.Start()");
@@ -28,8 +25,8 @@ class LobbyScene : MonoBehaviour
         SwitchPanel(m_waitPanel);
 
         // Get database objects
-        m_user = await User.Get();
-        m_lobby = await Lobby.Get(m_user);
+        User m_user = await User.Get();
+        Lobby m_lobby = await Lobby.Get(m_user);
 
         // Show main screen if user is not yet in a lobby or if user's lobby is invalid
         if (m_lobby == null || !m_lobby.State.Value.HasValue)
@@ -77,6 +74,9 @@ class LobbyScene : MonoBehaviour
     {
         Debug.Log("LobbyScene.SubmitButtonPressed()");
 
+        User m_user = await User.Get();
+        Lobby m_lobby = await Lobby.Get(m_user);
+
         if (!string.IsNullOrEmpty(m_codeField.text))
         {
             SwitchPanel(m_waitPanel);
@@ -111,6 +111,9 @@ class LobbyScene : MonoBehaviour
 
         SwitchPanel(m_waitPanel);
 
+        User m_user = await User.Get();
+        Lobby m_lobby = await Lobby.Get(m_user);
+
         string code = await CloudManager.CreateLobbyCode();
         if (string.IsNullOrEmpty(code)) SwitchPanel(m_startPanel);
         else
@@ -135,11 +138,14 @@ class LobbyScene : MonoBehaviour
     /// <summary>
     /// Called when the leave button in the lobby panel is pressed.
     /// </summary>
-    public void LeaveButtonPressed()
+    public async void LeaveButtonPressed()
     {
         Debug.Log("LobbyScene.LeaveButtonPressed()");
 
         SwitchPanel(m_waitPanel);
+
+        User m_user = await User.Get();
+        Lobby m_lobby = await Lobby.Get(m_user);
 
         m_lobby.State.ValueChanged -= LobbyStateChanged;
         CloudManager.LeaveLobby(m_user, m_lobby);
@@ -150,11 +156,14 @@ class LobbyScene : MonoBehaviour
     /// <summary>
     /// Called when the start button in the lobby panel is pressed.
     /// </summary>
-    public void StartButtonPressed()
+    public async void StartButtonPressed()
     {
         Debug.Log("LobbyScene.StartButtonPressed()");
 
         SwitchPanel(m_waitPanel);
+
+        User m_user = await User.Get();
+        Lobby m_lobby = await Lobby.Get(m_user);
 
         CloudManager.AssignPlayerScenes(m_user, m_lobby);
         StaticInventory.Hints.Clear();
@@ -183,9 +192,12 @@ class LobbyScene : MonoBehaviour
         panel.SetActive(true);
     }
 
-    void LobbyStateChanged(CloudNode<long> state)
+    async void LobbyStateChanged(CloudNode<long> state)
     {
         Debug.Log($"LobbyScene.LobbyStateChanged(\"{state.Value}\")");
+
+        User m_user = await User.Get();
+        Lobby m_lobby = await Lobby.Get(m_user);
 
         if (state.Value.HasValue && (LobbyState)state.Value.Value == LobbyState.InGame)
         {

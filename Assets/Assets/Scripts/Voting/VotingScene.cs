@@ -24,14 +24,11 @@ public class VotingScene : MonoBehaviour
 
     private string m_lobbyCode;
     private int m_scene;
-
-    User m_user = null;
-    Lobby m_lobby = null;
-
+    
     async void Start()
     {
-        m_user = await User.Get();
-        m_lobby = await Lobby.Get(m_user);
+        User m_user = await User.Get();
+        Lobby m_lobby = await Lobby.Get(m_user);
 
         if (m_lobby == null)
         {
@@ -147,8 +144,11 @@ public class VotingScene : MonoBehaviour
         }
     }
 
-    public void ConfirmVote()
+    public async void ConfirmVote()
     {
+        User m_user = await User.Get();
+        Lobby m_lobby = await Lobby.Get(m_user);
+
         var current = Suspects.First(s => s.gameObject.activeSelf);
         if (current != null)
         {

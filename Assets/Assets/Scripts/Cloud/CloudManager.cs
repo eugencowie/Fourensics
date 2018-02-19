@@ -1,5 +1,4 @@
 using Firebase.Database;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,20 +8,17 @@ static class CloudManager
     /// <summary>
     /// If lobby exists, updates player entry to new lobby and adds player to lobby.
     /// </summary>
-    public static bool JoinLobby(Lobby lobby, int maxPlayers)
+    public static bool JoinLobby(User user, Lobby lobby, int maxPlayers)
     {
         // Check if lobby exists
         if (lobby.State.Value == null)
             return false;
 
         // Get list of players in lobby
-        List<string> players = lobby.Users
-            .Where(u => u.Value != null)
-            .Select(u => u.Value)
-            .ToList();
+        List<string> players = AllUsers(lobby).ToList();
 
         // If player is already in room
-        if (players.Contains(SignInScene.User.Id))
+        if (players.Contains(user.Id))
             return true;
 
         // If too many players
@@ -30,9 +26,9 @@ static class CloudManager
             return false;
 
         // Add player to lobby
-        players.Add(SignInScene.User.Id);
+        players.Add(user.Id);
         for (int i = 0; i < players.Count; i++)
-            lobby.Users[i].Value = players[i];
+            lobby.Users[i].UserId.Value = players[i];
 
         return true;
     }
@@ -69,13 +65,16 @@ static class CloudManager
     /// Deletes the player entry and removes the player from the lobby. If no players are left in the
     /// lobby, deletes the lobby.
     /// </summary>
-    public static void LeaveLobby()
+    public static void LeaveLobby(User user, Lobby lobby)
     {
-        SignInScene.User.Lobby.Value = null;
-        SignInScene.User.Scene.Value = 0;
-        SignInScene.User.Ready.Value = false;
-        SignInScene.User.Vote.Value = null;
-        foreach (var item in SignInScene.User.Items)
+        user.Lobby.Value = null;
+        if (lobby.Users.Any(u => u.UserId.Value == user.Id))
+        {
+            lobby.Users.First(u => u.UserId.Value == user.Id).Scene.Value = 0;
+            lobby.Users.First(u => u.UserId.Value == user.Id).Ready.Value = false;
+            lobby.Users.First(u => u.UserId.Value == user.Id).Vote.Value = null;
+        }
+        foreach (var item in lobby.Users.First(u => u.UserId.Value == user.Id).Items)
         {
             item.Name.Value = null;
             item.Description.Value = null;
@@ -86,42 +85,38 @@ static class CloudManager
     /// <summary>
     ///
     /// </summary>
-    public static async Task<int> AssignPlayerScenes(string code)
+    public static int AssignPlayerScenes(User user, Lobby lobby)
     {
-        List<string> players = LobbyScene.Lobby.Users.Select(u => u.Value).ToList();
-        players.RemoveAll(s => string.IsNullOrEmpty(s));
+        List<string> players = AllUsers(lobby).ToList();
         players = players.OrderBy(_ => UnityEngine.Random.value).ToList();
         int ourScene = -1;
         for (int i = 0; i < players.Count; i++)
         {
-            User player = await User.Fetch(players[i]);
-            if (player.Id == SignInScene.User.Id)
+            if (players[i] == user.Id)
             {
                 ourScene = (i + 1);
             }
-            player.Scene.Value = i + 1;
+            lobby.Users.First(u => u.UserId.Value == players[i]).Scene.Value = i + 1;
         }
         return ourScene;
     }
-    
-    public static void UploadDatabaseItem(int slot, ObjectHintData hint)
+
+    public static void UploadDatabaseItem(User user, Lobby lobby, int slot, ObjectHintData hint)
     {
-        SignInScene.User.Items[slot - 1].Name.Value = hint.Name;
-        SignInScene.User.Items[slot - 1].Description.Value = hint.Hint;
-        SignInScene.User.Items[slot - 1].Image.Value = hint.Image;
+        lobby.Users.First(u => u.UserId.Value == user.Id).Items[slot - 1].Name.Value = hint.Name;
+        lobby.Users.First(u => u.UserId.Value == user.Id).Items[slot - 1].Description.Value = hint.Hint;
+        lobby.Users.First(u => u.UserId.Value == user.Id).Items[slot - 1].Image.Value = hint.Image;
     }
 
-    public static void RemoveDatabaseItem(int slot)
+    public static void RemoveDatabaseItem(User user, Lobby lobby, int slot)
     {
-        UploadDatabaseItem(slot, new ObjectHintData("", "", ""));
+        UploadDatabaseItem(user, lobby, slot, new ObjectHintData("", "", ""));
     }
 
-    public static int GetPlayerNumber(string player)
+    public static int GetPlayerNumber(User user, Lobby lobby, string player)
     {
-        List<string> players = LobbyScene.Lobby.Users.Select(u => u.Value).ToList();
-        players.RemoveAll(s => string.IsNullOrEmpty(s));
-        players.Remove(SignInScene.User.Id);
-        players.Insert(0, SignInScene.User.Id);
+        List<string> players = OtherUsers(lobby, user).ToList();
+        players.Insert(0, user.Id);
         int playerNb = players.IndexOf(player);
         if (playerNb >= 0 && playerNb < players.Count)
         {
@@ -130,32 +125,23 @@ static class CloudManager
         else return -1;
     }
 
-    public static async Task<User> DownloadClues(int playerNb)
+    public static async Task<User> DownloadClues(User user, Lobby lobby, int playerNb)
     {
-        List<string> players = LobbyScene.Lobby.Users.Select(u => u.Value).ToList();
-        players.RemoveAll(s => string.IsNullOrEmpty(s));
-        players.Remove(SignInScene.User.Id);
-        players.Insert(0, SignInScene.User.Id);
+        List<string> players = OtherUsers(lobby, user).ToList();
+        players.Insert(0, user.Id);
         if (playerNb < players.Count)
         {
-            return await User.Fetch(players[playerNb]);
+            return await Cloud.Fetch<User>("users", players[playerNb]);
         }
         else return null;
     }
-    
-    public static IEnumerable<string> AllUsers => LobbyScene.Lobby.Users
-            .Where(user => !string.IsNullOrWhiteSpace(user.Value))
-            .Select(user => user.Value);
 
-    public static IEnumerable<string> OtherUsers => LobbyScene.Lobby.Users
-            .Where(user => !string.IsNullOrWhiteSpace(user.Value))
-            .Where(user => user.Value != SignInScene.User.Id)
-            .Select(user => user.Value);
-    
-    public static async Task<User[]> FetchUsers(IEnumerable<string> userIds)
-    {
-        return await Task.WhenAll(userIds.Select(id => User.Fetch(id)));
-    }
+    public static IEnumerable<string> AllUsers(Lobby lobby) => lobby.Users
+            .Where(user => !string.IsNullOrWhiteSpace(user.UserId.Value))
+            .Select(user => user.UserId.Value);
+
+    public static IEnumerable<string> OtherUsers(Lobby lobby, User excludeUser) => AllUsers(lobby)
+            .Where(user => user != excludeUser.Id);
     
     /// <summary>
     /// Generates a random five-character room code.

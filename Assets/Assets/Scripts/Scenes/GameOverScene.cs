@@ -1,6 +1,6 @@
-using Firebase.Database;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -18,15 +18,18 @@ public class GameOverScene : MonoBehaviour
 
     [Range(0, 100)]
     public int RequiredVotePercentage = 51;
-    
+
     private string m_roomCode;
     private Dictionary<string, string> m_votedPlayers = new Dictionary<string, string>();
 
     private Text m_winOrLoseText;
-
-    void Start()
+    
+    async void Start()
     {
-        if (LobbyScene.Lobby == null)
+        User m_user = await User.Get();
+        Lobby m_lobby = await Lobby.Get(m_user);
+
+        if (m_lobby == null)
         {
             SceneManager.LoadScene("Lobby");
             return;
@@ -37,20 +40,23 @@ public class GameOverScene : MonoBehaviour
         WinVideo.loopPointReached += VideoLoopPointReached;
         LoseVideo.loopPointReached += VideoLoopPointReached;
 
-        string room = LobbyScene.Lobby.Id;
+        string room = m_lobby.Id;
         if (!string.IsNullOrEmpty(room))
         {
             m_roomCode = room;
-            foreach (var player in CloudManager.AllUsers) m_votedPlayers[player] = "";
-            RegisterListeners();
-            OnVoteChanged(SignInScene.User.Vote);
+            foreach (var player in CloudManager.AllUsers(m_lobby)) m_votedPlayers[player] = "";
+            await RegisterListeners();
+            OnVoteChanged(m_lobby.Users.First(u => u.UserId.Value == m_user.Id).Vote);
         }
         else SceneManager.LoadScene("Lobby");
     }
 
-    private async void RegisterListeners()
+    private async Task RegisterListeners()
     {
-        foreach (User user in await CloudManager.FetchUsers(CloudManager.AllUsers))
+        User m_user = await User.Get();
+        Lobby m_lobby = await Lobby.Get(m_user);
+
+        foreach (LobbyUser user in m_lobby.Users)
             user.Vote.ValueChanged += OnVoteChanged;
     }
 
@@ -61,22 +67,27 @@ public class GameOverScene : MonoBehaviour
         ResetButton.SetActive(true);
     }
 
-    public void ResetButtonPressed()
+    public async void ResetButtonPressed()
     {
-        CloudManager.LeaveLobby();
+        User m_user = await User.Get();
+        Lobby m_lobby = await Lobby.Get(m_user);
+
+        CloudManager.LeaveLobby(m_user, m_lobby);
         SceneManager.LoadScene("Lobby");
     }
 
-    private void OnVoteChanged(CloudNode entry)
+    private async void OnVoteChanged(CloudNode entry)
     {
+        User m_user = await User.Get();
+        Lobby m_lobby = await Lobby.Get(m_user);
+
         if (entry.Value != null)
         {
             string value = entry.Value;
 
             if (!string.IsNullOrEmpty(value))
             {
-                string[] key = entry.Key.Split('/');
-                string player = key[1];
+                string player = m_lobby.Users.First(x => x.Id == entry.Key.Parent.Id).UserId.Value;
                 m_votedPlayers[player] = value;
 
                 if (!m_votedPlayers.Any(p => string.IsNullOrEmpty(p.Value)))
@@ -89,8 +100,8 @@ public class GameOverScene : MonoBehaviour
 
                     if (percentage >= requiredPercentage)
                     {
-                        string yourVote = m_votedPlayers[SignInScene.User.Id];
-                        m_votedPlayers.Remove(SignInScene.User.Id);
+                        string yourVote = m_votedPlayers[m_user.Id];
+                        m_votedPlayers.Remove(m_user.Id);
 
                         WinText.text += "\n\nYou voted for " + yourVote;
                         for (int i = 0; i < m_votedPlayers.Count; i++)
@@ -102,7 +113,7 @@ public class GameOverScene : MonoBehaviour
 
                         m_winOrLoseText = WinText;
 
-                        m_votedPlayers[SignInScene.User.Id] = yourVote;
+                        m_votedPlayers[m_user.Id] = yourVote;
                     }
                     else
                     {

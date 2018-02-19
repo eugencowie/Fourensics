@@ -1,7 +1,7 @@
-using Firebase.Database;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -49,23 +49,24 @@ public class DatabaseScene : MonoBehaviour
 {
     public GameObject MainScreen, WaitScreen;
 
-    [SerializeField] private EditItemText EditScreen = null;
-    [SerializeField] private GameObject ReadyButton = null;
-    [SerializeField] private GameObject ReturnButton = null;
-    [SerializeField] private GameObject ButtonTemplate = null;
-    [SerializeField] private GameObject[] Backgrounds = new GameObject[4];
-    [SerializeField] private List<Data> Data = new List<Data>();
-    
-    private string m_lobby;
-    private int m_scene;
+    [SerializeField] EditItemText EditScreen = null;
+    [SerializeField] GameObject ReadyButton = null;
+    [SerializeField] GameObject ReturnButton = null;
+    [SerializeField] GameObject ButtonTemplate = null;
+    [SerializeField] GameObject[] Backgrounds = new GameObject[4];
+    [SerializeField] List<Data> Data = new List<Data>();
 
-    private Dictionary<string, bool> m_readyPlayers = new Dictionary<string, bool>();
+    string m_lobbyCode;
+    int m_scene;
 
     int playerItemsLoaded = 0;
-
-    void Start()
+    
+    async void Start()
     {
-        if (LobbyScene.Lobby == null)
+        User m_user = await User.Get();
+        Lobby m_lobby = await Lobby.Get(m_user);
+
+        if (m_lobby == null)
         {
             SceneManager.LoadScene("Lobby");
             return;
@@ -74,18 +75,17 @@ public class DatabaseScene : MonoBehaviour
         MainScreen.SetActive(false);
         WaitScreen.SetActive(true);
 
-        int scene = (int)(SignInScene.User.Scene.Value ?? 0);
+        int scene = (int)(m_lobby.Users.First(u => u.UserId.Value == m_user.Id).Scene.Value ?? 0);
         if (scene > 0)
         {
             m_scene = scene;
             SetBackground();
-            string lobby = LobbyScene.Lobby.Id;
+            string lobby = m_lobby.Id;
             if (!string.IsNullOrEmpty(lobby))
             {
-                m_lobby = lobby;
-                foreach (var player in CloudManager.AllUsers) m_readyPlayers[player] = false;
-                DownloadItems();
-                RegisterListeners();
+                m_lobbyCode = lobby;
+                await DownloadItems();
+                await RegisterListeners();
             }
             else SceneManager.LoadScene("Lobby");
         }
@@ -100,16 +100,19 @@ public class DatabaseScene : MonoBehaviour
         PlayerButtonPressed(Data[0]);
     }
 
-    private async void RegisterListeners()
+    async Task RegisterListeners()
     {
-        foreach (Item clue in (await CloudManager.FetchUsers(CloudManager.OtherUsers)).Select(user => user.Items).SelectMany(item => item))
-            clue.ValueChanged += OnSlotChanged;
+        User m_user = await User.Get();
+        Lobby m_lobby = await Lobby.Get(m_user);
 
-        foreach (User user in await CloudManager.FetchUsers(CloudManager.AllUsers))
+        foreach (LobbyUserItem clue in m_lobby.Users.Where(u => u.UserId.Value != m_user.Id).Select(u => u.Items).SelectMany(i => i))
+            clue.ValueChanged += OnSlotChangedAsync;
+
+        foreach (LobbyUser user in m_lobby.Users)
             user.Ready.ValueChanged += OnReadyChanged;
     }
 
-    private void SetBackground()
+    void SetBackground()
     {
         if (m_scene <= Backgrounds.Length)
         {
@@ -120,12 +123,13 @@ public class DatabaseScene : MonoBehaviour
         }
     }
 
-    public void ConfirmReady()
+    public async void ConfirmReady()
     {
         if (ReadyButton.activeSelf)
         {
             ReadyButton.SetActive(false);
-            SignInScene.User.Ready.Value = true;
+            User m_user = await User.Get();
+            Lobby m_lobby = await Lobby.Get(m_user);
             ReadyButton.SetActive(true);
             ReadyButton.GetComponent<Image>().color = Color.yellow;
             foreach (Transform t in ReadyButton.gameObject.transform)
@@ -133,40 +137,37 @@ public class DatabaseScene : MonoBehaviour
                 var text = t.GetComponent<Text>();
                 if (text != null) text.text = "Waiting...";
             }
+            CloudNode<bool> ready = m_lobby.Users.First(u => u.UserId.Value == m_user.Id).Ready;
+            ready.Value = true;
+            OnReadyChanged(ready);
         }
     }
 
-    public void ReturnButtonPressed()
+    public async void ReturnButtonPressed()
     {
         if (ReturnButton.activeSelf)
         {
             ReturnButton.SetActive(false);
-            DeregisterListeners();
+            await DeregisterListeners();
             SceneManager.LoadScene(m_scene);
         }
     }
-
-    public void VotingButtonPressed()
+    
+    async Task DeregisterListeners()
     {
-        if (!m_readyPlayers.Any(p => p.Value == false))
-        {
-            DeregisterListeners();
-            SceneManager.LoadScene("Voting");
-        }
-    }
+        User m_user = await User.Get();
+        Lobby m_lobby = await Lobby.Get(m_user);
 
-    private async void DeregisterListeners()
-    {
-        foreach (Item clue in (await CloudManager.FetchUsers(CloudManager.OtherUsers)).Select(user => user.Items).SelectMany(item => item))
-            clue.ValueChanged -= OnSlotChanged;
+        foreach (LobbyUserItem clue in m_lobby.Users.Where(u => u.UserId.Value != m_user.Id).Select(u => u.Items).SelectMany(i => i))
+            clue.ValueChanged -= OnSlotChangedAsync;
 
-        foreach (User user in await CloudManager.FetchUsers(CloudManager.AllUsers))
+        foreach (LobbyUser user in m_lobby.Users)
             user.Ready.ValueChanged -= OnReadyChanged;
     }
 
     Data m_current = null;
 
-    private void PlayerButtonPressed(Data data)
+    void PlayerButtonPressed(Data data)
     {
         foreach (var button in Data.Select(d => d.PlayerButton))
         {
@@ -249,27 +250,36 @@ public class DatabaseScene : MonoBehaviour
         }
     }
 
-    public void UploadItem(int slot, ObjectHintData hint)
+    public async Task UploadItem(int slot, ObjectHintData hint)
     {
-        CloudManager.UploadDatabaseItem(slot, hint);
+        User m_user = await User.Get();
+        Lobby m_lobby = await Lobby.Get(m_user);
+
+        CloudManager.UploadDatabaseItem(m_user, m_lobby, slot, hint);
     }
 
-    public void RemoveItem(int slot)
+    public async Task RemoveItem(int slot)
     {
         //if (!m_readyPlayers.Any(p => p.Value == false))
         //{
-        CloudManager.RemoveDatabaseItem(slot);
+        User m_user = await User.Get();
+        Lobby m_lobby = await Lobby.Get(m_user);
+
+        CloudManager.RemoveDatabaseItem(m_user, m_lobby, slot);
         //}
     }
 
-    private async void DownloadItems()
+    async Task DownloadItems()
     {
+        User m_user = await User.Get();
+        Lobby m_lobby = await Lobby.Get(m_user);
+
         int tmp = 0;
-        User player = await CloudManager.DownloadClues(tmp);
-        for (int j = 0; j < player.Items.Length; j++)
+        //User player = await CloudManager.DownloadClues(tmp);
+        for (int j = 0; j < m_lobby.Users.First(u => u.UserId.Value == m_user.Id).Items.Length; j++)
         {
             int tmp2 = j;
-            var clue = player.Items[tmp2];
+            LobbyUserItem clue = m_lobby.Users.First(u => u.UserId.Value == m_user.Id).Items[tmp2];
             CheckPlayerItemsLoaded();
             if (!string.IsNullOrEmpty(clue.Name.Value))
             {
@@ -309,13 +319,13 @@ public class DatabaseScene : MonoBehaviour
                     }
                 }
                 newObj.GetComponent<DragHandler>().enabled = false;
-                newObj.GetComponent<Button>().onClick.AddListener(() => {
+                newObj.GetComponent<Button>().onClick.AddListener(async () => {
                     if (StaticSlot.TimesRemoved < StaticSlot.MaxRemovals)
                     {
                         slot.GetComponent<Slot>().Text.GetComponent<Text>().text = "";
                         slot.GetComponent<Slot>().EditButton.gameObject.SetActive(false);
                         slot.GetComponent<Slot>().EditButton.onClick.RemoveAllListeners();
-                        RemoveItem(slot.GetComponent<Slot>().SlotNumber);
+                        await RemoveItem(slot.GetComponent<Slot>().SlotNumber);
                         Destroy(newObj);
                         StaticSlot.TimesRemoved++;
                     }
@@ -346,27 +356,27 @@ public class DatabaseScene : MonoBehaviour
         }
     }
 
-    private void OnSlotChanged(CloudNode entry)
+    async void OnSlotChangedAsync(CloudNode entry)
     {
         if (ReadyButton == null)
             return;
 
         //Debug.Log(entry.Key + " | " + (args.Snapshot.Exists ? args.Snapshot.Value.ToString() : ""));
+        User m_user = await User.Get();
+        Lobby m_lobby = await Lobby.Get(m_user);
 
-        string[] key = entry.Key.Split('/');
-        if (key.Length >= 5)
-        {
-            string player = key[1];
-            string field = key[4];
+        string player = m_lobby.Users.First(x => x.Id == entry.Key.Parent.Parent.Parent.Id).UserId.Value;
+        string field = entry.Key.Id;
 
-            if (entry.Value != null)
+        if (entry.Value != null)
             {
                 string value = entry.Value;
 
                 int slotNb = -1;
-                if (!string.IsNullOrEmpty(value) && int.TryParse(key[3].Replace("slot-", ""), out slotNb))
+                if (!string.IsNullOrEmpty(value) && int.TryParse(entry.Key.Parent.Id, out slotNb))
                 {
-                    int playerNb = CloudManager.GetPlayerNumber(player);
+
+                    int playerNb = CloudManager.GetPlayerNumber(m_user, m_lobby, player);
                     var slot = Data[playerNb].Slots[slotNb - 1];
                     if (field == "name")
                     {
@@ -437,9 +447,9 @@ public class DatabaseScene : MonoBehaviour
             else
             {
                 int slotNb = -1;
-                if (int.TryParse(key[3].Replace("slot-", ""), out slotNb))
+                if (int.TryParse(entry.Key.Parent.Id, out slotNb))
                 {
-                    int playerNb = CloudManager.GetPlayerNumber(player);
+                    int playerNb = CloudManager.GetPlayerNumber(m_user, m_lobby, player);
                     var slot = Data[playerNb].Slots[slotNb - 1];
 
                     slot.GetComponent<Slot>().Text.GetComponent<Text>().text = "";
@@ -450,10 +460,9 @@ public class DatabaseScene : MonoBehaviour
                     }
                 }
             }
-        }
     }
 
-    private void CheckPlayerItemsLoaded()
+    void CheckPlayerItemsLoaded()
     {
         playerItemsLoaded++;
 
@@ -464,7 +473,7 @@ public class DatabaseScene : MonoBehaviour
         }
     }
 
-    private void OnReadyChanged(CloudNode<bool> entry)
+    async void OnReadyChanged(CloudNode<bool> entry)
     {
         if (ReadyButton == null)
             return;
@@ -475,18 +484,12 @@ public class DatabaseScene : MonoBehaviour
 
             if (value == true)
             {
-                string[] key = entry.Key.Split('/');
-                string player = key[1];
-                m_readyPlayers[player] = true;
+                User m_user = await User.Get();
+                Lobby m_lobby = await Lobby.Get(m_user);
 
-                if (player == SignInScene.User.Id)
+                if (!m_lobby.Users.Any(x => x.Ready.Value == false))
                 {
-                    ConfirmReady();
-                }
-
-                if (!m_readyPlayers.Any(p => p.Value == false))
-                {
-                    VotingButtonPressed();
+                    SceneManager.LoadScene("Voting");
                 }
             }
         }

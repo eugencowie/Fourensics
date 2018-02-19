@@ -1,5 +1,5 @@
-using Firebase.Database;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -12,28 +12,37 @@ public class VotingDatabaseScene : MonoBehaviour
     [SerializeField] private GameObject ButtonTemplate = null;
     [SerializeField] private GameObject[] Backgrounds = new GameObject[4];
     [SerializeField] private Data[] Data = new Data[4];
-    
-    private string m_lobby;
+
+    private string m_lobbyCode;
     private int m_scene;
 
     int playerItemsLoaded = 0;
 
-    void Start()
+    async void Start()
     {
+        User m_user = await User.Get();
+        Lobby m_lobby = await Lobby.Get(m_user);
+
+        if (m_lobby == null)
+        {
+            SceneManager.LoadScene("Lobby");
+            return;
+        }
+
         MainScreen.SetActive(false);
         WaitScreen.SetActive(true);
 
-        int scene = (int)(SignInScene.User.Scene.Value ?? 0);
+        int scene = (int)(m_lobby.Users.First(u => u.UserId.Value == m_user.Id).Scene.Value ?? 0);
         if (scene > 0)
         {
             m_scene = scene;
             SetBackground();
-            string lobby = LobbyScene.Lobby.Id;
+            string lobby = m_lobby.Id;
             if (!string.IsNullOrEmpty(lobby))
             {
-                m_lobby = lobby;
-                DownloadItems();
-                RegisterListeners();
+                m_lobbyCode = lobby;
+                await DownloadItems();
+                await RegisterListeners();
             }
             else SceneManager.LoadScene("Lobby");
         }
@@ -48,9 +57,12 @@ public class VotingDatabaseScene : MonoBehaviour
         PlayerButtonPressed(Data[0]);
     }
 
-    private async void RegisterListeners()
+    private async Task RegisterListeners()
     {
-        foreach (Item clue in (await CloudManager.FetchUsers(CloudManager.OtherUsers)).Select(user => user.Items).SelectMany(item => item))
+        User m_user = await User.Get();
+        Lobby m_lobby = await Lobby.Get(m_user);
+
+        foreach (LobbyUserItem clue in m_lobby.Users.Where(u => u.UserId.Value != m_user.Id).Select(u => u.Items).SelectMany(i => i))
             clue.ValueChanged += OnSlotChanged;
     }
 
@@ -94,21 +106,24 @@ public class VotingDatabaseScene : MonoBehaviour
         playerItemsLoaded++;
         Debug.Log(playerItemsLoaded);
 
-        if (playerItemsLoaded >= 24)
+        //if (playerItemsLoaded >= 24)
         {
             WaitScreen.SetActive(false);
             MainScreen.SetActive(true);
         }
     }
 
-    private async void DownloadItems()
+    private async Task DownloadItems()
     {
+        User m_user = await User.Get();
+        Lobby m_lobby = await Lobby.Get(m_user);
+
         int tmp = 0;
-        User player = await CloudManager.DownloadClues(tmp);
-        for (int j = 0; j < player.Items.Length; j++)
+        //User player = await CloudManager.DownloadClues(tmp);
+        for (int j = 0; j < m_lobby.Users.First(u => u.UserId.Value == m_user.Id).Items.Length; j++)
         {
             int tmp2 = j;
-            var clue = player.Items[tmp2];
+            var clue = m_lobby.Users.First(u => u.UserId.Value == m_user.Id).Items[tmp2];
             CheckPlayerItemsLoaded();
             if (!string.IsNullOrEmpty(clue.Name.Value))
             {
@@ -153,95 +168,94 @@ public class VotingDatabaseScene : MonoBehaviour
         }
     }
 
-    private void OnSlotChanged(CloudNode entry)
+    private async void OnSlotChanged(CloudNode entry)
     {
-        string[] key = entry.Key.Split('/');
-        if (key.Length >= 5)
+        User m_user = await User.Get();
+        Lobby m_lobby = await Lobby.Get(m_user);
+
+        string player = m_lobby.Users.First(x => x.Id == entry.Key.Parent.Parent.Parent.Id).UserId.Value;
+        string field = entry.Key.Id;
+
+        if (entry.Value != null)
         {
-            string player = key[1];
-            string field = key[4];
+            string value = entry.Value;
+            Debug.Log(entry.Key + " = " + value);
 
-            if (entry.Value != null)
+            int slotNb = -1;
+            if (int.TryParse(entry.Key.Parent.Id, out slotNb))
             {
-                string value = entry.Value;
-                Debug.Log(entry.Key + " = " + value);
-
-                int slotNb = -1;
-                if (int.TryParse(key[3].Replace("slot-", ""), out slotNb))
+                int playerNb = CloudManager.GetPlayerNumber(m_user, m_lobby, player);
+                var slot = Data[playerNb].Slots[slotNb - 1];
+                if (field == "name")
                 {
-                    int playerNb = CloudManager.GetPlayerNumber(player);
-                    var slot = Data[playerNb].Slots[slotNb - 1];
-                    if (field == "name")
+                    foreach (Transform t in slot.transform) if (t.gameObject.name == value) Destroy(t.gameObject);
+                    var newObj = Instantiate(ButtonTemplate, ButtonTemplate.transform.parent);
+                    newObj.SetActive(true);
+                    newObj.name = value;
+                    newObj.transform.SetParent(slot.transform);
+                    foreach (Transform t in newObj.transform)
                     {
-                        foreach (Transform t in slot.transform) if (t.gameObject.name == value) Destroy(t.gameObject);
-                        var newObj = Instantiate(ButtonTemplate, ButtonTemplate.transform.parent);
-                        newObj.SetActive(true);
-                        newObj.name = value;
-                        newObj.transform.SetParent(slot.transform);
-                        foreach (Transform t in newObj.transform)
+                        if (t.gameObject.GetComponent<Text>() != null)
                         {
-                            if (t.gameObject.GetComponent<Text>() != null)
-                            {
-                                t.gameObject.GetComponent<Text>().text = value;
-                            }
+                            t.gameObject.GetComponent<Text>().text = value;
                         }
-                        newObj.GetComponent<DragHandler>().enabled = false;
                     }
-                    else if (field == "hint")
+                    newObj.GetComponent<DragHandler>().enabled = false;
+                }
+                else if (field == "hint")
+                {
+                    slot.GetComponent<Slot>().Text.GetComponent<Text>().text = value;
+                }
+                else if (field == "image")
+                {
+                    if (!string.IsNullOrEmpty(value))
                     {
-                        slot.GetComponent<Slot>().Text.GetComponent<Text>().text = value;
-                    }
-                    else if (field == "image")
-                    {
-                        if (!string.IsNullOrEmpty(value))
+                        foreach (Transform t1 in slot.transform)
                         {
-                            foreach (Transform t1 in slot.transform)
+                            foreach (Transform t in t1)
                             {
-                                foreach (Transform t in t1)
+                                if (t.gameObject.GetComponent<Image>() != null)
                                 {
-                                    if (t.gameObject.GetComponent<Image>() != null)
-                                    {
-                                        t.gameObject.GetComponent<Image>().sprite = Resources.Load<Sprite>(value);
-                                    }
+                                    t.gameObject.GetComponent<Image>().sprite = Resources.Load<Sprite>(value);
                                 }
                             }
                         }
-                        else
+                    }
+                    else
+                    {
+                        foreach (Transform t1 in slot.transform)
                         {
-                            foreach (Transform t1 in slot.transform)
+                            foreach (Transform t in t1)
                             {
-                                foreach (Transform t in t1)
+                                if (t.gameObject.GetComponent<Image>() != null)
                                 {
-                                    if (t.gameObject.GetComponent<Image>() != null)
-                                    {
-                                        t.gameObject.GetComponent<Image>().gameObject.SetActive(false);
-                                    }
-                                    if (t.gameObject.GetComponent<Text>() != null)
-                                    {
-                                        t.gameObject.GetComponent<Text>().gameObject.SetActive(true); // TODO: REMOVE TEMP FIX
-                                    }
+                                    t.gameObject.GetComponent<Image>().gameObject.SetActive(false);
+                                }
+                                if (t.gameObject.GetComponent<Text>() != null)
+                                {
+                                    t.gameObject.GetComponent<Text>().gameObject.SetActive(true); // TODO: REMOVE TEMP FIX
                                 }
                             }
                         }
                     }
                 }
             }
-            else
+        }
+        else
+        {
+            Debug.Log(entry.Key + " removed");
+
+            int slotNb = -1;
+            if (int.TryParse(entry.Key.Parent.Id, out slotNb))
             {
-                Debug.Log(entry.Key + " removed");
+                int playerNb = CloudManager.GetPlayerNumber(m_user, m_lobby, player);
+                var slot = Data[playerNb].Slots[slotNb - 1];
 
-                int slotNb = -1;
-                if (int.TryParse(key[3].Replace("slot-", ""), out slotNb))
+                slot.GetComponent<Slot>().Text.GetComponent<Text>().text = "";
+
+                foreach (Transform t1 in slot.transform)
                 {
-                    int playerNb = CloudManager.GetPlayerNumber(player);
-                    var slot = Data[playerNb].Slots[slotNb - 1];
-
-                    slot.GetComponent<Slot>().Text.GetComponent<Text>().text = "";
-
-                    foreach (Transform t1 in slot.transform)
-                    {
-                        Destroy(t1.gameObject);
-                    }
+                    Destroy(t1.gameObject);
                 }
             }
         }

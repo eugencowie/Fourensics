@@ -16,15 +16,15 @@ class User : ICloudObject
     void ICloudObject.Create(Key key)
     {
         Key = key;
-        Name = CloudNode.Create($"{Key}/name");
-        Lobby = CloudNode.Create($"{Key}/lobby");
+        Name = CloudNode.Create(Key.Child("name"));
+        Lobby = CloudNode.Create(Key.Child("lobby"));
     }
 
     async Task ICloudObject.Fetch(Key key)
     {
         Key = key;
-        Name = await CloudNode.Fetch($"{Key}/name");
-        Lobby = await CloudNode.Fetch($"{Key}/lobby");
+        Name = await CloudNode.Fetch(Key.Child("name"));
+        Lobby = await CloudNode.Fetch(Key.Child("lobby"));
     }
 
     static User m_instance = null;

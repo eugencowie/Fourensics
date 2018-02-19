@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -21,8 +20,6 @@ public class RoomScene : MonoBehaviour
     [SerializeField] private GameObject DatabaseButton = null;
 
     private string m_roomCode;
-
-    private Dictionary<string, bool> m_readyPlayers = new Dictionary<string, bool>();
 
     public GameObject mainScreen;
     public GameObject welcomeScreen;
@@ -51,7 +48,6 @@ public class RoomScene : MonoBehaviour
         if (!string.IsNullOrEmpty(room))
         {
             m_roomCode = room;
-            foreach (var player in CloudManager.AllUsers(m_lobby)) m_readyPlayers[player] = false;
             await RegisterListeners();
             ReadyButton.SetActive(true);
             DatabaseButton.SetActive(true);
@@ -63,6 +59,7 @@ public class RoomScene : MonoBehaviour
     {
         User m_user = await User.Get();
         Lobby m_lobby = await Lobby.Get(m_user);
+
         foreach (LobbyUserItem clue in m_lobby.Users.Where(u => u.UserId.Value != m_user.Id).Select(u => u.Items).SelectMany(i => i))
             clue.ValueChanged += OnSlotChanged;
 
@@ -95,18 +92,8 @@ public class RoomScene : MonoBehaviour
                 User m_user = await User.Get();
                 Lobby m_lobby = await Lobby.Get(m_user);
 
-                string[] key = entry.Key.Split('/');
-                string player = m_lobby.Users.First(x => x.Id == key[3]).UserId.Value;
-                m_readyPlayers[player] = true;
-
-                if (player == m_user.Id)
+                if (!m_lobby.Users.Any(x => x.Ready.Value == false))
                 {
-                    ConfirmReady();
-                }
-
-                if (!m_readyPlayers.Any(p => p.Value == false))
-                {
-                    //NetworkController.DeregisterReadyChanged(OnReadyChanged);
                     SceneManager.LoadScene("Voting");
                 }
             }
@@ -147,7 +134,7 @@ public class RoomScene : MonoBehaviour
 
     private async void OnSlotChanged(CloudNode entry)
     {
-        string[] keys = entry.Key.Split('/');
+        string[] keys = entry.Key.ToString().Split('/');
         if (keys.Length >= 5)
         {
             string field = keys[4];

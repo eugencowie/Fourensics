@@ -17,7 +17,7 @@ public class VotingDatabaseScene : MonoBehaviour
     private int m_scene;
 
     int playerItemsLoaded = 0;
-    
+
     async void Start()
     {
         User m_user = await User.Get();
@@ -106,7 +106,7 @@ public class VotingDatabaseScene : MonoBehaviour
         playerItemsLoaded++;
         Debug.Log(playerItemsLoaded);
 
-        if (playerItemsLoaded >= 24)
+        //if (playerItemsLoaded >= 24)
         {
             WaitScreen.SetActive(false);
             MainScreen.SetActive(true);
@@ -173,93 +173,89 @@ public class VotingDatabaseScene : MonoBehaviour
         User m_user = await User.Get();
         Lobby m_lobby = await Lobby.Get(m_user);
 
-        string[] key = entry.Key.Split('/');
-        if (key.Length >= 5)
+        string player = m_lobby.Users.First(x => x.Id == entry.Key.Parent.Parent.Parent.Id).UserId.Value;
+        string field = entry.Key.Id;
+
+        if (entry.Value != null)
         {
-            string player = m_lobby.Users.First(x => x.Id == key[3]).UserId.Value;
-            string field = key[4];
+            string value = entry.Value;
+            Debug.Log(entry.Key + " = " + value);
 
-            if (entry.Value != null)
+            int slotNb = -1;
+            if (int.TryParse(entry.Key.Parent.Id, out slotNb))
             {
-                string value = entry.Value;
-                Debug.Log(entry.Key + " = " + value);
-
-                int slotNb = -1;
-                if (int.TryParse(m_lobby.Users.First(x => x.Id == key[3]).UserId.Value.Replace("slot-", ""), out slotNb))
+                int playerNb = CloudManager.GetPlayerNumber(m_user, m_lobby, player);
+                var slot = Data[playerNb].Slots[slotNb - 1];
+                if (field == "name")
                 {
-                    int playerNb = CloudManager.GetPlayerNumber(m_user, m_lobby, player);
-                    var slot = Data[playerNb].Slots[slotNb - 1];
-                    if (field == "name")
+                    foreach (Transform t in slot.transform) if (t.gameObject.name == value) Destroy(t.gameObject);
+                    var newObj = Instantiate(ButtonTemplate, ButtonTemplate.transform.parent);
+                    newObj.SetActive(true);
+                    newObj.name = value;
+                    newObj.transform.SetParent(slot.transform);
+                    foreach (Transform t in newObj.transform)
                     {
-                        foreach (Transform t in slot.transform) if (t.gameObject.name == value) Destroy(t.gameObject);
-                        var newObj = Instantiate(ButtonTemplate, ButtonTemplate.transform.parent);
-                        newObj.SetActive(true);
-                        newObj.name = value;
-                        newObj.transform.SetParent(slot.transform);
-                        foreach (Transform t in newObj.transform)
+                        if (t.gameObject.GetComponent<Text>() != null)
                         {
-                            if (t.gameObject.GetComponent<Text>() != null)
-                            {
-                                t.gameObject.GetComponent<Text>().text = value;
-                            }
+                            t.gameObject.GetComponent<Text>().text = value;
                         }
-                        newObj.GetComponent<DragHandler>().enabled = false;
                     }
-                    else if (field == "hint")
+                    newObj.GetComponent<DragHandler>().enabled = false;
+                }
+                else if (field == "hint")
+                {
+                    slot.GetComponent<Slot>().Text.GetComponent<Text>().text = value;
+                }
+                else if (field == "image")
+                {
+                    if (!string.IsNullOrEmpty(value))
                     {
-                        slot.GetComponent<Slot>().Text.GetComponent<Text>().text = value;
-                    }
-                    else if (field == "image")
-                    {
-                        if (!string.IsNullOrEmpty(value))
+                        foreach (Transform t1 in slot.transform)
                         {
-                            foreach (Transform t1 in slot.transform)
+                            foreach (Transform t in t1)
                             {
-                                foreach (Transform t in t1)
+                                if (t.gameObject.GetComponent<Image>() != null)
                                 {
-                                    if (t.gameObject.GetComponent<Image>() != null)
-                                    {
-                                        t.gameObject.GetComponent<Image>().sprite = Resources.Load<Sprite>(value);
-                                    }
+                                    t.gameObject.GetComponent<Image>().sprite = Resources.Load<Sprite>(value);
                                 }
                             }
                         }
-                        else
+                    }
+                    else
+                    {
+                        foreach (Transform t1 in slot.transform)
                         {
-                            foreach (Transform t1 in slot.transform)
+                            foreach (Transform t in t1)
                             {
-                                foreach (Transform t in t1)
+                                if (t.gameObject.GetComponent<Image>() != null)
                                 {
-                                    if (t.gameObject.GetComponent<Image>() != null)
-                                    {
-                                        t.gameObject.GetComponent<Image>().gameObject.SetActive(false);
-                                    }
-                                    if (t.gameObject.GetComponent<Text>() != null)
-                                    {
-                                        t.gameObject.GetComponent<Text>().gameObject.SetActive(true); // TODO: REMOVE TEMP FIX
-                                    }
+                                    t.gameObject.GetComponent<Image>().gameObject.SetActive(false);
+                                }
+                                if (t.gameObject.GetComponent<Text>() != null)
+                                {
+                                    t.gameObject.GetComponent<Text>().gameObject.SetActive(true); // TODO: REMOVE TEMP FIX
                                 }
                             }
                         }
                     }
                 }
             }
-            else
+        }
+        else
+        {
+            Debug.Log(entry.Key + " removed");
+
+            int slotNb = -1;
+            if (int.TryParse(entry.Key.Parent.Id, out slotNb))
             {
-                Debug.Log(entry.Key + " removed");
+                int playerNb = CloudManager.GetPlayerNumber(m_user, m_lobby, player);
+                var slot = Data[playerNb].Slots[slotNb - 1];
 
-                int slotNb = -1;
-                if (int.TryParse(m_lobby.Users.First(x => x.Id == key[3]).UserId.Value.Replace("slot-", ""), out slotNb))
+                slot.GetComponent<Slot>().Text.GetComponent<Text>().text = "";
+
+                foreach (Transform t1 in slot.transform)
                 {
-                    int playerNb = CloudManager.GetPlayerNumber(m_user, m_lobby, player);
-                    var slot = Data[playerNb].Slots[slotNb - 1];
-
-                    slot.GetComponent<Slot>().Text.GetComponent<Text>().text = "";
-
-                    foreach (Transform t1 in slot.transform)
-                    {
-                        Destroy(t1.gameObject);
-                    }
+                    Destroy(t1.gameObject);
                 }
             }
         }

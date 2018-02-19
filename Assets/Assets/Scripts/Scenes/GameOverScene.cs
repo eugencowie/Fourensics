@@ -87,8 +87,7 @@ public class GameOverScene : MonoBehaviour
 
             if (!string.IsNullOrEmpty(value))
             {
-                string[] key = entry.Key.Split('/');
-                string player = m_lobby.Users.First(x => x.Id == key[3]).UserId.Value;
+                string player = m_lobby.Users.First(x => x.Id == entry.Key.Parent.Id).UserId.Value;
                 m_votedPlayers[player] = value;
 
                 if (!m_votedPlayers.Any(p => string.IsNullOrEmpty(p.Value)))

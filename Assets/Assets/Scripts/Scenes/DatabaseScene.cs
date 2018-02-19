@@ -59,8 +59,6 @@ public class DatabaseScene : MonoBehaviour
     string m_lobbyCode;
     int m_scene;
 
-    Dictionary<string, bool> m_readyPlayers = new Dictionary<string, bool>();
-
     int playerItemsLoaded = 0;
     
     async void Start()
@@ -86,7 +84,6 @@ public class DatabaseScene : MonoBehaviour
             if (!string.IsNullOrEmpty(lobby))
             {
                 m_lobbyCode = lobby;
-                foreach (var player in CloudManager.AllUsers(m_lobby)) m_readyPlayers[player] = false;
                 await DownloadItems();
                 await RegisterListeners();
             }
@@ -128,13 +125,11 @@ public class DatabaseScene : MonoBehaviour
 
     public async void ConfirmReady()
     {
-        User m_user = await User.Get();
-        Lobby m_lobby = await Lobby.Get(m_user);
-
         if (ReadyButton.activeSelf)
         {
             ReadyButton.SetActive(false);
-            m_lobby.Users.First(u => u.UserId.Value == m_user.Id).Ready.Value = true;
+            User m_user = await User.Get();
+            Lobby m_lobby = await Lobby.Get(m_user);
             ReadyButton.SetActive(true);
             ReadyButton.GetComponent<Image>().color = Color.yellow;
             foreach (Transform t in ReadyButton.gameObject.transform)
@@ -142,6 +137,9 @@ public class DatabaseScene : MonoBehaviour
                 var text = t.GetComponent<Text>();
                 if (text != null) text.text = "Waiting...";
             }
+            CloudNode<bool> ready = m_lobby.Users.First(u => u.UserId.Value == m_user.Id).Ready;
+            ready.Value = true;
+            OnReadyChanged(ready);
         }
     }
 
@@ -154,16 +152,7 @@ public class DatabaseScene : MonoBehaviour
             SceneManager.LoadScene(m_scene);
         }
     }
-
-    public async void VotingButtonPressed()
-    {
-        if (!m_readyPlayers.Any(p => p.Value == false))
-        {
-            await DeregisterListeners();
-            SceneManager.LoadScene("Voting");
-        }
-    }
-
+    
     async Task DeregisterListeners()
     {
         User m_user = await User.Get();
@@ -290,7 +279,7 @@ public class DatabaseScene : MonoBehaviour
         for (int j = 0; j < m_lobby.Users.First(u => u.UserId.Value == m_user.Id).Items.Length; j++)
         {
             int tmp2 = j;
-            var clue = m_lobby.Users.First(u => u.UserId.Value == m_user.Id).Items[tmp2];
+            LobbyUserItem clue = m_lobby.Users.First(u => u.UserId.Value == m_user.Id).Items[tmp2];
             CheckPlayerItemsLoaded();
             if (!string.IsNullOrEmpty(clue.Name.Value))
             {
@@ -376,18 +365,15 @@ public class DatabaseScene : MonoBehaviour
         User m_user = await User.Get();
         Lobby m_lobby = await Lobby.Get(m_user);
 
-        string[] key = entry.Key.Split('/');
-        if (key.Length >= 5)
-        {
-            string player = m_lobby.Users.First(x => x.Id == key[3]).UserId.Value;
-            string field = key[4];
+        string player = m_lobby.Users.First(x => x.Id == entry.Key.Parent.Parent.Parent.Id).UserId.Value;
+        string field = entry.Key.Id;
 
-            if (entry.Value != null)
+        if (entry.Value != null)
             {
                 string value = entry.Value;
 
                 int slotNb = -1;
-                if (!string.IsNullOrEmpty(value) && int.TryParse(m_lobby.Users.First(x => x.Id == key[3]).UserId.Value.Replace("slot-", ""), out slotNb))
+                if (!string.IsNullOrEmpty(value) && int.TryParse(entry.Key.Parent.Id, out slotNb))
                 {
 
                     int playerNb = CloudManager.GetPlayerNumber(m_user, m_lobby, player);
@@ -461,7 +447,7 @@ public class DatabaseScene : MonoBehaviour
             else
             {
                 int slotNb = -1;
-                if (int.TryParse(m_lobby.Users.First(x => x.Id == key[3]).UserId.Value.Replace("slot-", ""), out slotNb))
+                if (int.TryParse(entry.Key.Parent.Id, out slotNb))
                 {
                     int playerNb = CloudManager.GetPlayerNumber(m_user, m_lobby, player);
                     var slot = Data[playerNb].Slots[slotNb - 1];
@@ -474,7 +460,6 @@ public class DatabaseScene : MonoBehaviour
                     }
                 }
             }
-        }
     }
 
     void CheckPlayerItemsLoaded()
@@ -502,18 +487,9 @@ public class DatabaseScene : MonoBehaviour
                 User m_user = await User.Get();
                 Lobby m_lobby = await Lobby.Get(m_user);
 
-                string[] key = entry.Key.Split('/');
-                string player = m_lobby.Users.First(x => x.Id == key[3]).UserId.Value;
-                m_readyPlayers[player] = true;
-
-                if (player == m_user.Id)
+                if (!m_lobby.Users.Any(x => x.Ready.Value == false))
                 {
-                    ConfirmReady();
-                }
-
-                if (!m_readyPlayers.Any(p => p.Value == false))
-                {
-                    VotingButtonPressed();
+                    SceneManager.LoadScene("Voting");
                 }
             }
         }

@@ -55,19 +55,19 @@ class Slot : MonoBehaviour, IDropHandler
 
     public bool CanDrop = false;
 
-    private AudioSource m_audioSource;
-    public AudioClip emailAudioClip;
+    private AudioSource m_audioSource = null;
+    public AudioClip emailAudioClip = null;
 
-    public GameObject Text;
-    public Button EditButton;
+    public GameObject Text = null;
+    public Button EditButton = null;
 
-    public GameObject MainScreen;
-    public EditItemText EditItemText;
+    public GameObject MainScreen = null;
+    public EditItemText EditItemText = null;
 
-    public DatabaseScene DatabaseController;
+    public DatabaseScene DatabaseController = null;
 
     [Range(1, 6)]
-    public int SlotNumber;
+    public int SlotNumber = 0;
 
     private void Start()
     {

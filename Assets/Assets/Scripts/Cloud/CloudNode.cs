@@ -10,7 +10,7 @@ class CloudNode
     /// <summary>
     /// The name of the node in the database.
     /// </summary>
-    public string Key { get; }
+    public Key Key { get; }
 
     /// <summary>
     /// Gets or sets the value in the database.
@@ -18,7 +18,9 @@ class CloudNode
     public string Value
     {
         get { return m_value; }
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
         set { SetValue(value); }
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
     }
 
     /// <summary>
@@ -40,16 +42,16 @@ class CloudNode
     /// <summary>
     /// Creates and sets the value of a new node in the cloud-hosted database.
     /// </summary>
-    public static CloudNode Create(string path, string value = null) => new CloudNode(path) {
+    public static CloudNode Create(Key key, string value = null) => new CloudNode(key) {
         Value = value
     };
 
     /// <summary>
     /// Fetches the value of an existing node in the cloud-hosted database.
     /// </summary>
-    public static async Task<CloudNode> Fetch(string path)
+    public static async Task<CloudNode> Fetch(Key key)
     {
-        CloudNode node = new CloudNode(path);
+        CloudNode node = new CloudNode(key);
         node.m_value = (string)(await node.m_reference.GetValueAsync()).Value;
         return node;
     }
@@ -57,12 +59,11 @@ class CloudNode
     DatabaseReference m_reference;
     string m_value;
     bool m_busy;
-    int m_changes = 0;
 
-    CloudNode(string key)
+    CloudNode(Key key)
     {
         Key = key;
-        m_reference = Cloud.Database.RootReference.Child(key);
+        m_reference = Cloud.Database.RootReference.Child(key.ToString());
         m_reference.ValueChanged += OnValueChanged;
     }
 
@@ -74,12 +75,11 @@ class CloudNode
     void OnValueChanged(object sender, ValueChangedEventArgs args)
     {
         string value = (string)args.Snapshot.Value;
-        if (!m_busy && m_changes > 0 && m_value != value)
+        if (!m_busy && m_value != value)
         {
             m_value = value;
             ValueChanged?.Invoke(this);
         }
-        m_changes++;
     }
 }
 
@@ -91,7 +91,7 @@ class CloudNode<T> where T : struct
     /// <summary>
     /// The name of the node in the database.
     /// </summary>
-    public string Key { get; }
+    public Key Key { get; }
 
     /// <summary>
     /// Gets or sets the value in the database.
@@ -99,7 +99,9 @@ class CloudNode<T> where T : struct
     public T? Value
     {
         get { return m_value; }
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
         set { SetValue(value); }
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
     }
 
     /// <summary>
@@ -121,16 +123,16 @@ class CloudNode<T> where T : struct
     /// <summary>
     /// Creates and sets the value of a new node in the cloud-hosted database.
     /// </summary>
-    public static CloudNode<T> Create(string path, T? value = null) => new CloudNode<T>(path) {
+    public static CloudNode<T> Create(Key key, T? value = null) => new CloudNode<T>(key) {
         Value = value
     };
 
     /// <summary>
     /// Fetches the value of an existing node in the cloud-hosted database.
     /// </summary>
-    public static async Task<CloudNode<T>> Fetch(string path)
+    public static async Task<CloudNode<T>> Fetch(Key key)
     {
-        CloudNode<T> node = new CloudNode<T>(path);
+        CloudNode<T> node = new CloudNode<T>(key);
         node.m_value = (T?)(await node.m_reference.GetValueAsync()).Value;
         return node;
     }
@@ -138,12 +140,11 @@ class CloudNode<T> where T : struct
     DatabaseReference m_reference;
     T? m_value;
     bool m_busy;
-    int m_changes = 0;
 
-    CloudNode(string key)
+    CloudNode(Key key)
     {
         Key = key;
-        m_reference = Cloud.Database.RootReference.Child(key);
+        m_reference = Cloud.Database.RootReference.Child(key.ToString());
         m_reference.ValueChanged += OnValueChanged;
     }
 
@@ -155,11 +156,10 @@ class CloudNode<T> where T : struct
     void OnValueChanged(object sender, ValueChangedEventArgs args)
     {
         T? value = (T?)args.Snapshot.Value;
-        if (!m_busy && m_changes > 0 && m_value.Equals(value))
+        if (!m_busy && !m_value.Equals(value))
         {
             m_value = value;
             ValueChanged?.Invoke(this);
         }
-        m_changes++;
     }
 }

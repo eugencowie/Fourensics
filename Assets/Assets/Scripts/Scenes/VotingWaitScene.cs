@@ -50,8 +50,7 @@ public class VotingWaitScene : MonoBehaviour
             {
                 User m_user = await User.Get();
                 Lobby m_lobby = await Lobby.Get(m_user);
-                string[] key = entry.Key.Split('/');
-                string player = m_lobby.Users.First(x => x.Id == key[3]).UserId.Value;
+                string player = m_lobby.Users.First(x => x.Id == entry.Key.Parent.Id).UserId.Value;
                 m_votedPlayers[player] = value;
             }
         }

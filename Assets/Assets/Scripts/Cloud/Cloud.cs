@@ -5,6 +5,22 @@ using Firebase.Unity.Editor;
 using Google;
 using System.Threading.Tasks;
 
+class Key
+{
+    public string Id { get; }
+    public Key Parent { get; }
+
+    public Key(string id, Key parent=null)
+    {
+        Id = id;
+        Parent = parent;
+    }
+
+    public Key Child(string id) => new Key(id, this);
+
+    public override string ToString() => $"{Parent}/{Id}";
+}
+
 interface ICloudObject
 {
     void Create(Key key);
@@ -43,7 +59,7 @@ static class Cloud
         return obj;
     }
 
-    public static T Create<T>(string path, string id) where T : ICloudObject, new() => Create<T>(new Key(path, id));
+    public static T Create<T>(string path, string id) where T : ICloudObject, new() => Create<T>(new Key(path).Child(id));
 
-    public static Task<T> Fetch<T>(string path, string id) where T : ICloudObject, new() => Fetch<T>(new Key(path, id));
+    public static Task<T> Fetch<T>(string path, string id) where T : ICloudObject, new() => Fetch<T>(new Key(path).Child(id));
 }

@@ -5,22 +5,6 @@ using System;
 using System.Threading.Tasks;
 using UnityEngine;
 
-struct Key
-{
-    public string Path { get; set; }
-    public string Id { get; set; }
-    public override string ToString() => $"{Path}/{Id}";
-    
-    public Key(string path, string id)
-    {
-        if (path == null) throw new ArgumentNullException("path");
-        if (id == null) throw new ArgumentNullException("id");
-
-        Path = path;
-        Id = id;
-    }
-}
-
 class User : ICloudObject
 {
     public Key Key { get; private set; }

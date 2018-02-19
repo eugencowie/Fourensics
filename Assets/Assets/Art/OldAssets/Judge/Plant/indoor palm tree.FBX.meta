@@ -1,0 +1,163 @@
+fileFormatVersion: 2
+guid: cedc08b7cda77ee4687bf80455c0fedc
+timeCreated: 1512048067
+licenseType: Pro
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: Leaf
+    100004: Leaf001
+    100006: Leaf002
+    100008: Leaf003
+    100010: Leaf004
+    100012: re
+    100014: Trunk
+    100016: Trunk002
+    100018: Trunk004
+    100020: Trunk005
+    400000: //RootNode
+    400002: Leaf
+    400004: Leaf001
+    400006: Leaf002
+    400008: Leaf003
+    400010: Leaf004
+    400012: re
+    400014: Trunk
+    400016: Trunk002
+    400018: Trunk004
+    400020: Trunk005
+    2300000: //RootNode
+    2300002: Leaf
+    2300004: Leaf001
+    2300006: Leaf002
+    2300008: Leaf003
+    2300010: Leaf004
+    2300012: re
+    2300014: Trunk
+    2300016: Trunk002
+    2300018: Trunk004
+    2300020: Trunk005
+    3300000: //RootNode
+    3300002: Leaf
+    3300004: Leaf001
+    3300006: Leaf002
+    3300008: Leaf003
+    3300010: Leaf004
+    3300012: re
+    3300014: Trunk
+    3300016: Trunk002
+    3300018: Trunk004
+    3300020: Trunk005
+    4300000: plant pot
+    4300002: Trunk002
+    4300004: Leaf002
+    4300006: Trunk
+    4300008: Leaf
+    4300010: re
+    4300012: Leaf001
+    4300014: Trunk004
+    4300016: Leaf004
+    4300018: Trunk005
+    4300020: Leaf003
+    7400000: Take 001
+    9500000: //RootNode
+    11100000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 2
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Take 001
+      takeName: Take 001
+      firstFrame: 0
+      lastFrame: 190
+      wrapMode: 2
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 1
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 0.2
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 1
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 8
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 1
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

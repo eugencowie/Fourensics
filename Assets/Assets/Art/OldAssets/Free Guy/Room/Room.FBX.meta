@@ -1,0 +1,199 @@
+fileFormatVersion: 2
+guid: a174018bb3ace7a408c28414c0091b12
+timeCreated: 1508688971
+licenseType: Free
+ModelImporter:
+  serializedVersion: 21
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: Back rest
+    100004: Bin
+    100006: Bin Handles
+    100008: Blood Footprint left
+    100010: Ceiling
+    100012: Coffee Table
+    100014: 'Coffee table leg '
+    100016: Coffee table leg  1
+    100018: Coffee table leg 001
+    100020: Coffee table leg 002
+    100022: Door
+    100024: Door 2
+    100026: Door Knob
+    100028: Door Knob001
+    100030: 'Free Guy room walls and floor '
+    100032: Furniture Leg
+    100034: Furniture Leg 003
+    100036: Furniture Leg 2
+    100038: Furniture Leg001
+    100040: Furniture Leg002
+    100042: Furniture Leg003
+    100044: TV
+    100046: TV stand
+    400000: //RootNode
+    400002: Back rest
+    400004: Bin
+    400006: Bin Handles
+    400008: Blood Footprint left
+    400010: Ceiling
+    400012: Coffee Table
+    400014: 'Coffee table leg '
+    400016: Coffee table leg  1
+    400018: Coffee table leg 001
+    400020: Coffee table leg 002
+    400022: Door
+    400024: Door 2
+    400026: Door Knob
+    400028: Door Knob001
+    400030: 'Free Guy room walls and floor '
+    400032: Furniture Leg
+    400034: Furniture Leg 003
+    400036: Furniture Leg 2
+    400038: Furniture Leg001
+    400040: Furniture Leg002
+    400042: Furniture Leg003
+    400044: TV
+    400046: TV stand
+    2300000: Back rest
+    2300002: Bin
+    2300004: Bin Handles
+    2300006: Blood Footprint left
+    2300008: Ceiling
+    2300010: Coffee Table
+    2300012: 'Coffee table leg '
+    2300014: Coffee table leg  1
+    2300016: Coffee table leg 001
+    2300018: Coffee table leg 002
+    2300020: Door
+    2300022: Door 2
+    2300024: Door Knob
+    2300026: Door Knob001
+    2300028: 'Free Guy room walls and floor '
+    2300030: Furniture Leg
+    2300032: Furniture Leg 003
+    2300034: Furniture Leg 2
+    2300036: Furniture Leg001
+    2300038: Furniture Leg002
+    2300040: Furniture Leg003
+    2300042: TV
+    2300044: TV stand
+    3300000: Back rest
+    3300002: Bin
+    3300004: Bin Handles
+    3300006: Blood Footprint left
+    3300008: Ceiling
+    3300010: Coffee Table
+    3300012: 'Coffee table leg '
+    3300014: Coffee table leg  1
+    3300016: Coffee table leg 001
+    3300018: Coffee table leg 002
+    3300020: Door
+    3300022: Door 2
+    3300024: Door Knob
+    3300026: Door Knob001
+    3300028: 'Free Guy room walls and floor '
+    3300030: Furniture Leg
+    3300032: Furniture Leg 003
+    3300034: Furniture Leg 2
+    3300036: Furniture Leg001
+    3300038: Furniture Leg002
+    3300040: Furniture Leg003
+    3300042: TV
+    3300044: TV stand
+    4300000: 'Free Guy room walls and floor '
+    4300002: Back rest
+    4300004: Coffee Table
+    4300006: 'Coffee table leg '
+    4300008: 'Coffee table leg '
+    4300010: Coffee table leg 001
+    4300012: Coffee table leg 002
+    4300014: TV stand
+    4300016: TV
+    4300018: Furniture Leg
+    4300020: Furniture Leg 2
+    4300022: Furniture Leg001
+    4300024: Furniture Leg 003
+    4300026: Bin
+    4300028: Door
+    4300030: Door Knob
+    4300032: Door 2
+    4300034: Door Knob001
+    4300036: Ceiling
+    4300038: Blood Footprint left
+    4300040: Bin Handles
+    4300042: Furniture Leg002
+    4300044: Furniture Leg003
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

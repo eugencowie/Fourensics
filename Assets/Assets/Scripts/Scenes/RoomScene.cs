@@ -23,7 +23,7 @@ public class RoomScene : MonoBehaviour
 
     public GameObject mainScreen;
     public GameObject welcomeScreen;
-    
+
     async void Start()
     {
         if (StaticRoom.SeenWelcome)

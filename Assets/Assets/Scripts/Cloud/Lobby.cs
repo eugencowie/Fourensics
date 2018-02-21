@@ -25,7 +25,7 @@ class Lobby : ICloudObject
         State = await CloudNode<long>.Fetch(Key.Child("state"));
         Users = await Task.WhenAll("0123".Select(n => Cloud.Fetch<LobbyUser>(Key.Child("users").Child(n.ToString()))));
     }
-    
+
     static Lobby m_instance = null;
 
     public static async Task<Lobby> Get(User user)
@@ -86,7 +86,7 @@ class LobbyUserItem : ICloudObject
     public CloudNode Name { get; private set; }
     public CloudNode Description { get; private set; }
     public CloudNode Image { get; private set; }
-    
+
     public event Action<CloudNode> ValueChanged
     {
         add

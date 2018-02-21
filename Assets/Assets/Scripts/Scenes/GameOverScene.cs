@@ -23,7 +23,7 @@ public class GameOverScene : MonoBehaviour
     private Dictionary<string, string> m_votedPlayers = new Dictionary<string, string>();
 
     private Text m_winOrLoseText;
-    
+
     async void Start()
     {
         User m_user = await User.Get();

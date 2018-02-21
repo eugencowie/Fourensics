@@ -8,7 +8,7 @@ public class VotingWaitScene : MonoBehaviour
 {
     private string m_roomCode;
     private Dictionary<string, string> m_votedPlayers = new Dictionary<string, string>();
-    
+
     async void Start()
     {
         User m_user = await User.Get();

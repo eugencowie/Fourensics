@@ -24,7 +24,7 @@ public class VotingScene : MonoBehaviour
 
     private string m_lobbyCode;
     private int m_scene;
-    
+
     async void Start()
     {
         User m_user = await User.Get();

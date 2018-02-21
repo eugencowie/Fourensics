@@ -3,6 +3,18 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+static class UI
+{
+    public static bool IsPointerOverUIObject()
+    {
+        PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
+        eventDataCurrentPosition.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
+        return results.Count > 0;
+    }
+}
+
 [RequireComponent(typeof(Camera)), RequireComponent(typeof(CameraSwipe))]
 public class CameraTap : MonoBehaviour
 {
@@ -37,7 +49,7 @@ public class CameraTap : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
+        if (Input.GetMouseButtonDown(0) && !UI.IsPointerOverUIObject())
         {
             m_touchStartPos = Input.mousePosition;
             m_isTouching = true;

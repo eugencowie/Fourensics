@@ -15,7 +15,7 @@ static class CloudManager
             return false;
 
         // Get list of players in lobby
-        List<string> players = AllUsers(lobby).ToList();
+        List<string> players = AllUsersStr(lobby).ToList();
 
         // If player is already in room
         if (players.Contains(user.Id))
@@ -118,7 +118,7 @@ static class CloudManager
     /// </summary>
     public static int AssignPlayerScenes(User user, Lobby lobby)
     {
-        List<string> players = AllUsers(lobby).ToList();
+        List<string> players = AllUsersStr(lobby).ToList();
         players = players.OrderBy(_ => UnityEngine.Random.value).ToList();
         int ourScene = -1;
         for (int i = 0; i < players.Count; i++)
@@ -146,7 +146,7 @@ static class CloudManager
 
     public static int GetPlayerNumber(User user, Lobby lobby, string player)
     {
-        List<string> players = OtherUsers(lobby, user).ToList();
+        List<string> players = OtherUsersStr(lobby, user).ToList();
         players.Insert(0, user.Id);
         int playerNb = players.IndexOf(player);
         if (playerNb >= 0 && playerNb < players.Count)
@@ -158,7 +158,7 @@ static class CloudManager
 
     public static async Task<User> DownloadClues(User user, Lobby lobby, int playerNb)
     {
-        List<string> players = OtherUsers(lobby, user).ToList();
+        List<string> players = OtherUsersStr(lobby, user).ToList();
         players.Insert(0, user.Id);
         if (playerNb < players.Count)
         {
@@ -167,13 +167,18 @@ static class CloudManager
         else return null;
     }
 
-    public static IEnumerable<string> AllUsers(Lobby lobby) => lobby.Users
-            .Where(user => !string.IsNullOrWhiteSpace(user.UserId.Value))
+    public static IEnumerable<LobbyUser> AllUsers(Lobby lobby) => lobby.Users
+            .Where(user => !string.IsNullOrWhiteSpace(user.UserId.Value));
+
+    public static IEnumerable<LobbyUser> OtherUsers(Lobby lobby, User excludeUser) => AllUsers(lobby)
+            .Where(user => user.UserId.Value != excludeUser.Id);
+
+    public static IEnumerable<string> AllUsersStr(Lobby lobby) => AllUsers(lobby)
             .Select(user => user.UserId.Value);
 
-    public static IEnumerable<string> OtherUsers(Lobby lobby, User excludeUser) => AllUsers(lobby)
-            .Where(user => user != excludeUser.Id);
-    
+    public static IEnumerable<string> OtherUsersStr(Lobby lobby, User excludeUser) => OtherUsers(lobby, excludeUser)
+            .Select(user => user.UserId.Value);
+
     /// <summary>
     /// Generates a random five-character room code.
     /// </summary>

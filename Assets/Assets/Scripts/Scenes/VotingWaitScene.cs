@@ -24,7 +24,7 @@ public class VotingWaitScene : MonoBehaviour
         if (!string.IsNullOrEmpty(room))
         {
             m_roomCode = room;
-            foreach (var player in CloudManager.AllUsers(m_lobby)) m_votedPlayers[player] = "";
+            foreach (var player in CloudManager.AllUsersStr(m_lobby)) m_votedPlayers[player] = "";
             await RegisterListeners();
             OnVoteChanged(m_lobby.Users.First(u => u.UserId.Value == m_user.Id).Vote);
         }

@@ -20,7 +20,6 @@ public class GameOverScene : MonoBehaviour
     public int RequiredVotePercentage = 51;
 
     private string m_roomCode;
-    private Dictionary<string, string> m_votedPlayers = new Dictionary<string, string>();
 
     private Text m_winOrLoseText;
 
@@ -44,9 +43,8 @@ public class GameOverScene : MonoBehaviour
         if (!string.IsNullOrEmpty(room))
         {
             m_roomCode = room;
-            foreach (var player in CloudManager.AllUsersStr(m_lobby)) m_votedPlayers[player] = "";
             await RegisterListeners();
-            OnVoteChanged(m_lobby.Users.First(u => u.UserId.Value == m_user.Id).Vote);
+            OnVoteChanged(CloudManager.OnlyUser(m_lobby, m_user).Vote);
         }
         else SceneManager.LoadScene("Lobby");
     }
@@ -56,8 +54,17 @@ public class GameOverScene : MonoBehaviour
         User m_user = await User.Get();
         Lobby m_lobby = await Lobby.Get(m_user);
 
-        foreach (LobbyUser user in m_lobby.Users)
+        foreach (LobbyUser user in CloudManager.OtherUsers(m_lobby, m_user))
             user.Vote.ValueChanged += OnVoteChanged;
+    }
+
+    private async Task DeregisterListeners()
+    {
+        User m_user = await User.Get();
+        Lobby m_lobby = await Lobby.Get(m_user);
+
+        foreach (LobbyUser user in CloudManager.OtherUsers(m_lobby, m_user))
+            user.Vote.ValueChanged -= OnVoteChanged;
     }
 
     private void VideoLoopPointReached(VideoPlayer source)
@@ -72,48 +79,51 @@ public class GameOverScene : MonoBehaviour
         User m_user = await User.Get();
         Lobby m_lobby = await Lobby.Get(m_user);
 
+        await DeregisterListeners();
         CloudManager.LeaveLobby(m_user, m_lobby);
         SceneManager.LoadScene("Lobby");
     }
 
     private async void OnVoteChanged(CloudNode entry)
     {
-        User m_user = await User.Get();
-        Lobby m_lobby = await Lobby.Get(m_user);
-
         if (entry.Value != null)
         {
             string value = entry.Value;
 
             if (!string.IsNullOrEmpty(value))
             {
-                string player = m_lobby.Users.First(x => x.Id == entry.Key.Parent.Id).UserId.Value;
-                m_votedPlayers[player] = value;
+                User m_user = await User.Get();
+                Lobby m_lobby = await Lobby.Get(m_user);
 
-                if (!m_votedPlayers.Any(p => string.IsNullOrEmpty(p.Value)))
+                bool everyoneVoted = CloudManager.AllUsers(m_lobby).All(x => !string.IsNullOrWhiteSpace(x.Vote.Value));
+
+                if (everyoneVoted)
                 {
-                    float correctAnswers = m_votedPlayers.Count(p => p.Value == "Caleb Holden");
-                    float totalAnswers = m_votedPlayers.Count;
+                    IEnumerable<LobbyUser> allUsers = CloudManager.AllUsers(m_lobby);
+
+                    float correctAnswers = allUsers.Count(x => x.Vote.Value == "Caleb Holden");
+                    float totalAnswers = allUsers.Count();
 
                     float percentage = correctAnswers / totalAnswers;
                     float requiredPercentage = RequiredVotePercentage / 100.0f;
 
                     if (percentage >= requiredPercentage)
                     {
-                        string yourVote = m_votedPlayers[m_user.Id];
-                        m_votedPlayers.Remove(m_user.Id);
+                        WinText.text += $"\n\nYou voted for {CloudManager.OnlyUser(m_lobby, m_user).Vote.Value}";
 
-                        WinText.text += "\n\nYou voted for " + yourVote;
-                        for (int i = 0; i < m_votedPlayers.Count; i++)
+                        IEnumerable<LobbyUser> otherUsers = CloudManager.OtherUsers(m_lobby, m_user);
+
+                        int counter = 2;
+                        foreach (LobbyUser user in otherUsers)
                         {
-                            WinText.text += "\nPlayer " + (i + 2) + " voted for " + m_votedPlayers.ElementAt(i).Value;
+                            WinText.text += $"\nPlayer {counter} voted for {user.Vote.Value}";
+                            counter++;
                         }
+
                         WaitText.gameObject.SetActive(false);
                         WinVideo.gameObject.SetActive(true);
 
                         m_winOrLoseText = WinText;
-
-                        m_votedPlayers[m_user.Id] = yourVote;
                     }
                     else
                     {

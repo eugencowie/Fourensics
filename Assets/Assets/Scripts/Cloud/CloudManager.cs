@@ -173,6 +173,9 @@ static class CloudManager
     public static IEnumerable<LobbyUser> OtherUsers(Lobby lobby, User excludeUser) => AllUsers(lobby)
             .Where(user => user.UserId.Value != excludeUser.Id);
 
+    public static LobbyUser OnlyUser(Lobby lobby, User onlyUser) => AllUsers(lobby)
+        .FirstOrDefault(user => user.UserId.Value == onlyUser.Id);
+
     public static IEnumerable<string> AllUsersStr(Lobby lobby) => AllUsers(lobby)
             .Select(user => user.UserId.Value);
 

@@ -7,7 +7,6 @@ using UnityEngine.SceneManagement;
 public class VotingWaitScene : MonoBehaviour
 {
     private string m_roomCode;
-    private Dictionary<string, string> m_votedPlayers = new Dictionary<string, string>();
 
     async void Start()
     {
@@ -24,9 +23,8 @@ public class VotingWaitScene : MonoBehaviour
         if (!string.IsNullOrEmpty(room))
         {
             m_roomCode = room;
-            foreach (var player in CloudManager.AllUsersStr(m_lobby)) m_votedPlayers[player] = "";
             await RegisterListeners();
-            OnVoteChanged(m_lobby.Users.First(u => u.UserId.Value == m_user.Id).Vote);
+            OnVoteChanged(CloudManager.OnlyUser(m_lobby, m_user).Vote);
         }
         else SceneManager.LoadScene("Lobby");
     }
@@ -36,8 +34,17 @@ public class VotingWaitScene : MonoBehaviour
         User m_user = await User.Get();
         Lobby m_lobby = await Lobby.Get(m_user);
 
-        foreach (LobbyUser user in m_lobby.Users.Where(u => u.UserId.Value != m_user.Id))
+        foreach (LobbyUser user in CloudManager.OtherUsers(m_lobby, m_user))
             user.Vote.ValueChanged += OnVoteChanged;
+    }
+
+    private async Task DeregisterListeners()
+    {
+        User m_user = await User.Get();
+        Lobby m_lobby = await Lobby.Get(m_user);
+
+        foreach (LobbyUser user in CloudManager.OtherUsers(m_lobby, m_user))
+            user.Vote.ValueChanged -= OnVoteChanged;
     }
 
     private async void OnVoteChanged(CloudNode entry)
@@ -50,24 +57,15 @@ public class VotingWaitScene : MonoBehaviour
             {
                 User m_user = await User.Get();
                 Lobby m_lobby = await Lobby.Get(m_user);
-                string player = m_lobby.Users.First(x => x.Id == entry.Key.Parent.Id).UserId.Value;
-                m_votedPlayers[player] = value;
+
+                bool everyoneVoted = CloudManager.AllUsers(m_lobby).All(x => !string.IsNullOrWhiteSpace(x.Vote.Value));
+
+                if (everyoneVoted)
+                {
+                    await DeregisterListeners();
+                    SceneManager.LoadScene("GameOver");
+                }
             }
         }
-
-        if (!m_votedPlayers.Any(p => string.IsNullOrEmpty(p.Value)))
-        {
-            await DeregisterListeners();
-            SceneManager.LoadScene("GameOver");
-        }
-    }
-
-    private async Task DeregisterListeners()
-    {
-        User m_user = await User.Get();
-        Lobby m_lobby = await Lobby.Get(m_user);
-
-        foreach (LobbyUser user in m_lobby.Users.Where(u => u.UserId.Value != m_user.Id))
-            user.Vote.ValueChanged -= OnVoteChanged;
     }
 }

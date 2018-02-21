@@ -121,7 +121,7 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 1
-  bundleVersion: 1.1
+  bundleVersion: 1.4
   preloadedAssets: []
   metroInputSource: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -144,8 +144,8 @@ PlayerSettings:
     Android: com.notyetinteractive.fourensics
     Standalone: com.notyetinteractive.fourensics
   buildNumber:
-    Standalone: 18
-  AndroidBundleVersionCode: 18
+    Standalone: 21
+  AndroidBundleVersionCode: 21
   AndroidMinSdkVersion: 16
   AndroidTargetSdkVersion: 0
   AndroidPreferredInstallLocation: 1

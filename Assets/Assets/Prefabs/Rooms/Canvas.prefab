@@ -1351,9 +1351,6 @@ GameObject:
   - component: {fileID: 223051488238776802}
   - component: {fileID: 114894176888435500}
   - component: {fileID: 114828746955754250}
-  - component: {fileID: 114321816682737282}
-  - component: {fileID: 114812443614665316}
-  - component: {fileID: 114774551039824432}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -2686,7 +2683,7 @@ MonoBehaviour:
   OnConfirm:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114774551039824432}
+      - m_Target: {fileID: 0}
         m_MethodName: ConfirmLeave
         m_Mode: 1
         m_Arguments:
@@ -2743,20 +2740,6 @@ MonoBehaviour:
   - {fileID: 1638302396083194}
   - {fileID: 1561380202781428}
   - {fileID: 1253251419195702}
---- !u!114 &114321816682737282
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1856969743927884}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -619905303, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_FirstSelected: {fileID: 0}
-  m_sendNavigationEvents: 1
-  m_DragThreshold: 5
 --- !u!114 &114323581515082356
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4173,7 +4156,7 @@ MonoBehaviour:
   OnConfirm:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114774551039824432}
+      - m_Target: {fileID: 0}
         m_MethodName: ConfirmReady
         m_Mode: 1
         m_Arguments:
@@ -4297,21 +4280,6 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
---- !u!114 &114774551039824432
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1856969743927884}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1fb277d9c408b4946b1fefaa649acd05, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ReadyButton: {fileID: 1500024669501314}
-  DatabaseButton: {fileID: 1638302396083194}
-  mainScreen: {fileID: 1820183108813484}
-  welcomeScreen: {fileID: 1886734614711416}
 --- !u!114 &114775757663607376
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4511,24 +4479,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114812443614665316
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1856969743927884}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1077351063, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_HorizontalAxis: Horizontal
-  m_VerticalAxis: Vertical
-  m_SubmitButton: Submit
-  m_CancelButton: Cancel
-  m_InputActionsPerSecond: 10
-  m_RepeatDelay: 0.5
-  m_ForceModuleActive: 0
 --- !u!114 &114827208515892526
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5230,7 +5180,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114774551039824432}
+      - m_Target: {fileID: 0}
         m_MethodName: DatabaseButtonPressed
         m_Mode: 1
         m_Arguments:
@@ -5964,7 +5914,7 @@ RectTransform:
   m_GameObject: {fileID: 1563080186255844}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.0000056, y: 1.0000056, z: 1.0000056}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 224751998003846562}
   - {fileID: 224514537231792656}
@@ -6057,7 +6007,7 @@ RectTransform:
   m_GameObject: {fileID: 1231345905788812}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.0000056, y: 1.0000056, z: 1.0000056}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 224891210020848268}
   - {fileID: 224127857158902806}
@@ -7193,7 +7143,7 @@ RectTransform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1820183108813484}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -7238,7 +7188,7 @@ RectTransform:
   m_GameObject: {fileID: 1875217942679970}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.0000056, y: 1.0000056, z: 1.0000056}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 224532539283351496}
   - {fileID: 224667187206907598}
@@ -7277,7 +7227,7 @@ RectTransform:
   m_GameObject: {fileID: 1539234370465088}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.0000012, y: 1.0000012, z: 1.0000012}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 224182377635633546}
   - {fileID: 224217393922502276}
@@ -7332,7 +7282,7 @@ RectTransform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1710242774785532}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -7503,7 +7453,7 @@ RectTransform:
   m_GameObject: {fileID: 1660093251319686}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.0000056, y: 1.0000056, z: 1.0000056}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 224504261374584540}
   - {fileID: 224030679604416502}
@@ -7805,7 +7755,7 @@ RectTransform:
   m_GameObject: {fileID: 1517979752340134}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.0000056, y: 1.0000056, z: 1.0000056}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 224828221648867678}
   - {fileID: 224657060021660230}

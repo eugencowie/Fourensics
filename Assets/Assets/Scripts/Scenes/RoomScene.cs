@@ -23,7 +23,7 @@ public class RoomScene : MonoBehaviour
 
     public GameObject mainScreen;
     public GameObject welcomeScreen;
-    
+
     async void Start()
     {
         if (StaticRoom.SeenWelcome)
@@ -92,7 +92,9 @@ public class RoomScene : MonoBehaviour
                 User m_user = await User.Get();
                 Lobby m_lobby = await Lobby.Get(m_user);
 
-                if (!m_lobby.Users.Any(x => x.Ready.Value == false))
+                bool everyoneReady = CloudManager.AllUsers(m_lobby).All(x => x.Ready.Value.HasValue && x.Ready.Value == true);
+
+                if (everyoneReady)
                 {
                     SceneManager.LoadScene("Voting");
                 }

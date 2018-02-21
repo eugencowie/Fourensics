@@ -20,7 +20,7 @@ public class CameraSwipe : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
+        if (Input.GetMouseButtonDown(0) && !UI.IsPointerOverUIObject())
         {
             m_touchOrigin = Input.mousePosition;
             m_isRotating = true;

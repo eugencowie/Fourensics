@@ -10,7 +10,7 @@ class Key
     public string Id { get; }
     public Key Parent { get; }
 
-    public Key(string id, Key parent=null)
+    public Key(string id, Key parent = null)
     {
         Id = id;
         Parent = parent;

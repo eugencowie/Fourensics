@@ -38,6 +38,14 @@ class Lobby : ICloudObject
 
         return m_instance;
     }
+
+    public static Lobby Create(string id)
+    {
+        if (string.IsNullOrWhiteSpace(id))
+            return null;
+
+        return m_instance = Cloud.Create<Lobby>("lobbies", id);
+    }
 }
 
 class LobbyUser : ICloudObject

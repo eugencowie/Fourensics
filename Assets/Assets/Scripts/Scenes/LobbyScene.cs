@@ -120,7 +120,7 @@ class LobbyScene : MonoBehaviour
         if (string.IsNullOrEmpty(code)) SwitchPanel(m_startPanel);
         else
         {
-            Lobby lobby = Cloud.Create<Lobby>("lobbies", code);
+            Lobby lobby = Lobby.Create(code);
             lobby.State.Value = (int)LobbyState.Lobby;
 
             bool joinSuccess = CloudManager.JoinLobby(m_user, lobby, m_maxPlayers);

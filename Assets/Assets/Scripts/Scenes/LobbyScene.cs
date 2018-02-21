@@ -19,33 +19,35 @@ class LobbyScene : MonoBehaviour
 
     async void Start()
     {
-        Debug.Log("LobbyScene.Start()");
-
-        // Show please wait screen
+        // Show wait panel
         SwitchPanel(m_waitPanel);
 
         // Get database objects
-        User m_user = await User.Get();
-        Lobby m_lobby = await Lobby.Get(m_user);
+        User user = await User.Get();
+        Lobby lobby = await Lobby.Get(user);
 
-        // Show main screen if user is not yet in a lobby or if user's lobby is invalid
-        if (m_lobby == null || !m_lobby.State.Value.HasValue)
+        if (lobby == null || !lobby.State.Value.HasValue)
         {
-            m_user.Lobby.Value = null;
+            // Reset static data
             StaticClues.Reset();
             StaticInventory.Reset();
             StaticRoom.Reset();
             StaticSlot.Reset();
             StaticSuspects.Reset();
-            SwitchPanel(m_startPanel);
-            return;
-        }
 
-        // Show lobby screen
-        m_codeLabel.text = m_lobby.Id;
-        if (m_lobby.Users[0].UserId.Value != m_user.Id)
-            m_lobby.State.ValueChanged += LobbyStateChanged;
-        SwitchPanel(m_lobbyPanel);
+            // Show start panel
+            SwitchPanel(m_startPanel);
+        }
+        else
+        {
+            // Register lobby state change callback
+            if (lobby.Users[0].UserId.Value != user.Id)
+                lobby.State.ValueChanged += LobbyStateChanged;
+
+            // Show lobby panel
+            m_codeLabel.text = lobby.Id;
+            SwitchPanel(m_lobbyPanel);
+        }
     }
 
     /// <summary>
@@ -53,8 +55,7 @@ class LobbyScene : MonoBehaviour
     /// </summary>
     public void JoinButtonPressed()
     {
-        Debug.Log("LobbyScene.JoinButtonPressed()");
-
+        // Show join panel
         SwitchPanel(m_joinPanel);
     }
 
@@ -63,8 +64,7 @@ class LobbyScene : MonoBehaviour
     /// </summary>
     public void BackButtonPressed()
     {
-        Debug.Log("LobbyScene.BackButtonPressed()");
-
+        // Show start panel
         SwitchPanel(m_startPanel);
     }
 
@@ -73,33 +73,42 @@ class LobbyScene : MonoBehaviour
     /// </summary>
     public async void SubmitButtonPressed()
     {
-        Debug.Log("LobbyScene.SubmitButtonPressed()");
-
-        User m_user = await User.Get();
-        Lobby m_lobby = await Lobby.Get(m_user);
-
         if (!string.IsNullOrEmpty(m_codeField.text))
         {
+            // Show wait panel
             SwitchPanel(m_waitPanel);
 
-            // Fetch lobby from cloud
-            Lobby lobby = await Cloud.Fetch<Lobby>("lobbies", m_codeField.text.ToUpper());
+            // Get user database object
+            User user = await User.Get();
 
-            bool success = CloudManager.JoinLobby(m_user, lobby, m_maxPlayers);
-            if (!success)
+            // Update user lobby value
+            user.Lobby.Value = m_codeField.text.ToUpper();
+
+            // Fetch lobby from cloud
+            Lobby lobby = await Lobby.Get(user);
+
+            // Attempt to join lobby
+            bool success = CloudManager.JoinLobby(user, lobby, m_maxPlayers);
+
+            if (success)
             {
-                m_codeField.text = "";
-                SwitchPanel(m_joinPanel);
+                // Register lobby state change callback
+                if (lobby.Users[0].UserId.Value != user.Id)
+                    lobby.State.ValueChanged += LobbyStateChanged;
+
+                // Show lobby panel
+                m_startButton.SetActive(false);
+                m_codeLabel.text = lobby.Id;
+                SwitchPanel(m_lobbyPanel);
             }
             else
             {
-                m_lobby = lobby;
-                m_user.Lobby.Value = m_lobby.Id;
-                m_codeLabel.text = m_lobby.Id;
-                if (m_lobby.Users[0].UserId.Value != m_user.Id)
-                    m_lobby.State.ValueChanged += LobbyStateChanged;
-                m_startButton.SetActive(false);
-                SwitchPanel(m_lobbyPanel);
+                // Reset user lobby value
+                user.Lobby.Value = null;
+
+                // Show join panel
+                m_codeField.text = "";
+                SwitchPanel(m_joinPanel);
             }
         }
     }
@@ -109,32 +118,48 @@ class LobbyScene : MonoBehaviour
     /// </summary>
     public async void CreateButtonPressed()
     {
-        Debug.Log("LobbyScene.CreateButtonPressed()");
-
+        // Show wait panel
         SwitchPanel(m_waitPanel);
 
-        User m_user = await User.Get();
-        Lobby m_lobby = await Lobby.Get(m_user);
-
+        // Attempt to create unique lobby code
         string code = await CloudManager.CreateLobbyCode();
-        if (string.IsNullOrEmpty(code)) SwitchPanel(m_startPanel);
-        else
+
+        if (!string.IsNullOrEmpty(code))
         {
+            // Create new lobby
             Lobby lobby = Lobby.Create(code);
             lobby.State.Value = (int)LobbyState.Lobby;
 
+            // Get user database object
+            User m_user = await User.Get();
+
+            // Attempt to add user to lobby
             bool joinSuccess = CloudManager.JoinLobby(m_user, lobby, m_maxPlayers);
-            if (!joinSuccess) SwitchPanel(m_startPanel);
-            else
+
+            if (joinSuccess)
             {
-                m_lobby = lobby;
-                m_user.Lobby.Value = m_lobby.Id;
-                m_codeLabel.text = m_lobby.Id;
-                if (m_lobby.Users[0].UserId.Value != m_user.Id)
-                    m_lobby.State.ValueChanged += LobbyStateChanged;
+                // Set user lobby value
+                m_user.Lobby.Value = lobby.Id;
+
+                // Register lobby state change callback
+                if (lobby.Users[0].UserId.Value != m_user.Id)
+                    lobby.State.ValueChanged += LobbyStateChanged;
+
+                // Show lobby panel
                 m_startButton.SetActive(true);
+                m_codeLabel.text = lobby.Id;
                 SwitchPanel(m_lobbyPanel);
             }
+            else
+            {
+                // Show start panel
+                SwitchPanel(m_startPanel);
+            }
+        }
+        else
+        {
+            // Show start panel
+            SwitchPanel(m_startPanel);
         }
     }
 
@@ -143,16 +168,21 @@ class LobbyScene : MonoBehaviour
     /// </summary>
     public async void LeaveButtonPressed()
     {
-        Debug.Log("LobbyScene.LeaveButtonPressed()");
-
+        // Show wait panel
         SwitchPanel(m_waitPanel);
 
+        // Get database objects
         User m_user = await User.Get();
         Lobby m_lobby = await Lobby.Get(m_user);
 
+        // Deregister lobby state change callback
         if (m_lobby.Users[0].UserId.Value != m_user.Id)
             m_lobby.State.ValueChanged -= LobbyStateChanged;
+
+        // Remove the user from the lobby
         CloudManager.LeaveLobby(m_user, m_lobby);
+
+        // Show start panel
         m_codeLabel.text = "_____";
         SwitchPanel(m_startPanel);
     }
@@ -162,30 +192,32 @@ class LobbyScene : MonoBehaviour
     /// </summary>
     public async void StartButtonPressed()
     {
-        Debug.Log("LobbyScene.StartButtonPressed()");
-
+        // Show wait panel
         SwitchPanel(m_waitPanel);
 
+        // Get database objects
         User m_user = await User.Get();
         Lobby m_lobby = await Lobby.Get(m_user);
 
+        // Assign users to their scenes
         CloudManager.AssignPlayerScenes(m_user, m_lobby);
+
+        // Clear static data
         StaticInventory.Hints.Clear();
+
+        // Set lobby state value
         m_lobby.State.Value = (int)LobbyState.InGame;
         LobbyStateChanged(m_lobby.State);
     }
 
     public void CodeFieldChanged(string s)
     {
-        Debug.Log($"LobbyScene.CodeFieldChanged(\"{s}\")");
-
+        // Make code field text uppercase
         m_codeField.text = m_codeField.text.ToUpper();
     }
 
     void SwitchPanel(GameObject panel)
     {
-        Debug.Log($"LobbyScene.SwitchPanel(\"{panel.name}\")");
-
         // Disable all panels
         foreach (var p in new GameObject[] { m_startPanel, m_joinPanel, m_lobbyPanel, m_waitPanel })
         {
@@ -198,19 +230,22 @@ class LobbyScene : MonoBehaviour
 
     async void LobbyStateChanged(CloudNode<long> state)
     {
-        Debug.Log($"LobbyScene.LobbyStateChanged(\"{state.Value}\")");
-
+        // Get database objects
         User m_user = await User.Get();
         Lobby m_lobby = await Lobby.Get(m_user);
 
         if (state.Value.HasValue && (LobbyState)state.Value.Value == LobbyState.InGame)
         {
+            // Get this user's scene
             int scene = (int)(m_lobby.Users.First(u => u.UserId.Value == m_user.Id).Scene.Value ?? 0);
+
             if (scene >= 1 && scene <= 4)
             {
+                // Deregister lobby state change callback
                 if (m_lobby.Users[0].UserId.Value != m_user.Id)
                     m_lobby.State.ValueChanged -= LobbyStateChanged;
 
+                // Load this user's scene
                 SceneManager.LoadScene(scene);
             }
         }

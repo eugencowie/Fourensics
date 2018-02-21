@@ -11,7 +11,7 @@ static class CloudManager
     public static bool JoinLobby(User user, Lobby lobby, int maxPlayers)
     {
         // Check if lobby exists
-        if (lobby.State.Value == null)
+        if (lobby == null || lobby.State.Value == null)
             return false;
 
         // Get list of players in lobby

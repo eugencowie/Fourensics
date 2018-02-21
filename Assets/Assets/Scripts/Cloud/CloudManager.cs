@@ -68,17 +68,48 @@ static class CloudManager
     public static void LeaveLobby(User user, Lobby lobby)
     {
         user.Lobby.Value = null;
-        if (lobby.Users.Any(u => u.UserId.Value == user.Id))
+
+        if (lobby.Users[0].UserId.Value == user.Id)
         {
-            lobby.Users.First(u => u.UserId.Value == user.Id).Scene.Value = 0;
-            lobby.Users.First(u => u.UserId.Value == user.Id).Ready.Value = false;
-            lobby.Users.First(u => u.UserId.Value == user.Id).Vote.Value = null;
+            DeleteLobby(lobby);
         }
-        foreach (var item in lobby.Users.First(u => u.UserId.Value == user.Id).Items)
+        else
         {
-            item.Name.Value = null;
-            item.Description.Value = null;
-            item.Image.Value = null;
+            LobbyUser userInfo = lobby.Users.FirstOrDefault(u => u.UserId.Value == user.Id);
+            if (userInfo != null)
+            {
+                userInfo.UserId.Value = null;
+                userInfo.Scene.Value = null;
+                userInfo.Ready.Value = null;
+                userInfo.Vote.Value = null;
+
+                foreach (var item in userInfo.Items)
+                {
+                    item.Name.Value = null;
+                    item.Description.Value = null;
+                    item.Image.Value = null;
+                }
+            }
+        }
+    }
+
+    static void DeleteLobby(Lobby lobby)
+    {
+        lobby.State.Value = null;
+
+        foreach (LobbyUser userInfo in lobby.Users)
+        {
+            userInfo.UserId.Value = null;
+            userInfo.Scene.Value = null;
+            userInfo.Ready.Value = null;
+            userInfo.Vote.Value = null;
+
+            foreach (var item in userInfo.Items)
+            {
+                item.Name.Value = null;
+                item.Description.Value = null;
+                item.Image.Value = null;
+            }
         }
     }
 

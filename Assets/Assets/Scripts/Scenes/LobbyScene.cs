@@ -16,7 +16,7 @@ class LobbyScene : MonoBehaviour
     [SerializeField] GameObject m_startButton = null;
 
     const int m_maxPlayers = 4;
-    
+
     async void Start()
     {
         Debug.Log("LobbyScene.Start()");
@@ -43,7 +43,8 @@ class LobbyScene : MonoBehaviour
 
         // Show lobby screen
         m_codeLabel.text = m_lobby.Id;
-        m_lobby.State.ValueChanged += LobbyStateChanged;
+        if (m_lobby.Users[0].UserId.Value != m_user.Id)
+            m_lobby.State.ValueChanged += LobbyStateChanged;
         SwitchPanel(m_lobbyPanel);
     }
 
@@ -95,7 +96,8 @@ class LobbyScene : MonoBehaviour
                 m_lobby = lobby;
                 m_user.Lobby.Value = m_lobby.Id;
                 m_codeLabel.text = m_lobby.Id;
-                m_lobby.State.ValueChanged += LobbyStateChanged;
+                if (m_lobby.Users[0].UserId.Value != m_user.Id)
+                    m_lobby.State.ValueChanged += LobbyStateChanged;
                 m_startButton.SetActive(false);
                 SwitchPanel(m_lobbyPanel);
             }
@@ -128,7 +130,8 @@ class LobbyScene : MonoBehaviour
                 m_lobby = lobby;
                 m_user.Lobby.Value = m_lobby.Id;
                 m_codeLabel.text = m_lobby.Id;
-                m_lobby.State.ValueChanged += LobbyStateChanged;
+                if (m_lobby.Users[0].UserId.Value != m_user.Id)
+                    m_lobby.State.ValueChanged += LobbyStateChanged;
                 m_startButton.SetActive(true);
                 SwitchPanel(m_lobbyPanel);
             }
@@ -147,7 +150,8 @@ class LobbyScene : MonoBehaviour
         User m_user = await User.Get();
         Lobby m_lobby = await Lobby.Get(m_user);
 
-        m_lobby.State.ValueChanged -= LobbyStateChanged;
+        if (m_lobby.Users[0].UserId.Value != m_user.Id)
+            m_lobby.State.ValueChanged -= LobbyStateChanged;
         CloudManager.LeaveLobby(m_user, m_lobby);
         m_codeLabel.text = "_____";
         SwitchPanel(m_startPanel);
@@ -204,7 +208,9 @@ class LobbyScene : MonoBehaviour
             int scene = (int)(m_lobby.Users.First(u => u.UserId.Value == m_user.Id).Scene.Value ?? 0);
             if (scene >= 1 && scene <= 4)
             {
-                m_lobby.State.ValueChanged -= LobbyStateChanged;
+                if (m_lobby.Users[0].UserId.Value != m_user.Id)
+                    m_lobby.State.ValueChanged -= LobbyStateChanged;
+
                 SceneManager.LoadScene(scene);
             }
         }

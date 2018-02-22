@@ -844,7 +844,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4139790929669702, guid: 7cf233c418538624787033c1d79756e5, type: 2}
       propertyPath: m_RootOrder
-      value: 4
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 114300337123482170, guid: 7cf233c418538624787033c1d79756e5,
         type: 2}
@@ -869,6 +869,12 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 7cf233c418538624787033c1d79756e5, type: 2}
   m_IsPrefabParent: 0
+--- !u!114 &945612682 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114300337123482170, guid: 7cf233c418538624787033c1d79756e5,
+    type: 2}
+  m_PrefabInternal: {fileID: 945612681}
+  m_Script: {fileID: 11500000, guid: 1fb277d9c408b4946b1fefaa649acd05, type: 3}
 --- !u!1 &973775615
 GameObject:
   m_ObjectHideFlags: 0
@@ -1638,7 +1644,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 839e2b346a546d5499587c491a63843f, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 839e2b346a546d5499587c491a63843f, type: 3}
       propertyPath: m_LocalScale.x
@@ -1884,7 +1890,7 @@ Transform:
   - {fileID: 348652161}
   - {fileID: 1182214372}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!4 &1595424719 stripped
 Transform:
@@ -2038,7 +2044,37 @@ Prefab:
     - target: {fileID: 224382924449657762, guid: dc26f056f492a8b44b9525b72dda3044,
         type: 2}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114971547804651856, guid: dc26f056f492a8b44b9525b72dda3044,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 945612682}
+    - target: {fileID: 114971547804651856, guid: dc26f056f492a8b44b9525b72dda3044,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: DatabaseButtonPressed
+      objectReference: {fileID: 0}
+    - target: {fileID: 114304696642076134, guid: dc26f056f492a8b44b9525b72dda3044,
+        type: 2}
+      propertyPath: OnConfirm.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 945612682}
+    - target: {fileID: 114304696642076134, guid: dc26f056f492a8b44b9525b72dda3044,
+        type: 2}
+      propertyPath: OnConfirm.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ConfirmLeave
+      objectReference: {fileID: 0}
+    - target: {fileID: 114710839301753246, guid: dc26f056f492a8b44b9525b72dda3044,
+        type: 2}
+      propertyPath: OnConfirm.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 945612682}
+    - target: {fileID: 114710839301753246, guid: dc26f056f492a8b44b9525b72dda3044,
+        type: 2}
+      propertyPath: OnConfirm.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ConfirmReady
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: dc26f056f492a8b44b9525b72dda3044, type: 2}

@@ -6956,6 +6956,12 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 7cf233c418538624787033c1d79756e5, type: 2}
   m_IsPrefabParent: 0
+--- !u!114 &1229172497 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114300337123482170, guid: 7cf233c418538624787033c1d79756e5,
+    type: 2}
+  m_PrefabInternal: {fileID: 1229172496}
+  m_Script: {fileID: 11500000, guid: 1fb277d9c408b4946b1fefaa649acd05, type: 3}
 --- !u!4 &1232350834 stripped
 Transform:
   m_PrefabParentObject: {fileID: 400014, guid: b0c015413ae17b6488d34bede4450d4d, type: 3}
@@ -8405,6 +8411,36 @@ Prefab:
         type: 2}
       propertyPath: m_RootOrder
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114971547804651856, guid: dc26f056f492a8b44b9525b72dda3044,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1229172497}
+    - target: {fileID: 114971547804651856, guid: dc26f056f492a8b44b9525b72dda3044,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: DatabaseButtonPressed
+      objectReference: {fileID: 0}
+    - target: {fileID: 114304696642076134, guid: dc26f056f492a8b44b9525b72dda3044,
+        type: 2}
+      propertyPath: OnConfirm.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1229172497}
+    - target: {fileID: 114304696642076134, guid: dc26f056f492a8b44b9525b72dda3044,
+        type: 2}
+      propertyPath: OnConfirm.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ConfirmLeave
+      objectReference: {fileID: 0}
+    - target: {fileID: 114710839301753246, guid: dc26f056f492a8b44b9525b72dda3044,
+        type: 2}
+      propertyPath: OnConfirm.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1229172497}
+    - target: {fileID: 114710839301753246, guid: dc26f056f492a8b44b9525b72dda3044,
+        type: 2}
+      propertyPath: OnConfirm.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ConfirmReady
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: dc26f056f492a8b44b9525b72dda3044, type: 2}

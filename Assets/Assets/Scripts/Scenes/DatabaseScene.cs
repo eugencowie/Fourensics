@@ -322,15 +322,6 @@ public class DatabaseScene : MonoBehaviour
                     {
                         if (t.gameObject.GetComponent<Text>() != null)
                             t.gameObject.GetComponent<Text>().text = entry.Value;
-
-                        if (player != m_user.Id && t.gameObject.name == "Alert" && !StaticClues.SeenSlots.Any(s => s.Equals(new SlotData(playerNb.ToString(), (slotNb + 1).ToString(), entry.Value))))
-                        {
-                            t.gameObject.SetActive(true);
-
-                            foreach (Transform t2 in Data[playerNb].PlayerButton.transform)
-                                if (t2.gameObject.name == "Alert")
-                                    t2.gameObject.SetActive(true);
-                        }
                     }
 
                     newObj.GetComponent<DragHandler>().enabled = false;
@@ -353,6 +344,19 @@ public class DatabaseScene : MonoBehaviour
                 else if (entry.Key.Id == "description")
                 {
                     slot.GetComponent<Slot>().Text.GetComponent<Text>().text = entry.Value;
+
+                    foreach (Transform t1 in slot.transform)
+                    {
+                        foreach (Transform t in t1)
+                        {
+                            t.gameObject.SetActive(true);
+
+                            foreach (Transform t2 in Data[playerNb].PlayerButton.transform)
+                                if (t2.gameObject.name == "Alert")
+                                    t2.gameObject.SetActive(true);
+                        }
+                    }
+                    
                     if (player == m_user.Id)
                     {
                         slot.GetComponent<Slot>().EditButton.gameObject.SetActive(true);

@@ -60,10 +60,10 @@ public class RoomScene : MonoBehaviour
         User m_user = await User.Get();
         Lobby m_lobby = await Lobby.Get(m_user);
 
-        foreach (LobbyUserItem clue in m_lobby.Users.Where(u => u.UserId.Value != m_user.Id).Select(u => u.Items).SelectMany(i => i))
+        foreach (LobbyUserItem clue in CloudManager.OtherUsers(m_lobby, m_user).Select(u => u.Items).SelectMany(i => i))
             clue.ValueChanged += OnSlotChanged;
 
-        foreach (LobbyUser user in m_lobby.Users)
+        foreach (LobbyUser user in CloudManager.AllUsers(m_lobby))
             user.Ready.ValueChanged += OnReadyChanged;
     }
 
@@ -136,30 +136,25 @@ public class RoomScene : MonoBehaviour
 
     private async void OnSlotChanged(CloudNode entry)
     {
-        string[] keys = entry.Key.ToString().Split('/');
-        if (keys.Length >= 5)
+        int slotNb = -1;
+        if (int.TryParse(entry.Key.Parent.Id, out slotNb))
         {
-            string field = keys[4];
-
-            if (entry.Value != null && field == "name")
+            if (entry.Value != null && entry.Key.Id == "description")
             {
                 string value = entry.Value;
 
-                int slot;
-                if (!string.IsNullOrEmpty(value) && int.TryParse(keys[3].Replace("slot-", ""), out slot))
+                User m_user = await User.Get();
+                Lobby m_lobby = await Lobby.Get(m_user);
+
+                string player = m_lobby.Users.First(x => x.Id == entry.Key.Parent.Parent.Parent.Id).UserId.Value;
+                int playerNb = CloudManager.GetPlayerNumber(m_user, m_lobby, player);
+
+                if (DatabaseButton != null && !StaticClues.SeenSlots.Any(s => s.Equals(new SlotData(player.ToString(), (slotNb + 1).ToString(), value))))
                 {
-                    User m_user = await User.Get();
-                    Lobby m_lobby = await Lobby.Get(m_user);
-                    int player = CloudManager.GetPlayerNumber(m_user, m_lobby, keys[1]);
-                    if (DatabaseButton != null && !StaticClues.SeenSlots.Any(s => s.Equals(new SlotData(player.ToString(), slot.ToString(), value))))
+                    foreach (Transform t in DatabaseButton.transform)
                     {
-                        foreach (Transform t in DatabaseButton.transform)
-                        {
-                            if (t.gameObject.name == "Alert")
-                            {
-                                t.gameObject.SetActive(true);
-                            }
-                        }
+                        if (t.gameObject.name == "Alert")
+                            t.gameObject.SetActive(true);
                     }
                 }
             }

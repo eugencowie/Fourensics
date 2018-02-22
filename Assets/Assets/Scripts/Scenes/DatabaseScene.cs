@@ -305,7 +305,7 @@ public class DatabaseScene : MonoBehaviour
 
             GameObject slot = Data[playerNb].Slots[slotNb];
 
-            if (entry.Value != null)
+            if (!string.IsNullOrWhiteSpace(entry.Value))
             {
                 if (entry.Key.Id == "name")
                 {
@@ -356,7 +356,7 @@ public class DatabaseScene : MonoBehaviour
                                     t2.gameObject.SetActive(true);
                         }
                     }
-                    
+
                     if (player == m_user.Id)
                     {
                         slot.GetComponent<Slot>().EditButton.gameObject.SetActive(true);
@@ -383,39 +383,39 @@ public class DatabaseScene : MonoBehaviour
                 }
                 else if (entry.Key.Id == "image")
                 {
-                    if (!string.IsNullOrEmpty(entry.Value))
+                    foreach (Transform t1 in slot.transform)
                     {
-                        foreach (Transform t1 in slot.transform)
+                        foreach (Transform t in t1)
                         {
-                            foreach (Transform t in t1)
-                            {
-                                if (t.gameObject.name == "Image" && t.gameObject.GetComponent<Image>() != null)
-                                    t.gameObject.GetComponent<Image>().sprite = Resources.Load<Sprite>(entry.Value);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        foreach (Transform t1 in slot.transform)
-                        {
-                            foreach (Transform t in t1)
-                            {
-                                if (t.gameObject.name == "Image" && t.gameObject.GetComponent<Image>() != null)
-                                    t.gameObject.SetActive(false);
+                            if (t.gameObject.name == "Image" && t.gameObject.GetComponent<Image>() != null)
+                                t.gameObject.GetComponent<Image>().sprite = Resources.Load<Sprite>(entry.Value);
 
-                                if (t.gameObject.GetComponent<Text>() != null)
-                                    t.gameObject.SetActive(true); // TODO: REMOVE TEMP FIX
-                            }
+                            if (t.gameObject.GetComponent<Text>() != null)
+                                t.gameObject.GetComponent<Text>().text = "";
                         }
                     }
                 }
             }
             else
             {
-                slot.GetComponent<Slot>().Text.GetComponent<Text>().text = "";
+                if (entry.Key.Id == "image")
+                {
+                    foreach (Transform t1 in slot.transform)
+                    {
+                        foreach (Transform t in t1)
+                        {
+                            if (t.gameObject.name == "Image" && t.gameObject.GetComponent<Image>() != null)
+                                t.gameObject.SetActive(false);
+                        }
+                    }
+                }
+                else
+                {
+                    slot.GetComponent<Slot>().Text.GetComponent<Text>().text = "";
 
-                foreach (Transform t1 in slot.transform)
-                    Destroy(t1.gameObject);
+                    foreach (Transform t1 in slot.transform)
+                        Destroy(t1.gameObject);
+                }
             }
 
             if (player == m_user.Id)

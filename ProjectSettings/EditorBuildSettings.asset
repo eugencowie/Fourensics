@@ -9,17 +9,17 @@ EditorBuildSettings:
     path: Assets/Assets/Scenes/Lobby.unity
     guid: 6aa7f954fd1fca3499510d504f8a2756
   - enabled: 1
-    path: Assets/Assets/Scenes/Rooms/Bartender.unity
-    guid: d858c1784694de949a44880b19d2d3c1
+    path: Assets/Assets/Scenes/The Deal Scenes/Warehouse.unity
+    guid: e3d615ffdd089774eb8418f7592c1da0
+  - enabled: 1
+    path: Assets/Assets/Scenes/Rooms/Syndicate/HotelGarden.unity
+    guid: 342277ef8889cd046af8f2d0bdc12bcc
   - enabled: 1
     path: Assets/Assets/Scenes/Rooms/Defendant.unity
     guid: f7b8758782bca24488d6b69a5cd0426d
   - enabled: 1
     path: Assets/Assets/Scenes/Rooms/Judge.unity
     guid: 6c25eec06492f8d47bc18006da98b0f3
-  - enabled: 1
-    path: Assets/Assets/Scenes/Rooms/Lawyer.unity
-    guid: 762d1d827963c334399a08a88d5b35ae
   - enabled: 1
     path: Assets/Assets/Scenes/Database.unity
     guid: 02d35302db79d7e479cf809d7054dc2b

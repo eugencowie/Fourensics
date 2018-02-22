@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class InventorySaveLoad : MonoBehaviour
 {
-    private void Awake()
+    private void Start()
     {
         Load();
     }

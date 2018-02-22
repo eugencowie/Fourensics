@@ -32,7 +32,7 @@ public class VotingDatabaseScene : MonoBehaviour
         MainScreen.SetActive(false);
         WaitScreen.SetActive(true);
 
-        int scene = (int)(m_lobby.Users.First(u => u.UserId.Value == m_user.Id).Scene.Value ?? 0);
+        int scene = (int)(CloudManager.OnlyUser(m_lobby, m_user).Scene.Value ?? 0);
         if (scene > 0)
         {
             m_scene = scene;
@@ -120,10 +120,10 @@ public class VotingDatabaseScene : MonoBehaviour
 
         int tmp = 0;
         //User player = await CloudManager.DownloadClues(tmp);
-        for (int j = 0; j < m_lobby.Users.First(u => u.UserId.Value == m_user.Id).Items.Length; j++)
+        for (int j = 0; j < CloudManager.OnlyUser(m_lobby, m_user).Items.Length; j++)
         {
             int tmp2 = j;
-            var clue = m_lobby.Users.First(u => u.UserId.Value == m_user.Id).Items[tmp2];
+            var clue = CloudManager.OnlyUser(m_lobby, m_user).Items[tmp2];
             CheckPlayerItemsLoaded();
             if (!string.IsNullOrEmpty(clue.Name.Value))
             {

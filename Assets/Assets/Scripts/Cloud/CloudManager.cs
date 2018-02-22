@@ -162,7 +162,7 @@ static class CloudManager
         players.Insert(0, user.Id);
         if (playerNb < players.Count)
         {
-            return await Cloud.Fetch<User>("users", players[playerNb]);
+            return await Cloud.Fetch<User>(new Key("users").Child(players[playerNb]));
         }
         else return null;
     }

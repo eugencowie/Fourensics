@@ -34,7 +34,7 @@ class Lobby : ICloudObject
             m_instance = null;
 
         else if (m_instance == null || m_instance.Id != user.Lobby.Value)
-            m_instance = await Cloud.Fetch<Lobby>("lobbies", user.Lobby.Value);
+            m_instance = await Cloud.Fetch<Lobby>(new Key("lobbies").Child(user.Lobby.Value));
 
         return m_instance;
     }
@@ -44,7 +44,7 @@ class Lobby : ICloudObject
         if (string.IsNullOrWhiteSpace(id))
             return null;
 
-        return m_instance = Cloud.Create<Lobby>("lobbies", id);
+        return m_instance = Cloud.Create<Lobby>(new Key("lobbies").Child(id));
     }
 }
 
@@ -66,7 +66,7 @@ class LobbyUser : ICloudObject
         Scene = CloudNode<long>.Create(Key.Child("scene"));
         Ready = CloudNode<bool>.Create(Key.Child("ready"));
         Vote = CloudNode.Create(Key.Child("vote"));
-        Items = "012345".Select(n => Cloud.Create<LobbyUserItem>($"{Key}/items", n.ToString())).ToArray();
+        Items = "012345".Select(n => Cloud.Create<LobbyUserItem>(Key.Child("items").Child(n.ToString()))).ToArray();
     }
 
     async Task ICloudObject.Fetch(Key key)
@@ -76,7 +76,7 @@ class LobbyUser : ICloudObject
         Scene = await CloudNode<long>.Fetch(Key.Child("scene"));
         Ready = await CloudNode<bool>.Fetch(Key.Child("ready"));
         Vote = await CloudNode.Fetch(Key.Child("vote"));
-        Items = await Task.WhenAll("012345".Select(n => Cloud.Fetch<LobbyUserItem>($"{Key}/items", n.ToString())));
+        Items = await Task.WhenAll("012345".Select(n => Cloud.Fetch<LobbyUserItem>(Key.Child("items").Child(n.ToString()))));
     }
 }
 

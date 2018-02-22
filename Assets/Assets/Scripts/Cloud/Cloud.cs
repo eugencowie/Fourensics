@@ -3,6 +3,7 @@ using Firebase.Auth;
 using Firebase.Database;
 using Firebase.Unity.Editor;
 using Google;
+using System;
 using System.Threading.Tasks;
 
 class Key
@@ -12,6 +13,9 @@ class Key
 
     public Key(string id, Key parent = null)
     {
+        if (id.Contains("/"))
+            throw new ArgumentException("No slashes in key id, use parent parameter instead", "id");
+
         Id = id;
         Parent = parent;
     }
@@ -58,8 +62,4 @@ static class Cloud
         await obj.Fetch(key);
         return obj;
     }
-
-    public static T Create<T>(string path, string id) where T : ICloudObject, new() => Create<T>(new Key(path).Child(id));
-
-    public static Task<T> Fetch<T>(string path, string id) where T : ICloudObject, new() => Fetch<T>(new Key(path).Child(id));
 }

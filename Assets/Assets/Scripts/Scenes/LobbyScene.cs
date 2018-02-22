@@ -237,7 +237,7 @@ class LobbyScene : MonoBehaviour
         if (state.Value.HasValue && (LobbyState)state.Value.Value == LobbyState.InGame)
         {
             // Get this user's scene
-            int scene = (int)(m_lobby.Users.First(u => u.UserId.Value == m_user.Id).Scene.Value ?? 0);
+            int scene = (int)(CloudManager.OnlyUser(m_lobby, m_user).Scene.Value ?? 0);
 
             if (scene >= 1 && scene <= 4)
             {

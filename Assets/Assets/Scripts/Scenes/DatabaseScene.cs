@@ -75,7 +75,7 @@ public class DatabaseScene : MonoBehaviour
         MainScreen.SetActive(false);
         WaitScreen.SetActive(true);
 
-        int scene = (int)(m_lobby.Users.First(u => u.UserId.Value == m_user.Id).Scene.Value ?? 0);
+        int scene = (int)(CloudManager.OnlyUser(m_lobby, m_user).Scene.Value ?? 0);
         if (scene > 0)
         {
             m_scene = scene;
@@ -105,10 +105,10 @@ public class DatabaseScene : MonoBehaviour
         User m_user = await User.Get();
         Lobby m_lobby = await Lobby.Get(m_user);
 
-        foreach (LobbyUserItem clue in m_lobby.Users.Where(u => u.UserId.Value != m_user.Id).Select(u => u.Items).SelectMany(i => i))
+        foreach (LobbyUserItem clue in CloudManager.OtherUsers(m_lobby, m_user).Select(u => u.Items).SelectMany(i => i))
             clue.ValueChanged += OnSlotChangedAsync;
 
-        foreach (LobbyUser user in m_lobby.Users)
+        foreach (LobbyUser user in CloudManager.AllUsers(m_lobby))
             user.Ready.ValueChanged += OnReadyChanged;
     }
 
@@ -137,7 +137,7 @@ public class DatabaseScene : MonoBehaviour
                 var text = t.GetComponent<Text>();
                 if (text != null) text.text = "Waiting...";
             }
-            CloudNode<bool> ready = m_lobby.Users.First(u => u.UserId.Value == m_user.Id).Ready;
+            CloudNode<bool> ready = CloudManager.OnlyUser(m_lobby, m_user).Ready;
             ready.Value = true;
             OnReadyChanged(ready);
         }
@@ -276,10 +276,10 @@ public class DatabaseScene : MonoBehaviour
 
         int tmp = 0;
         //User player = await CloudManager.DownloadClues(tmp);
-        for (int j = 0; j < m_lobby.Users.First(u => u.UserId.Value == m_user.Id).Items.Length; j++)
+        for (int j = 0; j < CloudManager.OnlyUser(m_lobby, m_user).Items.Length; j++)
         {
             int tmp2 = j;
-            LobbyUserItem clue = m_lobby.Users.First(u => u.UserId.Value == m_user.Id).Items[tmp2];
+            LobbyUserItem clue = CloudManager.OnlyUser(m_lobby, m_user).Items[tmp2];
             CheckPlayerItemsLoaded();
             if (!string.IsNullOrEmpty(clue.Name.Value))
             {

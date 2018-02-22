@@ -40,7 +40,7 @@ public class VotingScene : MonoBehaviour
         ReturnButton.SetActive(false);
         //VoteButton.SetActive(false);
 
-        int scene = (int)(m_lobby.Users.First(u => u.UserId.Value == m_user.Id).Scene.Value ?? 0);
+        int scene = (int)(CloudManager.OnlyUser(m_lobby, m_user).Scene.Value ?? 0);
         if (scene > 0)
         {
             m_scene = scene;
@@ -152,7 +152,7 @@ public class VotingScene : MonoBehaviour
         var current = Suspects.First(s => s.gameObject.activeSelf);
         if (current != null)
         {
-            m_lobby.Users.First(u => u.UserId.Value == m_user.Id).Vote.Value = current.Name.text;
+            CloudManager.OnlyUser(m_lobby, m_user).Vote.Value = current.Name.text;
             SceneManager.LoadScene("VotingWait");
         }
     }

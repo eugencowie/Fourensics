@@ -128,7 +128,7 @@ public class RoomScene : MonoBehaviour
                 var text = t.GetComponent<Text>();
                 if (text != null) text.text = "Waiting...";
             }
-            CloudNode<bool> ready = m_lobby.Users.First(u => u.UserId.Value == m_user.Id).Ready;
+            CloudNode<bool> ready = CloudManager.OnlyUser(m_lobby, m_user).Ready;
             ready.Value = true;
             OnReadyChanged(ready);
         }

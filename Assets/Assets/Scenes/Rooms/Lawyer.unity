@@ -139,6 +139,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0a8ecbd9b98fe940ac61450a8fb6b1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  InspectRotation: {x: 0, y: 0, z: 0}
   InspectScale: 1.5
   audioSource: {fileID: 0}
   audioClip: {fileID: 8300000, guid: bb3e08a62e10a054c83a73db77ae7310, type: 3}
@@ -1325,6 +1326,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0a8ecbd9b98fe940ac61450a8fb6b1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  InspectRotation: {x: 0, y: 0, z: 0}
   InspectScale: 2
   audioSource: {fileID: 0}
   audioClip: {fileID: 8300000, guid: f2c28aed90148524e9cf6b46f04f8120, type: 3}
@@ -1732,6 +1734,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0a8ecbd9b98fe940ac61450a8fb6b1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  InspectRotation: {x: 0, y: 0, z: 0}
   InspectScale: 3
   audioSource: {fileID: 0}
   audioClip: {fileID: 8300000, guid: 856b26bf1e7554e4ab6e66231197f906, type: 3}
@@ -2041,6 +2044,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0a8ecbd9b98fe940ac61450a8fb6b1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  InspectRotation: {x: 0, y: 0, z: 0}
   InspectScale: 1.9
   audioSource: {fileID: 0}
   audioClip: {fileID: 8300000, guid: 098f23cce2cf5ab42b71f693c4ba752a, type: 3}
@@ -2224,6 +2228,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0a8ecbd9b98fe940ac61450a8fb6b1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  InspectRotation: {x: 0, y: 0, z: 0}
   InspectScale: 0.15
   audioSource: {fileID: 0}
   audioClip: {fileID: 8300000, guid: f2c28aed90148524e9cf6b46f04f8120, type: 3}
@@ -2433,6 +2438,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0a8ecbd9b98fe940ac61450a8fb6b1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  InspectRotation: {x: 0, y: 0, z: 180}
   InspectScale: 3
   audioSource: {fileID: 0}
   audioClip: {fileID: 8300000, guid: b45f8975336da7b45857b2c1c64c8d2e, type: 3}
@@ -2598,6 +2604,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0a8ecbd9b98fe940ac61450a8fb6b1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  InspectRotation: {x: 0, y: 0, z: 0}
   InspectScale: 3
   audioSource: {fileID: 0}
   audioClip: {fileID: 8300000, guid: b45f8975336da7b45857b2c1c64c8d2e, type: 3}
@@ -4914,6 +4921,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0a8ecbd9b98fe940ac61450a8fb6b1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  InspectRotation: {x: -90, y: 0, z: 0}
   InspectScale: 0.5
   audioSource: {fileID: 0}
   audioClip: {fileID: 8300000, guid: b0b6a429ed07e8c46a05732737878967, type: 3}
@@ -5815,6 +5823,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0a8ecbd9b98fe940ac61450a8fb6b1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  InspectRotation: {x: 0, y: 0, z: 0}
   InspectScale: 3
   audioSource: {fileID: 0}
   audioClip: {fileID: 0}
@@ -6001,7 +6010,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0a8ecbd9b98fe940ac61450a8fb6b1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  InspectScale: 3
+  InspectRotation: {x: 180, y: 0, z: 0}
+  InspectScale: 2
   audioSource: {fileID: 0}
   audioClip: {fileID: 8300000, guid: 2f7145665bd581747af98d510140c193, type: 3}
 --- !u!1001 &1358125082
@@ -6898,6 +6908,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0a8ecbd9b98fe940ac61450a8fb6b1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  InspectRotation: {x: 0, y: 0, z: 0}
   InspectScale: 2
   audioSource: {fileID: 0}
   audioClip: {fileID: 8300000, guid: 2f7145665bd581747af98d510140c193, type: 3}
@@ -7396,6 +7407,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0a8ecbd9b98fe940ac61450a8fb6b1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  InspectRotation: {x: 0, y: 0, z: 0}
   InspectScale: 3
   audioSource: {fileID: 0}
   audioClip: {fileID: 8300000, guid: 2f7145665bd581747af98d510140c193, type: 3}
@@ -7901,6 +7913,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0a8ecbd9b98fe940ac61450a8fb6b1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  InspectRotation: {x: 0, y: 0, z: 0}
   InspectScale: 3
   audioSource: {fileID: 0}
   audioClip: {fileID: 8300000, guid: bb3e08a62e10a054c83a73db77ae7310, type: 3}
@@ -8449,7 +8462,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0a8ecbd9b98fe940ac61450a8fb6b1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  InspectScale: 2
+  InspectRotation: {x: 0, y: -90, z: 0}
+  InspectScale: 1
   audioSource: {fileID: 0}
   audioClip: {fileID: 8300000, guid: bb3e08a62e10a054c83a73db77ae7310, type: 3}
 --- !u!65 &2009853629

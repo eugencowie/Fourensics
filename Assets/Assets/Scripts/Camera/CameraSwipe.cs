@@ -4,6 +4,7 @@ using UnityEngine.EventSystems;
 [RequireComponent(typeof(Camera))]
 public class CameraSwipe : MonoBehaviour
 {
+    [SerializeField] bool m_enableConstraints = true;
     [SerializeField] private int LeftConstraint = 20;
     [SerializeField] private int RightConstraint = 255;
 
@@ -36,8 +37,9 @@ public class CameraSwipe : MonoBehaviour
             Vector3 screenPos = m_camera.ScreenToViewportPoint(Input.mousePosition - m_touchOrigin);
 
             float movement = screenPos.normalized.x * m_turnSpeed * Time.deltaTime * -1;
-
-            if (transform.rotation.eulerAngles.y > LeftConstraint - movement && transform.rotation.eulerAngles.y < RightConstraint - movement)
+            
+            if (m_enableConstraints == false || (transform.rotation.eulerAngles.y > LeftConstraint - movement &&
+                transform.rotation.eulerAngles.y < RightConstraint - movement))
             {
                 transform.RotateAround(transform.position, Vector3.up, movement);
             }

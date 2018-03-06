@@ -132,6 +132,9 @@ public class CameraTap : MonoBehaviour
             newObject.transform.parent = m_camera.transform;
             newObject.transform.localPosition = new Vector3(0, 0, 0.1f);
             newObject.transform.localScale *= inspectable.InspectScale * 0.1f;
+            newObject.transform.localRotation =
+                Quaternion.AngleAxis(180, Vector3.up) *
+                Quaternion.Euler(inspectable.InspectRotation);
 
             newObject.AddComponent<ObjectInspecting>().OnInspectEnded = () => {
                 HideHintPanel();

@@ -8455,15 +8455,15 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400000, guid: b4bcc1a128984a64888fdd23f2148531, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -112.11684
+      value: -111.899666
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: b4bcc1a128984a64888fdd23f2148531, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -211.28471
+      value: -211.27875
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: b4bcc1a128984a64888fdd23f2148531, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -265.53864
+      value: -265.53113
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: b4bcc1a128984a64888fdd23f2148531, type: 3}
       propertyPath: m_LocalRotation.x
@@ -8488,6 +8488,30 @@ Prefab:
     - target: {fileID: 400000, guid: b4bcc1a128984a64888fdd23f2148531, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 77.314
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: b4bcc1a128984a64888fdd23f2148531, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.05699344
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: b4bcc1a128984a64888fdd23f2148531, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.0059814453
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: b4bcc1a128984a64888fdd23f2148531, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.0000035911798
+      objectReference: {fileID: 0}
+    - target: {fileID: 400002, guid: b4bcc1a128984a64888fdd23f2148531, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.056963667
+      objectReference: {fileID: 0}
+    - target: {fileID: 400002, guid: b4bcc1a128984a64888fdd23f2148531, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.0059661865
+      objectReference: {fileID: 0}
+    - target: {fileID: 400002, guid: b4bcc1a128984a64888fdd23f2148531, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.0000031106174
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b4bcc1a128984a64888fdd23f2148531, type: 3}
@@ -8522,8 +8546,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0a8ecbd9b98fe940ac61450a8fb6b1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  InspectRotation: {x: 0, y: -90, z: 0}
-  InspectScale: 1
+  InspectRotation: {x: 0, y: -90, z: -20}
+  InspectScale: 2
   audioSource: {fileID: 0}
   audioClip: {fileID: 8300000, guid: bb3e08a62e10a054c83a73db77ae7310, type: 3}
 --- !u!65 &2009853629
@@ -8536,8 +8560,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.3568591, y: 0.2639079, z: 0.42452937}
-  m_Center: {x: 0.1116148, y: 0.11673951, z: 0.24921428}
+  m_Size: {x: 0.32930058, y: 0.2639079, z: 0.37200695}
+  m_Center: {x: 0.06409055, y: 0.11673951, z: -0.009799704}
 --- !u!4 &2009853630 stripped
 Transform:
   m_PrefabParentObject: {fileID: 400000, guid: b4bcc1a128984a64888fdd23f2148531, type: 3}

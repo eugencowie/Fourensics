@@ -6680,7 +6680,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0a8ecbd9b98fe940ac61450a8fb6b1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  InspectRotation: {x: 0, y: 0, z: 0}
+  InspectRotation: {x: 0, y: -90, z: -20}
   InspectScale: 2
   audioSource: {fileID: 0}
   audioClip: {fileID: 8300000, guid: bb3e08a62e10a054c83a73db77ae7310, type: 3}
@@ -6710,8 +6710,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.6529476, y: 0.56833047, z: 0.7439782}
-  m_Center: {x: -0.04105653, y: 0.067271456, z: 0.17859414}
+  m_Size: {x: 0.39382735, y: 0.28611675, z: 0.507022}
+  m_Center: {x: 0.017180283, y: 0.09469225, z: 0.04330989}
 --- !u!82 &1142571150
 AudioSource:
   m_ObjectHideFlags: 0
@@ -7695,15 +7695,15 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400000, guid: df2ef6bc9e7add54f8bed488e70b4593, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2.817
+      value: -2.872078
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: df2ef6bc9e7add54f8bed488e70b4593, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.669
+      value: -2.8163674
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: df2ef6bc9e7add54f8bed488e70b4593, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.077
+      value: 0.08132669
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: df2ef6bc9e7add54f8bed488e70b4593, type: 3}
       propertyPath: m_LocalRotation.x
@@ -7748,6 +7748,30 @@ Prefab:
     - target: {fileID: 400000, guid: df2ef6bc9e7add54f8bed488e70b4593, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: -90.00001
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: df2ef6bc9e7add54f8bed488e70b4593, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.056974135
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: df2ef6bc9e7add54f8bed488e70b4593, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.005975958
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: df2ef6bc9e7add54f8bed488e70b4593, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.00000024440945
+      objectReference: {fileID: 0}
+    - target: {fileID: 400002, guid: df2ef6bc9e7add54f8bed488e70b4593, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.056973964
+      objectReference: {fileID: 0}
+    - target: {fileID: 400002, guid: df2ef6bc9e7add54f8bed488e70b4593, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.0059761945
+      objectReference: {fileID: 0}
+    - target: {fileID: 400002, guid: df2ef6bc9e7add54f8bed488e70b4593, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.00000003859097
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: df2ef6bc9e7add54f8bed488e70b4593, type: 3}

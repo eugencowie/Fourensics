@@ -40,7 +40,7 @@ class User : ICloudObject
             if (Application.isEditor)
             {
                 // Fetch user from the cloud using device id
-                m_instance = await Cloud.Fetch<User>(new Key("users").Child($"dev-{SystemInfo.deviceUniqueIdentifier}"));
+                m_instance = await Cloud.Fetch<User>(new Key("users").Child($"000_dev_{SystemInfo.deviceUniqueIdentifier}"));
                 m_instance.Name.Value = $"Dev #{SystemInfo.deviceUniqueIdentifier.Substring(0, 7)}";
             }
             else

@@ -96,6 +96,7 @@ static class CloudManager
     static void DeleteLobby(Lobby lobby)
     {
         lobby.State.Value = null;
+        lobby.Case.Value = null;
 
         foreach (LobbyUser userInfo in lobby.Users)
         {

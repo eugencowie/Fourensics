@@ -130,6 +130,9 @@ class LobbyScene : MonoBehaviour
             Lobby lobby = Lobby.Create(code);
             lobby.State.Value = (int)LobbyState.Lobby;
 
+            // TODO: use value from case selector
+            lobby.Case.Value = 1;
+
             // Get user database object
             User m_user = await User.Get();
 
@@ -236,17 +239,25 @@ class LobbyScene : MonoBehaviour
 
         if (state.Value.HasValue && (LobbyState)state.Value.Value == LobbyState.InGame)
         {
-            // Get this user's scene
-            int scene = (int)(CloudManager.OnlyUser(m_lobby, m_user).Scene.Value ?? 0);
+            // Get lobby case number
+            int caseNb = (int)(m_lobby.Case.Value ?? 0);
 
-            if (scene >= 1 && scene <= 4)
+            if (caseNb >= 1 && caseNb <= 2)
             {
-                // Deregister lobby state change callback
-                if (m_lobby.Users[0].UserId.Value != m_user.Id)
-                    m_lobby.State.ValueChanged -= LobbyStateChanged;
+                const int scenesPerCase = 4;
 
-                // Load this user's scene
-                SceneManager.LoadScene(scene);
+                // Get this user's scene
+                int scene = (int)(CloudManager.OnlyUser(m_lobby, m_user).Scene.Value ?? 0);
+
+                if (scene >= 1 && scene <= scenesPerCase)
+                {
+                    // Deregister lobby state change callback
+                    if (m_lobby.Users[0].UserId.Value != m_user.Id)
+                        m_lobby.State.ValueChanged -= LobbyStateChanged;
+
+                    // Load this user's scene
+                    SceneManager.LoadScene(((caseNb - 1) * scenesPerCase) + scene);
+                }
             }
         }
     }

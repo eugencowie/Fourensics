@@ -149,7 +149,7 @@ public class RoomScene : MonoBehaviour
                 string player = m_lobby.Users.First(x => x.Id == entry.Key.Parent.Parent.Parent.Id).UserId.Value;
                 int playerNb = CloudManager.GetPlayerNumber(m_user, m_lobby, player);
 
-                if (DatabaseButton != null && !StaticClues.SeenSlots.Any(s => s.Equals(new SlotData(player.ToString(), (slotNb + 1).ToString(), value))))
+                if (DatabaseButton != null && !StaticClues.SeenSlots.Any(s => s.Equals(new SlotData(playerNb.ToString(), (slotNb + 1).ToString(), value))))
                 {
                     foreach (Transform t in DatabaseButton.transform)
                     {

@@ -8,6 +8,7 @@ class Lobby : ICloudObject
 {
     public Key Key { get; private set; }
     public CloudNode<long> State { get; private set; }
+    public CloudNode<long> Case { get; private set; }
     public LobbyUser[] Users { get; private set; }
 
     public string Id => Key.Id;
@@ -16,6 +17,7 @@ class Lobby : ICloudObject
     {
         Key = key;
         State = CloudNode<long>.Create(Key.Child("state"));
+        Case = CloudNode<long>.Create(Key.Child("case"));
         Users = "0123".Select(n => Cloud.Create<LobbyUser>(Key.Child("users").Child(n.ToString()))).ToArray();
     }
 
@@ -23,6 +25,7 @@ class Lobby : ICloudObject
     {
         Key = key;
         State = await CloudNode<long>.Fetch(Key.Child("state"));
+        Case = await CloudNode<long>.Fetch(Key.Child("case"));
         Users = await Task.WhenAll("0123".Select(n => Cloud.Fetch<LobbyUser>(Key.Child("users").Child(n.ToString()))));
     }
 

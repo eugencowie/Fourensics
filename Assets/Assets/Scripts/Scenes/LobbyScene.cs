@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -9,6 +10,7 @@ class LobbyScene : MonoBehaviour
     [SerializeField] InputField m_codeField = null;
 
     [SerializeField] GameObject m_startPanel = null;
+    [SerializeField] GameObject m_createPanel = null;
     [SerializeField] GameObject m_joinPanel = null;
     [SerializeField] GameObject m_lobbyPanel = null;
     [SerializeField] GameObject m_waitPanel = null;
@@ -116,7 +118,16 @@ class LobbyScene : MonoBehaviour
     /// <summary>
     /// Called when the create button in the start panel is pressed.
     /// </summary>
-    public async void CreateButtonPressed()
+    public void CreateButtonPressed()
+    {
+        // Show create panel
+        SwitchPanel(m_createPanel);
+    }
+
+    /// <summary>
+    /// Called when one of the case buttons in the create panel is pressed.
+    /// </summary>
+    public async Task CaseButtonPressed(int caseNb)
     {
         // Show wait panel
         SwitchPanel(m_waitPanel);
@@ -129,6 +140,7 @@ class LobbyScene : MonoBehaviour
             // Create new lobby
             Lobby lobby = Lobby.Create(code);
             lobby.State.Value = (int)LobbyState.Lobby;
+            lobby.Case.Value = caseNb;
 
             // Get user database object
             User m_user = await User.Get();
@@ -162,6 +174,9 @@ class LobbyScene : MonoBehaviour
             SwitchPanel(m_startPanel);
         }
     }
+
+    public async void Case1ButtonPressed() => await CaseButtonPressed(1);
+    public async void Case2ButtonPressed() => await CaseButtonPressed(2);
 
     /// <summary>
     /// Called when the leave button in the lobby panel is pressed.
@@ -219,7 +234,7 @@ class LobbyScene : MonoBehaviour
     void SwitchPanel(GameObject panel)
     {
         // Disable all panels
-        foreach (var p in new GameObject[] { m_startPanel, m_joinPanel, m_lobbyPanel, m_waitPanel })
+        foreach (var p in new GameObject[] { m_startPanel, m_createPanel, m_joinPanel, m_lobbyPanel, m_waitPanel })
         {
             p.SetActive(false);
         }
@@ -236,17 +251,25 @@ class LobbyScene : MonoBehaviour
 
         if (state.Value.HasValue && (LobbyState)state.Value.Value == LobbyState.InGame)
         {
-            // Get this user's scene
-            int scene = (int)(CloudManager.OnlyUser(m_lobby, m_user).Scene.Value ?? 0);
+            // Get lobby case number
+            int caseNb = (int)(m_lobby.Case.Value ?? 0);
 
-            if (scene >= 1 && scene <= 4)
+            if (caseNb >= 1 && caseNb <= 2)
             {
-                // Deregister lobby state change callback
-                if (m_lobby.Users[0].UserId.Value != m_user.Id)
-                    m_lobby.State.ValueChanged -= LobbyStateChanged;
+                const int scenesPerCase = 4;
 
-                // Load this user's scene
-                SceneManager.LoadScene(scene);
+                // Get this user's scene
+                int scene = (int)(CloudManager.OnlyUser(m_lobby, m_user).Scene.Value ?? 0);
+
+                if (scene >= 1 && scene <= scenesPerCase)
+                {
+                    // Deregister lobby state change callback
+                    if (m_lobby.Users[0].UserId.Value != m_user.Id)
+                        m_lobby.State.ValueChanged -= LobbyStateChanged;
+
+                    // Load this user's scene
+                    SceneManager.LoadScene(((caseNb - 1) * scenesPerCase) + scene);
+                }
             }
         }
     }

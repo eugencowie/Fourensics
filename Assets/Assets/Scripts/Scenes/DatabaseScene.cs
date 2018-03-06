@@ -148,8 +148,26 @@ public class DatabaseScene : MonoBehaviour
         if (ReturnButton.activeSelf)
         {
             ReturnButton.SetActive(false);
-            await DeregisterListeners();
-            SceneManager.LoadScene(m_scene);
+
+            // Get database objects
+            User m_user = await User.Get();
+            Lobby m_lobby = await Lobby.Get(m_user);
+
+            // Get lobby case number
+            int caseNb = (int)(m_lobby.Case.Value ?? 0);
+            if (caseNb >= 1 && caseNb <= 2)
+            {
+                const int scenesPerCase = 4;
+
+                // Get this user's scene
+                int scene = (int)(CloudManager.OnlyUser(m_lobby, m_user).Scene.Value ?? 0);
+
+                if (scene >= 1 && scene <= scenesPerCase)
+                {
+                    await DeregisterListeners();
+                    SceneManager.LoadScene(((caseNb - 1) * scenesPerCase) + scene);
+                }
+            }
         }
     }
 

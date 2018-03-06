@@ -345,19 +345,21 @@ public class DatabaseScene : MonoBehaviour
                 {
                     slot.GetComponent<Slot>().Text.GetComponent<Text>().text = entry.Value;
 
-                    foreach (Transform t1 in slot.transform)
+                    if (player != m_user.Id)
                     {
-                        foreach (Transform t in t1)
+                        foreach (Transform t1 in slot.transform)
                         {
-                            t.gameObject.SetActive(true);
+                            foreach (Transform t in t1)
+                            {
+                                t.gameObject.SetActive(true);
 
-                            foreach (Transform t2 in Data[playerNb].PlayerButton.transform)
-                                if (t2.gameObject.name == "Alert")
-                                    t2.gameObject.SetActive(true);
+                                foreach (Transform t2 in Data[playerNb].PlayerButton.transform)
+                                    if (t2.gameObject.name == "Alert")
+                                        t2.gameObject.SetActive(true);
+                            }
                         }
                     }
-
-                    if (player == m_user.Id)
+                    else
                     {
                         slot.GetComponent<Slot>().EditButton.gameObject.SetActive(true);
                         slot.GetComponent<Slot>().EditButton.onClick.AddListener(() => {

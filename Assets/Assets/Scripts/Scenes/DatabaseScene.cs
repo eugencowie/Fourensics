@@ -208,11 +208,11 @@ public class DatabaseScene : MonoBehaviour
 
         for (int slot = 0; slot < data.Slots.Count; ++slot)
         {
-            foreach (Transform t in data.Slots[slot].transform)
-            {
-                //Debug.Log("BTNPRS = player-" + Data.FindIndex(d => d == data) + "/slot-" + (slot + 1) + " = " + t.gameObject.name);
-                StaticClues.SeenSlots.Add(new SlotData(Data.FindIndex(d => d == data).ToString(), (slot + 1).ToString(), t.gameObject.name, data.Slots[slot]));
-            }
+            StaticClues.SeenSlots.Add(new SlotData(
+                Data.FindIndex(d => d == data).ToString(),
+                (slot + 1).ToString(),
+                data.Slots[slot].GetComponent<Slot>().Text.GetComponent<Text>().text,
+                data.Slots[slot]));
         }
 
         m_current = data;
@@ -241,11 +241,11 @@ public class DatabaseScene : MonoBehaviour
         {
             for (int slot = 0; slot < newData.Slots.Count; ++slot)
             {
-                foreach (Transform t in newData.Slots[slot].transform)
-                {
-                    //Debug.Log("BTNPRS = player-" + Data.FindIndex(d => d == data) + "/slot-" + (slot + 1) + " = " + t.gameObject.name);
-                    StaticClues.SeenSlots.Add(new SlotData(Data.FindIndex(d => d == newData).ToString(), (slot + 1).ToString(), t.gameObject.name, newData.Slots[slot]));
-                }
+                StaticClues.SeenSlots.Add(new SlotData(
+                    Data.FindIndex(d => d == newData).ToString(),
+                    (slot + 1).ToString(),
+                    newData.Slots[slot].GetComponent<Slot>().Text.GetComponent<Text>().text,
+                    newData.Slots[slot]));
             }
         }
     }
@@ -345,7 +345,7 @@ public class DatabaseScene : MonoBehaviour
                 {
                     slot.GetComponent<Slot>().Text.GetComponent<Text>().text = entry.Value;
 
-                    if (player != m_user.Id)
+                    if (player != m_user.Id && !StaticClues.SeenSlots.Any(x => x.Equals(new SlotData(playerNb.ToString(), (slotNb + 1).ToString(), entry.Value))))
                     {
                         foreach (Transform t1 in slot.transform)
                         {

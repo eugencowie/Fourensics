@@ -96,7 +96,8 @@ public class RoomScene : MonoBehaviour
 
                 if (everyoneReady)
                 {
-                    SceneManager.LoadScene("Voting");
+                    StaticClues.SeenSlots.Clear();
+                    SceneManager.LoadScene("VotingDatabase");
                 }
             }
         }

@@ -5,9 +5,19 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+public static class StaticVotingDatabase
+{
+    public static bool SeenWelcome = false;
+
+    public static void Reset()
+    {
+        SeenWelcome = false;
+    }
+}
+
 public class VotingDatabaseScene : MonoBehaviour
 {
-    public GameObject MainScreen, WaitScreen;
+    public GameObject MainScreen, WaitScreen, WelcomeScreen;
 
     //[SerializeField] private GameObject VotingButton = null;
     [SerializeField] private GameObject ButtonTemplate = null;
@@ -21,9 +31,15 @@ public class VotingDatabaseScene : MonoBehaviour
 
     async void Start()
     {
+        if (StaticVotingDatabase.SeenWelcome)
+        {
+            MainScreen.SetActive(true);
+            WelcomeScreen.SetActive(false);
+        }
+        StaticVotingDatabase.SeenWelcome = true;
+
         User m_user = await User.Get();
         Lobby m_lobby = await Lobby.Get(m_user);
-
         if (m_lobby == null)
         {
             SceneManager.LoadScene("Lobby");

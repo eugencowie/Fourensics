@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -11,7 +12,7 @@ public class VotingDatabaseScene : MonoBehaviour
     //[SerializeField] private GameObject VotingButton = null;
     [SerializeField] private GameObject ButtonTemplate = null;
     [SerializeField] private GameObject[] Backgrounds = new GameObject[4];
-    [SerializeField] private Data[] Data = new Data[4];
+    [SerializeField] private List<Data> Data = new List<Data>();
 
     private string m_lobbyCode;
     private int m_scene;
@@ -41,14 +42,14 @@ public class VotingDatabaseScene : MonoBehaviour
             if (!string.IsNullOrEmpty(lobby))
             {
                 m_lobbyCode = lobby;
-                await DownloadItems();
                 await RegisterListeners();
+                await DownloadItems();
             }
             else SceneManager.LoadScene("Lobby");
         }
         else SceneManager.LoadScene("Lobby");
 
-        for (int i = 0; i < Data.Length; i++)
+        for (int i = 0; i < Data.Count; i++)
         {
             Data data = Data[i];
             data.PlayerButton.GetComponent<Button>().onClick.AddListener(() => PlayerButtonPressed(data));
@@ -82,6 +83,8 @@ public class VotingDatabaseScene : MonoBehaviour
         SceneManager.LoadScene("Voting");
     }
 
+    Data m_current = null;
+
     private void PlayerButtonPressed(Data data)
     {
         foreach (var button in Data.Select(d => d.PlayerButton))
@@ -99,165 +102,195 @@ public class VotingDatabaseScene : MonoBehaviour
             cluePanel.SetActive(false);
         }
         data.CluePanel.SetActive(true);
+
+        if (m_current != null)
+        {
+            for (int slot = 0; slot < m_current.Slots.Count; ++slot)
+            {
+                foreach (Transform t in m_current.Slots[slot].transform)
+                {
+                    foreach (Transform t2 in t)
+                    {
+                        if (t2.gameObject.name == "Alert")
+                            t2.gameObject.SetActive(false);
+                    }
+                }
+            }
+
+            foreach (Transform t2 in m_current.PlayerButton.transform)
+            {
+                if (t2.gameObject.name == "Alert")
+                    t2.gameObject.SetActive(false);
+            }
+        }
+
+        for (int slot = 0; slot < data.Slots.Count; ++slot)
+        {
+            StaticClues.SeenSlots.Add(new SlotData(
+                Data.FindIndex(d => d == data).ToString(),
+                (slot + 1).ToString(),
+                data.Slots[slot].GetComponent<Slot>().Text.GetComponent<Text>().text,
+                data.Slots[slot]));
+        }
+
+        m_current = data;
     }
 
-    private void CheckPlayerItemsLoaded()
+    public void PageChanged(GameObject oldPage, GameObject newPage)
     {
-        playerItemsLoaded++;
-        Debug.Log(playerItemsLoaded);
-
-        //if (playerItemsLoaded >= 24)
+        /*Data oldData = Data.First(d => d.CluePanel == oldPage.transform.parent.gameObject);
+        if (oldData != null)
         {
-            WaitScreen.SetActive(false);
-            MainScreen.SetActive(true);
+            for (int slot = 0; slot < oldData.Slots.Count; ++slot)
+            {
+                foreach (Transform t in oldData.Slots[slot].transform)
+                {
+                    foreach (Transform t2 in t)
+                    {
+                        if (t2.gameObject.name == "Alert")
+                            t2.gameObject.SetActive(false);
+                    }
+                }
+            }
+        }*/
+
+        Data newData = Data.First(d => d.CluePanel == newPage.transform.parent.gameObject);
+        if (newData != null)
+        {
+            for (int slot = 0; slot < newData.Slots.Count; ++slot)
+            {
+                StaticClues.SeenSlots.Add(new SlotData(
+                    Data.FindIndex(d => d == newData).ToString(),
+                    (slot + 1).ToString(),
+                    newData.Slots[slot].GetComponent<Slot>().Text.GetComponent<Text>().text,
+                    newData.Slots[slot]));
+            }
         }
     }
 
-    private async Task DownloadItems()
+    async Task DownloadItems()
     {
         User m_user = await User.Get();
         Lobby m_lobby = await Lobby.Get(m_user);
 
-        int tmp = 0;
-        //User player = await CloudManager.DownloadClues(tmp);
-        for (int j = 0; j < CloudManager.OnlyUser(m_lobby, m_user).Items.Length; j++)
+        foreach (LobbyUserItem item in CloudManager.AllUsers(m_lobby).Select(x => x.Items).SelectMany(x => x))
         {
-            int tmp2 = j;
-            var clue = CloudManager.OnlyUser(m_lobby, m_user).Items[tmp2];
-            CheckPlayerItemsLoaded();
-            if (!string.IsNullOrEmpty(clue.Name.Value))
+            await OnSlotChangedAsync(item.Name);
+            await OnSlotChangedAsync(item.Description);
+            await OnSlotChangedAsync(item.Image);
+        }
+    }
+
+    async void OnSlotChanged(CloudNode entry)
+    {
+        await OnSlotChangedAsync(entry);
+    }
+
+    async Task OnSlotChangedAsync(CloudNode entry)
+    {
+        // Note: entry.Key is lobbies/<lobby_id>/users/<user_id>/items/<item_id>/<field>
+
+        int slotNb = -1;
+        if (int.TryParse(entry.Key.Parent.Id, out slotNb))
+        {
+            User m_user = await User.Get();
+            Lobby m_lobby = await Lobby.Get(m_user);
+
+            string player = m_lobby.Users.First(x => x.Id == entry.Key.Parent.Parent.Parent.Id).UserId.Value;
+            int playerNb = CloudManager.GetPlayerNumber(m_user, m_lobby, player);
+
+            GameObject slot = Data[playerNb].Slots[slotNb];
+
+            if (!string.IsNullOrWhiteSpace(entry.Value))
             {
-                var slot = Data[tmp].Slots[tmp2];
-                foreach (Transform t in slot.transform) if (t.gameObject.name == clue.Name.Value) Destroy(t.gameObject);
-                var newObj = Instantiate(ButtonTemplate, ButtonTemplate.transform.parent);
-                newObj.SetActive(true);
-                newObj.name = clue.Name.Value;
-                newObj.transform.SetParent(slot.transform);
-                if (!string.IsNullOrEmpty(clue.Image.Value))
+                if (entry.Key.Id == "name")
                 {
+                    foreach (Transform t in slot.transform)
+                        if (t.gameObject.name == entry.Value)
+                            Destroy(t.gameObject);
+
+                    GameObject newObj = Instantiate(ButtonTemplate, ButtonTemplate.transform.parent);
+                    newObj.SetActive(true);
+                    newObj.name = entry.Value;
+                    newObj.transform.SetParent(slot.transform);
+
                     foreach (Transform t in newObj.transform)
                     {
                         if (t.gameObject.GetComponent<Text>() != null)
+                            t.gameObject.GetComponent<Text>().text = entry.Value;
+                    }
+
+                    newObj.GetComponent<DragHandler>().enabled = false;
+                }
+                else if (entry.Key.Id == "description")
+                {
+                    slot.GetComponent<Slot>().Text.GetComponent<Text>().text = entry.Value;
+
+                    if (player != m_user.Id && !StaticClues.SeenSlots.Any(x => x.Equals(new SlotData(playerNb.ToString(), (slotNb + 1).ToString(), entry.Value))))
+                    {
+                        foreach (Transform t1 in slot.transform)
                         {
-                            t.gameObject.GetComponent<Text>().text = clue.Name.Value;
+                            foreach (Transform t in t1)
+                            {
+                                t.gameObject.SetActive(true);
+
+                                foreach (Transform t2 in Data[playerNb].PlayerButton.transform)
+                                    if (t2.gameObject.name == "Alert")
+                                        t2.gameObject.SetActive(true);
+                            }
                         }
-                        if (t.gameObject.GetComponent<Image>() != null)
+                    }
+                }
+                else if (entry.Key.Id == "image")
+                {
+                    foreach (Transform t1 in slot.transform)
+                    {
+                        foreach (Transform t in t1)
                         {
-                            t.gameObject.GetComponent<Image>().sprite = Resources.Load<Sprite>(clue.Image.Value);
+                            if (t.gameObject.name == "Image" && t.gameObject.GetComponent<Image>() != null)
+                                t.gameObject.GetComponent<Image>().sprite = Resources.Load<Sprite>(entry.Value);
+
+                            if (t.gameObject.GetComponent<Text>() != null)
+                                t.gameObject.GetComponent<Text>().text = "";
+                        }
+                    }
+                }
+            }
+            else
+            {
+                if (entry.Key.Id == "image")
+                {
+                    foreach (Transform t1 in slot.transform)
+                    {
+                        foreach (Transform t in t1)
+                        {
+                            if (t.gameObject.name == "Image" && t.gameObject.GetComponent<Image>() != null)
+                                t.gameObject.SetActive(false);
                         }
                     }
                 }
                 else
                 {
-                    foreach (Transform t in newObj.transform)
-                    {
-                        if (t.gameObject.GetComponent<Text>() != null)
-                        {
-                            t.gameObject.GetComponent<Text>().text = clue.Name.Value;
-                            t.gameObject.GetComponent<Text>().gameObject.SetActive(true);
-                        }
-                        if (t.gameObject.GetComponent<Image>() != null)
-                        {
-                            t.gameObject.GetComponent<Image>().gameObject.SetActive(false);
-                        }
-                    }
+                    slot.GetComponent<Slot>().Text.GetComponent<Text>().text = "";
+
+                    foreach (Transform t1 in slot.transform)
+                        Destroy(t1.gameObject);
                 }
-                newObj.GetComponent<DragHandler>().enabled = false;
-                slot.GetComponent<Slot>().Text.GetComponent<Text>().text = clue.Description.Value;
             }
+
+            if (player == m_user.Id)
+                CheckPlayerItemsLoaded();
         }
     }
 
-    private async void OnSlotChanged(CloudNode entry)
+    private void CheckPlayerItemsLoaded()
     {
-        User m_user = await User.Get();
-        Lobby m_lobby = await Lobby.Get(m_user);
+        playerItemsLoaded++;
 
-        string player = m_lobby.Users.First(x => x.Id == entry.Key.Parent.Parent.Parent.Id).UserId.Value;
-        string field = entry.Key.Id;
-
-        if (entry.Value != null)
+        if (playerItemsLoaded >= 18)
         {
-            string value = entry.Value;
-            Debug.Log(entry.Key + " = " + value);
-
-            int slotNb = -1;
-            if (int.TryParse(entry.Key.Parent.Id, out slotNb))
-            {
-                int playerNb = CloudManager.GetPlayerNumber(m_user, m_lobby, player);
-                var slot = Data[playerNb].Slots[slotNb - 1];
-                if (field == "name")
-                {
-                    foreach (Transform t in slot.transform) if (t.gameObject.name == value) Destroy(t.gameObject);
-                    var newObj = Instantiate(ButtonTemplate, ButtonTemplate.transform.parent);
-                    newObj.SetActive(true);
-                    newObj.name = value;
-                    newObj.transform.SetParent(slot.transform);
-                    foreach (Transform t in newObj.transform)
-                    {
-                        if (t.gameObject.GetComponent<Text>() != null)
-                        {
-                            t.gameObject.GetComponent<Text>().text = value;
-                        }
-                    }
-                    newObj.GetComponent<DragHandler>().enabled = false;
-                }
-                else if (field == "hint")
-                {
-                    slot.GetComponent<Slot>().Text.GetComponent<Text>().text = value;
-                }
-                else if (field == "image")
-                {
-                    if (!string.IsNullOrEmpty(value))
-                    {
-                        foreach (Transform t1 in slot.transform)
-                        {
-                            foreach (Transform t in t1)
-                            {
-                                if (t.gameObject.GetComponent<Image>() != null)
-                                {
-                                    t.gameObject.GetComponent<Image>().sprite = Resources.Load<Sprite>(value);
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        foreach (Transform t1 in slot.transform)
-                        {
-                            foreach (Transform t in t1)
-                            {
-                                if (t.gameObject.GetComponent<Image>() != null)
-                                {
-                                    t.gameObject.GetComponent<Image>().gameObject.SetActive(false);
-                                }
-                                if (t.gameObject.GetComponent<Text>() != null)
-                                {
-                                    t.gameObject.GetComponent<Text>().gameObject.SetActive(true); // TODO: REMOVE TEMP FIX
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        else
-        {
-            Debug.Log(entry.Key + " removed");
-
-            int slotNb = -1;
-            if (int.TryParse(entry.Key.Parent.Id, out slotNb))
-            {
-                int playerNb = CloudManager.GetPlayerNumber(m_user, m_lobby, player);
-                var slot = Data[playerNb].Slots[slotNb - 1];
-
-                slot.GetComponent<Slot>().Text.GetComponent<Text>().text = "";
-
-                foreach (Transform t1 in slot.transform)
-                {
-                    Destroy(t1.gameObject);
-                }
-            }
+            WaitScreen.SetActive(false);
+            MainScreen.SetActive(true);
         }
     }
 }

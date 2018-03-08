@@ -218,6 +218,7 @@ public class VotingDatabaseScene : MonoBehaviour
             await OnSlotChangedAsync(item.Name);
             await OnSlotChangedAsync(item.Description);
             await OnSlotChangedAsync(item.Image);
+            await ItemHighlightValueChangedAsync(item.Highlight);
         }
     }
 
@@ -335,6 +336,28 @@ public class VotingDatabaseScene : MonoBehaviour
 
     async void ItemHighlightValueChanged(CloudNode<bool> entry)
     {
+        await ItemHighlightValueChangedAsync(entry);
+    }
+
+    async Task ItemHighlightValueChangedAsync(CloudNode<bool> entry)
+    {
+        // Note: entry.Key is lobbies/<lobby_id>/users/<user_id>/items/<item_id>/highlight
+
+        int slotNb = -1;
+        if (int.TryParse(entry.Key.Parent.Id, out slotNb))
+        {
+            User user = await User.Get();
+            Lobby lobby = await Lobby.Get(user);
+
+            string player = lobby.Users.First(x => x.Id == entry.Key.Parent.Parent.Parent.Id).UserId.Value;
+            int playerNb = CloudManager.GetPlayerNumber(user, lobby, player);
+
+            GameObject slot = Data[playerNb].Slots[slotNb];
+
+            bool isHighlighted = (entry.Value.HasValue && entry.Value.Value);
+            
+            slot.GetComponent<Image>().color = (isHighlighted ? Color.black : Color.white);
+        }
     }
 
     private void CheckPlayerItemsLoaded()

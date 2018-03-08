@@ -1985,7 +1985,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Ben please add detail
+  m_Text: 
 --- !u!222 &547539026
 CanvasRenderer:
   m_ObjectHideFlags: 0

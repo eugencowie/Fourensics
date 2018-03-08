@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -42,14 +41,35 @@ class LobbyScene : MonoBehaviour
         }
         else
         {
-            // Register lobby state change callback
-            if (lobby.Users[0].UserId.Value != user.Id)
-                lobby.State.ValueChanged += LobbyStateChanged;
+            // Register callbacks
+            await RegisterCallbacks();
 
             // Show lobby panel
             m_codeLabel.text = lobby.Id;
             SwitchPanel(m_lobbyPanel);
         }
+    }
+
+    async Task RegisterCallbacks()
+    {
+        // Get database objects
+        User user = await User.Get();
+        Lobby lobby = await Lobby.Get(user);
+
+        // Register lobby state change callback
+        if (lobby.Users[0].UserId.Value != user.Id)
+            lobby.State.ValueChanged += LobbyStateChanged;
+    }
+
+    async Task DeregisterCallbacks()
+    {
+        // Get database objects
+        User user = await User.Get();
+        Lobby lobby = await Lobby.Get(user);
+
+        // Deregister lobby state change callback
+        if (lobby.Users[0].UserId.Value != user.Id)
+            lobby.State.ValueChanged -= LobbyStateChanged;
     }
 
     /// <summary>
@@ -94,9 +114,8 @@ class LobbyScene : MonoBehaviour
 
             if (success)
             {
-                // Register lobby state change callback
-                if (lobby.Users[0].UserId.Value != user.Id)
-                    lobby.State.ValueChanged += LobbyStateChanged;
+                // Register callbacks
+                await RegisterCallbacks();
 
                 // Show lobby panel
                 m_startButton.SetActive(false);
@@ -153,9 +172,8 @@ class LobbyScene : MonoBehaviour
                 // Set user lobby value
                 m_user.Lobby.Value = lobby.Id;
 
-                // Register lobby state change callback
-                if (lobby.Users[0].UserId.Value != m_user.Id)
-                    lobby.State.ValueChanged += LobbyStateChanged;
+                // Register callbacks
+                await RegisterCallbacks();
 
                 // Show lobby panel
                 m_startButton.SetActive(true);
@@ -190,9 +208,8 @@ class LobbyScene : MonoBehaviour
         User m_user = await User.Get();
         Lobby m_lobby = await Lobby.Get(m_user);
 
-        // Deregister lobby state change callback
-        if (m_lobby.Users[0].UserId.Value != m_user.Id)
-            m_lobby.State.ValueChanged -= LobbyStateChanged;
+        // Deregister callbacks
+        await DeregisterCallbacks();
 
         // Remove the user from the lobby
         CloudManager.LeaveLobby(m_user, m_lobby);
@@ -263,9 +280,8 @@ class LobbyScene : MonoBehaviour
 
                 if (scene >= 1 && scene <= scenesPerCase)
                 {
-                    // Deregister lobby state change callback
-                    if (m_lobby.Users[0].UserId.Value != m_user.Id)
-                        m_lobby.State.ValueChanged -= LobbyStateChanged;
+                    // Deregister callbacks
+                    await DeregisterCallbacks();
 
                     // Load this user's scene
                     SceneManager.LoadScene(((caseNb - 1) * scenesPerCase) + scene);

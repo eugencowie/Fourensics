@@ -29,6 +29,18 @@ class Lobby : ICloudObject
         Users = await Task.WhenAll("0123".Select(n => Cloud.Fetch<LobbyUser>(Key.Child("users").Child(n.ToString()))));
     }
 
+    public void Reset()
+    {
+        State.Value = null;
+        Case.Value = null;
+
+        foreach (LobbyUser userInfo in Users)
+        {
+            if (userInfo != null)
+                userInfo.Reset();
+        }
+    }
+
     static Lobby m_instance = null;
 
     public static async Task<Lobby> Get(User user)
@@ -81,6 +93,17 @@ class LobbyUser : ICloudObject
         Vote = await CloudNode.Fetch(Key.Child("vote"));
         Items = await Task.WhenAll("012345".Select(n => Cloud.Fetch<LobbyUserItem>(Key.Child("items").Child(n.ToString()))));
     }
+
+    public void Reset()
+    {
+        UserId.Value = null;
+        Scene.Value = null;
+        Ready.Value = null;
+        Vote.Value = null;
+
+        foreach (LobbyUserItem item in Items)
+            item.Reset();
+    }
 }
 
 class LobbyUserItem : ICloudObject
@@ -120,5 +143,12 @@ class LobbyUserItem : ICloudObject
         Name = await CloudNode.Fetch(Key.Child("name"));
         Description = await CloudNode.Fetch(Key.Child("description"));
         Image = await CloudNode.Fetch(Key.Child("image"));
+    }
+
+    public void Reset()
+    {
+        Name.Value = null;
+        Description.Value = null;
+        Image.Value = null;
     }
 }

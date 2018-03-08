@@ -8,10 +8,12 @@ using UnityEngine.UI;
 public static class StaticVotingDatabase
 {
     public static bool SeenWelcome = false;
+    public static bool HighlightedItem = false;
 
     public static void Reset()
     {
         SeenWelcome = false;
+        HighlightedItem = false;
     }
 }
 
@@ -74,13 +76,34 @@ public class VotingDatabaseScene : MonoBehaviour
         PlayerButtonPressed(Data[0]);
     }
 
-    private async Task RegisterListeners()
+    async Task RegisterListeners()
     {
-        User m_user = await User.Get();
-        Lobby m_lobby = await Lobby.Get(m_user);
+        User user = await User.Get();
+        Lobby lobby = await Lobby.Get(user);
 
-        foreach (LobbyUserItem clue in m_lobby.Users.Where(u => u.UserId.Value != m_user.Id).Select(u => u.Items).SelectMany(i => i))
+        foreach (LobbyUserItem clue in lobby.Users
+            .Where(u => u.UserId.Value != user.Id)
+            .Select(u => u.Items)
+            .SelectMany(i => i))
+        {
             clue.ValueChanged += OnSlotChanged;
+            clue.Highlight.ValueChanged += ItemHighlightValueChanged;
+        }
+    }
+
+    async Task DeregisterListeners()
+    {
+        User user = await User.Get();
+        Lobby lobby = await Lobby.Get(user);
+
+        foreach (LobbyUserItem clue in lobby.Users
+            .Where(u => u.UserId.Value != user.Id)
+            .Select(u => u.Items)
+            .SelectMany(i => i))
+        {
+            clue.ValueChanged -= OnSlotChanged;
+            clue.Highlight.ValueChanged -= ItemHighlightValueChanged;
+        }
     }
 
     private void SetBackground()
@@ -94,8 +117,9 @@ public class VotingDatabaseScene : MonoBehaviour
         }
     }
 
-    public void VotingButtonPressed()
+    public async void VotingButtonPressed()
     {
+        await DeregisterListeners();
         SceneManager.LoadScene("Voting");
     }
 
@@ -237,6 +261,16 @@ public class VotingDatabaseScene : MonoBehaviour
                     }
 
                     newObj.GetComponent<DragHandler>().enabled = false;
+
+                    newObj.GetComponent<Button>().onClick.AddListener(async () => {
+                        if (!StaticVotingDatabase.HighlightedItem)
+                        {
+                            StaticVotingDatabase.HighlightedItem = true;
+                            CloudNode<bool> highlight = await CloudNode<bool>.Fetch(entry.Key.Parent.Child("highlight"));
+                            highlight.Value = true;
+                            ItemHighlightValueChanged(highlight);
+                        }
+                    });
                 }
                 else if (entry.Key.Id == "description")
                 {
@@ -297,6 +331,10 @@ public class VotingDatabaseScene : MonoBehaviour
             if (player == m_user.Id)
                 CheckPlayerItemsLoaded();
         }
+    }
+
+    async void ItemHighlightValueChanged(CloudNode<bool> entry)
+    {
     }
 
     private void CheckPlayerItemsLoaded()

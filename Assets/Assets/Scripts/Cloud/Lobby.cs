@@ -112,6 +112,7 @@ class LobbyUserItem : ICloudObject
     public CloudNode Name { get; private set; }
     public CloudNode Description { get; private set; }
     public CloudNode Image { get; private set; }
+    public CloudNode<bool> Highlight { get; private set; }
 
     public event Action<CloudNode> ValueChanged
     {
@@ -135,6 +136,7 @@ class LobbyUserItem : ICloudObject
         Name = CloudNode.Create(Key.Child("name"));
         Description = CloudNode.Create(Key.Child("description"));
         Image = CloudNode.Create(Key.Child("image"));
+        Highlight = CloudNode<bool>.Create(Key.Child("highlight"));
     }
 
     async Task ICloudObject.Fetch(Key key)
@@ -143,6 +145,7 @@ class LobbyUserItem : ICloudObject
         Name = await CloudNode.Fetch(Key.Child("name"));
         Description = await CloudNode.Fetch(Key.Child("description"));
         Image = await CloudNode.Fetch(Key.Child("image"));
+        Highlight = await CloudNode<bool>.Fetch(Key.Child("highlight"));
     }
 
     public void Reset()
@@ -150,5 +153,6 @@ class LobbyUserItem : ICloudObject
         Name.Value = null;
         Description.Value = null;
         Image.Value = null;
+        Highlight.Value = null;
     }
 }

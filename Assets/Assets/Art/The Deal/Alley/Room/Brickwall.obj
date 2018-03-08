@@ -1,0 +1,31 @@
+# 3ds Max Wavefront OBJ Exporter v0.97b - (c)2007 guruware
+# File Created: 07.03.2018 22:14:47
+
+mtllib Brickwall.mtl
+
+#
+# object Brickwall
+#
+
+v  -324.1729 278.7457 21.6689
+v  -324.8539 0.0000 21.6689
+v  251.4721 0.0000 21.6689
+v  252.1530 278.7457 21.6689
+# 4 vertices
+
+vn 0.0000 0.0000 1.0000
+# 1 vertex normals
+
+vt 0.1595 0.7287 -0.7500
+vt 0.0005 0.3646 -0.2500
+vt 0.8405 0.0005 -0.7500
+vt 0.9995 0.3646 0.7500
+# 4 texture coords
+
+o Brickwall
+g Brickwall
+usemtl wire_115115115
+s 1
+f 1/1/1 2/2/1 3/3/1 4/4/1 
+# 1 polygons
+

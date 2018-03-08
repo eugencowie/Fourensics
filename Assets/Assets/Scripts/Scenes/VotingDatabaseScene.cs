@@ -8,10 +8,12 @@ using UnityEngine.UI;
 public static class StaticVotingDatabase
 {
     public static bool SeenWelcome = false;
+    public static bool HighlightedItem = false;
 
     public static void Reset()
     {
         SeenWelcome = false;
+        HighlightedItem = false;
     }
 }
 
@@ -19,7 +21,7 @@ public class VotingDatabaseScene : MonoBehaviour
 {
     public GameObject MainScreen, WaitScreen, WelcomeScreen;
 
-    //[SerializeField] private GameObject VotingButton = null;
+    [SerializeField] ModalDialog m_highlightConfirmScreen = null;
     [SerializeField] private GameObject ButtonTemplate = null;
     [SerializeField] private GameObject[] Backgrounds = new GameObject[4];
     [SerializeField] private List<Data> Data = new List<Data>();
@@ -74,13 +76,34 @@ public class VotingDatabaseScene : MonoBehaviour
         PlayerButtonPressed(Data[0]);
     }
 
-    private async Task RegisterListeners()
+    async Task RegisterListeners()
     {
-        User m_user = await User.Get();
-        Lobby m_lobby = await Lobby.Get(m_user);
+        User user = await User.Get();
+        Lobby lobby = await Lobby.Get(user);
 
-        foreach (LobbyUserItem clue in m_lobby.Users.Where(u => u.UserId.Value != m_user.Id).Select(u => u.Items).SelectMany(i => i))
+        foreach (LobbyUserItem clue in lobby.Users
+            .Where(u => u.UserId.Value != user.Id)
+            .Select(u => u.Items)
+            .SelectMany(i => i))
+        {
             clue.ValueChanged += OnSlotChanged;
+            clue.Highlight.ValueChanged += ItemHighlightValueChanged;
+        }
+    }
+
+    async Task DeregisterListeners()
+    {
+        User user = await User.Get();
+        Lobby lobby = await Lobby.Get(user);
+
+        foreach (LobbyUserItem clue in lobby.Users
+            .Where(u => u.UserId.Value != user.Id)
+            .Select(u => u.Items)
+            .SelectMany(i => i))
+        {
+            clue.ValueChanged -= OnSlotChanged;
+            clue.Highlight.ValueChanged -= ItemHighlightValueChanged;
+        }
     }
 
     private void SetBackground()
@@ -94,8 +117,9 @@ public class VotingDatabaseScene : MonoBehaviour
         }
     }
 
-    public void VotingButtonPressed()
+    public async void VotingButtonPressed()
     {
+        await DeregisterListeners();
         SceneManager.LoadScene("Voting");
     }
 
@@ -194,6 +218,7 @@ public class VotingDatabaseScene : MonoBehaviour
             await OnSlotChangedAsync(item.Name);
             await OnSlotChangedAsync(item.Description);
             await OnSlotChangedAsync(item.Image);
+            await ItemHighlightValueChangedAsync(item.Highlight);
         }
     }
 
@@ -237,6 +262,20 @@ public class VotingDatabaseScene : MonoBehaviour
                     }
 
                     newObj.GetComponent<DragHandler>().enabled = false;
+
+                    newObj.GetComponent<Button>().onClick.AddListener(() => {
+                        if (!StaticVotingDatabase.HighlightedItem)
+                        {
+                            m_highlightConfirmScreen.OnConfirm.RemoveAllListeners();
+                            m_highlightConfirmScreen.OnConfirm.AddListener(async () => {
+                                StaticVotingDatabase.HighlightedItem = true;
+                                CloudNode<bool> highlight = await CloudNode<bool>.Fetch(entry.Key.Parent.Child("highlight"));
+                                highlight.Value = true;
+                                ItemHighlightValueChanged(highlight);
+                            });
+                            m_highlightConfirmScreen.ShowDialog();
+                        }
+                    });
                 }
                 else if (entry.Key.Id == "description")
                 {
@@ -296,6 +335,32 @@ public class VotingDatabaseScene : MonoBehaviour
 
             if (player == m_user.Id)
                 CheckPlayerItemsLoaded();
+        }
+    }
+
+    async void ItemHighlightValueChanged(CloudNode<bool> entry)
+    {
+        await ItemHighlightValueChangedAsync(entry);
+    }
+
+    async Task ItemHighlightValueChangedAsync(CloudNode<bool> entry)
+    {
+        // Note: entry.Key is lobbies/<lobby_id>/users/<user_id>/items/<item_id>/highlight
+
+        int slotNb = -1;
+        if (int.TryParse(entry.Key.Parent.Id, out slotNb))
+        {
+            User user = await User.Get();
+            Lobby lobby = await Lobby.Get(user);
+
+            string player = lobby.Users.First(x => x.Id == entry.Key.Parent.Parent.Parent.Id).UserId.Value;
+            int playerNb = CloudManager.GetPlayerNumber(user, lobby, player);
+
+            GameObject slot = Data[playerNb].Slots[slotNb];
+
+            bool isHighlighted = (entry.Value.HasValue && entry.Value.Value);
+
+            slot.GetComponent<Image>().color = (isHighlighted ? Color.black : Color.white);
         }
     }
 

@@ -71,46 +71,14 @@ static class CloudManager
 
         if (lobby.Users[0].UserId.Value == user.Id)
         {
-            DeleteLobby(lobby);
+            lobby.Reset();
         }
         else
         {
             LobbyUser userInfo = lobby.Users.FirstOrDefault(u => u.UserId.Value == user.Id);
+
             if (userInfo != null)
-            {
-                userInfo.UserId.Value = null;
-                userInfo.Scene.Value = null;
-                userInfo.Ready.Value = null;
-                userInfo.Vote.Value = null;
-
-                foreach (var item in userInfo.Items)
-                {
-                    item.Name.Value = null;
-                    item.Description.Value = null;
-                    item.Image.Value = null;
-                }
-            }
-        }
-    }
-
-    static void DeleteLobby(Lobby lobby)
-    {
-        lobby.State.Value = null;
-        lobby.Case.Value = null;
-
-        foreach (LobbyUser userInfo in lobby.Users)
-        {
-            userInfo.UserId.Value = null;
-            userInfo.Scene.Value = null;
-            userInfo.Ready.Value = null;
-            userInfo.Vote.Value = null;
-
-            foreach (var item in userInfo.Items)
-            {
-                item.Name.Value = null;
-                item.Description.Value = null;
-                item.Image.Value = null;
-            }
+                userInfo.Reset();
         }
     }
 

@@ -7,6 +7,7 @@ using UnityEngine.UI;
 class LobbyScene : MonoBehaviour
 {
     [SerializeField] Text m_codeLabel = null;
+    [SerializeField] Text m_playersLabel = null;
     [SerializeField] InputField m_codeField = null;
 
     [SerializeField] GameObject m_startPanel = null;
@@ -42,14 +43,44 @@ class LobbyScene : MonoBehaviour
         }
         else
         {
-            // Register lobby state change callback
-            if (lobby.Users[0].UserId.Value != user.Id)
-                lobby.State.ValueChanged += LobbyStateChanged;
+            // Register callbacks
+            await RegisterCallbacks();
 
             // Show lobby panel
             m_codeLabel.text = lobby.Id;
+            LobbyUserIdChanged(CloudManager.OnlyUser(lobby, user).UserId);
             SwitchPanel(m_lobbyPanel);
         }
+    }
+
+    async Task RegisterCallbacks()
+    {
+        // Get database objects
+        User user = await User.Get();
+        Lobby lobby = await Lobby.Get(user);
+
+        // Register lobby state change callback
+        if (lobby.Users[0].UserId.Value != user.Id)
+            lobby.State.ValueChanged += LobbyStateChanged;
+
+        // Register lobby user id change callbacks
+        foreach (LobbyUser lobbyUser in lobby.Users)
+            lobbyUser.UserId.ValueChanged += LobbyUserIdChanged;
+    }
+
+    async Task DeregisterCallbacks()
+    {
+        // Get database objects
+        User user = await User.Get();
+        Lobby lobby = await Lobby.Get(user);
+
+        // Deregister lobby state change callback
+        if (lobby.Users[0].UserId.Value != user.Id)
+            lobby.State.ValueChanged -= LobbyStateChanged;
+
+        // Deregister lobby user id change callbacks
+        foreach (LobbyUser lobbyUser in lobby.Users)
+            lobbyUser.UserId.ValueChanged -= LobbyUserIdChanged;
     }
 
     /// <summary>
@@ -94,13 +125,13 @@ class LobbyScene : MonoBehaviour
 
             if (success)
             {
-                // Register lobby state change callback
-                if (lobby.Users[0].UserId.Value != user.Id)
-                    lobby.State.ValueChanged += LobbyStateChanged;
+                // Register callbacks
+                await RegisterCallbacks();
 
                 // Show lobby panel
                 m_startButton.SetActive(false);
                 m_codeLabel.text = lobby.Id;
+                LobbyUserIdChanged(CloudManager.OnlyUser(lobby, user).UserId);
                 SwitchPanel(m_lobbyPanel);
             }
             else
@@ -143,23 +174,23 @@ class LobbyScene : MonoBehaviour
             lobby.Case.Value = caseNb;
 
             // Get user database object
-            User m_user = await User.Get();
+            User user = await User.Get();
 
             // Attempt to add user to lobby
-            bool joinSuccess = CloudManager.JoinLobby(m_user, lobby, m_maxPlayers);
+            bool joinSuccess = CloudManager.JoinLobby(user, lobby, m_maxPlayers);
 
             if (joinSuccess)
             {
                 // Set user lobby value
-                m_user.Lobby.Value = lobby.Id;
+                user.Lobby.Value = lobby.Id;
 
-                // Register lobby state change callback
-                if (lobby.Users[0].UserId.Value != m_user.Id)
-                    lobby.State.ValueChanged += LobbyStateChanged;
+                // Register callbacks
+                await RegisterCallbacks();
 
                 // Show lobby panel
                 m_startButton.SetActive(true);
                 m_codeLabel.text = lobby.Id;
+                LobbyUserIdChanged(CloudManager.OnlyUser(lobby, user).UserId);
                 SwitchPanel(m_lobbyPanel);
             }
             else
@@ -187,15 +218,14 @@ class LobbyScene : MonoBehaviour
         SwitchPanel(m_waitPanel);
 
         // Get database objects
-        User m_user = await User.Get();
-        Lobby m_lobby = await Lobby.Get(m_user);
+        User user = await User.Get();
+        Lobby lobby = await Lobby.Get(user);
 
-        // Deregister lobby state change callback
-        if (m_lobby.Users[0].UserId.Value != m_user.Id)
-            m_lobby.State.ValueChanged -= LobbyStateChanged;
+        // Deregister callbacks
+        await DeregisterCallbacks();
 
         // Remove the user from the lobby
-        CloudManager.LeaveLobby(m_user, m_lobby);
+        CloudManager.LeaveLobby(user, lobby);
 
         // Show start panel
         m_codeLabel.text = "_____";
@@ -211,18 +241,18 @@ class LobbyScene : MonoBehaviour
         SwitchPanel(m_waitPanel);
 
         // Get database objects
-        User m_user = await User.Get();
-        Lobby m_lobby = await Lobby.Get(m_user);
+        User user = await User.Get();
+        Lobby lobby = await Lobby.Get(user);
 
         // Assign users to their scenes
-        CloudManager.AssignPlayerScenes(m_user, m_lobby);
+        CloudManager.AssignPlayerScenes(user, lobby);
 
         // Clear static data
         StaticInventory.Hints.Clear();
 
         // Set lobby state value
-        m_lobby.State.Value = (int)LobbyState.InGame;
-        LobbyStateChanged(m_lobby.State);
+        lobby.State.Value = (int)LobbyState.InGame;
+        LobbyStateChanged(lobby.State);
     }
 
     public void CodeFieldChanged(string s)
@@ -243,29 +273,41 @@ class LobbyScene : MonoBehaviour
         panel.SetActive(true);
     }
 
-    async void LobbyStateChanged(CloudNode<long> state)
+    async void LobbyUserIdChanged(CloudNode userId)
     {
         // Get database objects
-        User m_user = await User.Get();
-        Lobby m_lobby = await Lobby.Get(m_user);
+        User user = await User.Get();
+        Lobby lobby = await Lobby.Get(user);
 
+        // Get number of players in lobby
+        int playerCount = lobby.Users.Count(x => !string.IsNullOrWhiteSpace(x.UserId.Value));
+
+        // Set players text
+        m_playersLabel.text = $"{playerCount} / {m_maxPlayers}";
+    }
+
+    async void LobbyStateChanged(CloudNode<long> state)
+    {
         if (state.Value.HasValue && (LobbyState)state.Value.Value == LobbyState.InGame)
         {
+            // Get database objects
+            User user = await User.Get();
+            Lobby lobby = await Lobby.Get(user);
+
             // Get lobby case number
-            int caseNb = (int)(m_lobby.Case.Value ?? 0);
+            int caseNb = (int)(lobby.Case.Value ?? 0);
 
             if (caseNb >= 1 && caseNb <= 2)
             {
                 const int scenesPerCase = 4;
 
                 // Get this user's scene
-                int scene = (int)(CloudManager.OnlyUser(m_lobby, m_user).Scene.Value ?? 0);
+                int scene = (int)(CloudManager.OnlyUser(lobby, user).Scene.Value ?? 0);
 
                 if (scene >= 1 && scene <= scenesPerCase)
                 {
-                    // Deregister lobby state change callback
-                    if (m_lobby.Users[0].UserId.Value != m_user.Id)
-                        m_lobby.State.ValueChanged -= LobbyStateChanged;
+                    // Deregister callbacks
+                    await DeregisterCallbacks();
 
                     // Load this user's scene
                     SceneManager.LoadScene(((caseNb - 1) * scenesPerCase) + scene);

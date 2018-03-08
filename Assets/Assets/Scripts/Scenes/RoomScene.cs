@@ -97,6 +97,7 @@ public class RoomScene : MonoBehaviour
                 if (everyoneReady)
                 {
                     StaticClues.SeenSlots.Clear();
+                    StaticVotingDatabase.Reset();
                     SceneManager.LoadScene("VotingDatabase");
                 }
             }

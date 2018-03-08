@@ -473,6 +473,7 @@ public class DatabaseScene : MonoBehaviour
                 if (everyoneReady)
                 {
                     StaticClues.SeenSlots.Clear();
+                    StaticVotingDatabase.Reset();
                     SceneManager.LoadScene("VotingDatabase");
                 }
             }

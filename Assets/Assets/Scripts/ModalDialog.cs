@@ -3,25 +3,30 @@ using UnityEngine.UI;
 
 public class ModalDialog : MonoBehaviour
 {
-    public GameObject MainScreen;
-    public GameObject ThisScreen;
-    public GameObject WaitScreen;
+    public GameObject MainScreen = null;
+    public GameObject ThisScreen = null;
+    public GameObject WaitScreen = null;
 
     public Button.ButtonClickedEvent OnConfirm;
 
     public void HideDialog()
     {
-        SwitchTo(MainScreen);
+        if (MainScreen != null)
+            SwitchTo(MainScreen);
     }
 
     public void ShowDialog()
     {
-        SwitchTo(ThisScreen);
+        if (ThisScreen != null)
+            SwitchTo(ThisScreen);
     }
 
     public void ShowWaitDialog()
     {
-        SwitchTo(WaitScreen);
+        if (WaitScreen != null)
+            SwitchTo(WaitScreen);
+        else if (MainScreen != null)
+            SwitchTo(MainScreen);
 
         OnConfirm.Invoke();
     }
@@ -30,7 +35,8 @@ public class ModalDialog : MonoBehaviour
     {
         foreach (var obj in new GameObject[] { MainScreen, ThisScreen, WaitScreen })
         {
-            obj.SetActive(false);
+            if (obj != null)
+                obj.SetActive(false);
         }
 
         gameObj.SetActive(true);

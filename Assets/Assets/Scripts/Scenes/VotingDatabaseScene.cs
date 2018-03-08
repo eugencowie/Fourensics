@@ -21,7 +21,7 @@ public class VotingDatabaseScene : MonoBehaviour
 {
     public GameObject MainScreen, WaitScreen, WelcomeScreen;
 
-    //[SerializeField] private GameObject VotingButton = null;
+    [SerializeField] ModalDialog m_highlightConfirmScreen = null;
     [SerializeField] private GameObject ButtonTemplate = null;
     [SerializeField] private GameObject[] Backgrounds = new GameObject[4];
     [SerializeField] private List<Data> Data = new List<Data>();
@@ -263,13 +263,17 @@ public class VotingDatabaseScene : MonoBehaviour
 
                     newObj.GetComponent<DragHandler>().enabled = false;
 
-                    newObj.GetComponent<Button>().onClick.AddListener(async () => {
+                    newObj.GetComponent<Button>().onClick.AddListener(() => {
                         if (!StaticVotingDatabase.HighlightedItem)
                         {
-                            StaticVotingDatabase.HighlightedItem = true;
-                            CloudNode<bool> highlight = await CloudNode<bool>.Fetch(entry.Key.Parent.Child("highlight"));
-                            highlight.Value = true;
-                            ItemHighlightValueChanged(highlight);
+                            m_highlightConfirmScreen.OnConfirm.RemoveAllListeners();
+                            m_highlightConfirmScreen.OnConfirm.AddListener(async () => {
+                                StaticVotingDatabase.HighlightedItem = true;
+                                CloudNode<bool> highlight = await CloudNode<bool>.Fetch(entry.Key.Parent.Child("highlight"));
+                                highlight.Value = true;
+                                ItemHighlightValueChanged(highlight);
+                            });
+                            m_highlightConfirmScreen.ShowDialog();
                         }
                     });
                 }
@@ -355,7 +359,7 @@ public class VotingDatabaseScene : MonoBehaviour
             GameObject slot = Data[playerNb].Slots[slotNb];
 
             bool isHighlighted = (entry.Value.HasValue && entry.Value.Value);
-            
+
             slot.GetComponent<Image>().color = (isHighlighted ? Color.black : Color.white);
         }
     }

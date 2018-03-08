@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -6,6 +7,7 @@ using UnityEngine.UI;
 class LobbyScene : MonoBehaviour
 {
     [SerializeField] Text m_codeLabel = null;
+    [SerializeField] Text m_playersLabel = null;
     [SerializeField] InputField m_codeField = null;
 
     [SerializeField] GameObject m_startPanel = null;
@@ -46,6 +48,7 @@ class LobbyScene : MonoBehaviour
 
             // Show lobby panel
             m_codeLabel.text = lobby.Id;
+            LobbyUserIdChanged(CloudManager.OnlyUser(lobby, user).UserId);
             SwitchPanel(m_lobbyPanel);
         }
     }
@@ -59,6 +62,10 @@ class LobbyScene : MonoBehaviour
         // Register lobby state change callback
         if (lobby.Users[0].UserId.Value != user.Id)
             lobby.State.ValueChanged += LobbyStateChanged;
+
+        // Register lobby user id change callbacks
+        foreach (LobbyUser lobbyUser in lobby.Users)
+            lobbyUser.UserId.ValueChanged += LobbyUserIdChanged;
     }
 
     async Task DeregisterCallbacks()
@@ -70,6 +77,10 @@ class LobbyScene : MonoBehaviour
         // Deregister lobby state change callback
         if (lobby.Users[0].UserId.Value != user.Id)
             lobby.State.ValueChanged -= LobbyStateChanged;
+
+        // Deregister lobby user id change callbacks
+        foreach (LobbyUser lobbyUser in lobby.Users)
+            lobbyUser.UserId.ValueChanged -= LobbyUserIdChanged;
     }
 
     /// <summary>
@@ -120,6 +131,7 @@ class LobbyScene : MonoBehaviour
                 // Show lobby panel
                 m_startButton.SetActive(false);
                 m_codeLabel.text = lobby.Id;
+                LobbyUserIdChanged(CloudManager.OnlyUser(lobby, user).UserId);
                 SwitchPanel(m_lobbyPanel);
             }
             else
@@ -178,6 +190,7 @@ class LobbyScene : MonoBehaviour
                 // Show lobby panel
                 m_startButton.SetActive(true);
                 m_codeLabel.text = lobby.Id;
+                LobbyUserIdChanged(CloudManager.OnlyUser(lobby, user).UserId);
                 SwitchPanel(m_lobbyPanel);
             }
             else
@@ -260,10 +273,21 @@ class LobbyScene : MonoBehaviour
         panel.SetActive(true);
     }
 
-    async void LobbyStateChanged(CloudNode<long> state)
+    async void LobbyUserIdChanged(CloudNode userId)
     {
         // Get database objects
+        User user = await User.Get();
+        Lobby lobby = await Lobby.Get(user);
 
+        // Get number of players in lobby
+        int playerCount = lobby.Users.Count(x => !string.IsNullOrWhiteSpace(x.UserId.Value));
+
+        // Set players text
+        m_playersLabel.text = $"{playerCount} / {m_maxPlayers}";
+    }
+
+    async void LobbyStateChanged(CloudNode<long> state)
+    {
         if (state.Value.HasValue && (LobbyState)state.Value.Value == LobbyState.InGame)
         {
             // Get database objects

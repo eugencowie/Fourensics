@@ -162,15 +162,15 @@ class LobbyScene : MonoBehaviour
             lobby.Case.Value = caseNb;
 
             // Get user database object
-            User m_user = await User.Get();
+            User user = await User.Get();
 
             // Attempt to add user to lobby
-            bool joinSuccess = CloudManager.JoinLobby(m_user, lobby, m_maxPlayers);
+            bool joinSuccess = CloudManager.JoinLobby(user, lobby, m_maxPlayers);
 
             if (joinSuccess)
             {
                 // Set user lobby value
-                m_user.Lobby.Value = lobby.Id;
+                user.Lobby.Value = lobby.Id;
 
                 // Register callbacks
                 await RegisterCallbacks();
@@ -205,14 +205,14 @@ class LobbyScene : MonoBehaviour
         SwitchPanel(m_waitPanel);
 
         // Get database objects
-        User m_user = await User.Get();
-        Lobby m_lobby = await Lobby.Get(m_user);
+        User user = await User.Get();
+        Lobby lobby = await Lobby.Get(user);
 
         // Deregister callbacks
         await DeregisterCallbacks();
 
         // Remove the user from the lobby
-        CloudManager.LeaveLobby(m_user, m_lobby);
+        CloudManager.LeaveLobby(user, lobby);
 
         // Show start panel
         m_codeLabel.text = "_____";
@@ -228,18 +228,18 @@ class LobbyScene : MonoBehaviour
         SwitchPanel(m_waitPanel);
 
         // Get database objects
-        User m_user = await User.Get();
-        Lobby m_lobby = await Lobby.Get(m_user);
+        User user = await User.Get();
+        Lobby lobby = await Lobby.Get(user);
 
         // Assign users to their scenes
-        CloudManager.AssignPlayerScenes(m_user, m_lobby);
+        CloudManager.AssignPlayerScenes(user, lobby);
 
         // Clear static data
         StaticInventory.Hints.Clear();
 
         // Set lobby state value
-        m_lobby.State.Value = (int)LobbyState.InGame;
-        LobbyStateChanged(m_lobby.State);
+        lobby.State.Value = (int)LobbyState.InGame;
+        LobbyStateChanged(lobby.State);
     }
 
     public void CodeFieldChanged(string s)
@@ -263,20 +263,22 @@ class LobbyScene : MonoBehaviour
     async void LobbyStateChanged(CloudNode<long> state)
     {
         // Get database objects
-        User m_user = await User.Get();
-        Lobby m_lobby = await Lobby.Get(m_user);
 
         if (state.Value.HasValue && (LobbyState)state.Value.Value == LobbyState.InGame)
         {
+            // Get database objects
+            User user = await User.Get();
+            Lobby lobby = await Lobby.Get(user);
+
             // Get lobby case number
-            int caseNb = (int)(m_lobby.Case.Value ?? 0);
+            int caseNb = (int)(lobby.Case.Value ?? 0);
 
             if (caseNb >= 1 && caseNb <= 2)
             {
                 const int scenesPerCase = 4;
 
                 // Get this user's scene
-                int scene = (int)(CloudManager.OnlyUser(m_lobby, m_user).Scene.Value ?? 0);
+                int scene = (int)(CloudManager.OnlyUser(lobby, user).Scene.Value ?? 0);
 
                 if (scene >= 1 && scene <= scenesPerCase)
                 {

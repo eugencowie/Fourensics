@@ -4157,7 +4157,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1131246911
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4616,7 +4616,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MainScreen: {fileID: 1312411983}
   WaitScreen: {fileID: 425554640}
-  WelcomeScreen: {fileID: 2123521239}
+  m_welcomeScreen: {fileID: 2123521241}
   m_highlightConfirmScreen: {fileID: 1947426133}
   ButtonTemplate: {fileID: 1734520009}
   Backgrounds:
@@ -4944,7 +4944,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1312411984
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5636,7 +5636,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 2123521241}
         m_MethodName: ShowDialog
         m_Mode: 1
         m_Arguments:

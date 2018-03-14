@@ -19,26 +19,27 @@ public static class StaticVotingDatabase
 
 public class VotingDatabaseScene : MonoBehaviour
 {
-    public GameObject MainScreen, WaitScreen, WelcomeScreen;
+    public GameObject MainScreen, WaitScreen;
+
+    [SerializeField] ModalDialog m_welcomeScreen = null;
 
     [SerializeField] ModalDialog m_highlightConfirmScreen = null;
-    [SerializeField] private GameObject ButtonTemplate = null;
-    [SerializeField] private GameObject[] Backgrounds = new GameObject[4];
-    [SerializeField] private List<Data> Data = new List<Data>();
+    [SerializeField] GameObject ButtonTemplate = null;
+    [SerializeField] GameObject[] Backgrounds = new GameObject[4];
+    [SerializeField] List<Data> Data = new List<Data>();
 
-    private string m_lobbyCode;
-    private int m_scene;
+    string m_lobbyCode;
+    int m_scene;
 
     int playerItemsLoaded = 0;
 
     async void Start()
     {
-        if (StaticVotingDatabase.SeenWelcome)
+        if (!StaticVotingDatabase.SeenWelcome)
         {
-            MainScreen.SetActive(true);
-            WelcomeScreen.SetActive(false);
+            StaticVotingDatabase.SeenWelcome = true;
+            m_welcomeScreen.ShowDialog();
         }
-        StaticVotingDatabase.SeenWelcome = true;
 
         User m_user = await User.Get();
         Lobby m_lobby = await Lobby.Get(m_user);

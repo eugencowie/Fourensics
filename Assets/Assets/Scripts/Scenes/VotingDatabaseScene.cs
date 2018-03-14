@@ -19,26 +19,27 @@ public static class StaticVotingDatabase
 
 public class VotingDatabaseScene : MonoBehaviour
 {
-    public GameObject MainScreen, WaitScreen, WelcomeScreen;
+    public GameObject MainScreen, WaitScreen;
+
+    [SerializeField] ModalDialog m_welcomeScreen = null;
 
     [SerializeField] ModalDialog m_highlightConfirmScreen = null;
-    [SerializeField] private GameObject ButtonTemplate = null;
-    [SerializeField] private GameObject[] Backgrounds = new GameObject[4];
-    [SerializeField] private List<Data> Data = new List<Data>();
+    [SerializeField] GameObject ButtonTemplate = null;
+    [SerializeField] GameObject[] Backgrounds = new GameObject[4];
+    [SerializeField] List<Data> Data = new List<Data>();
 
-    private string m_lobbyCode;
-    private int m_scene;
+    string m_lobbyCode;
+    int m_scene;
 
     int playerItemsLoaded = 0;
 
     async void Start()
     {
-        if (StaticVotingDatabase.SeenWelcome)
+        if (!StaticVotingDatabase.SeenWelcome)
         {
-            MainScreen.SetActive(true);
-            WelcomeScreen.SetActive(false);
+            StaticVotingDatabase.SeenWelcome = true;
+            m_welcomeScreen.ShowDialog();
         }
-        StaticVotingDatabase.SeenWelcome = true;
 
         User m_user = await User.Get();
         Lobby m_lobby = await Lobby.Get(m_user);
@@ -142,27 +143,6 @@ public class VotingDatabaseScene : MonoBehaviour
             cluePanel.SetActive(false);
         }
         data.CluePanel.SetActive(true);
-
-        if (m_current != null)
-        {
-            for (int slot = 0; slot < m_current.Slots.Count; ++slot)
-            {
-                foreach (Transform t in m_current.Slots[slot].transform)
-                {
-                    foreach (Transform t2 in t)
-                    {
-                        if (t2.gameObject.name == "Alert")
-                            t2.gameObject.SetActive(false);
-                    }
-                }
-            }
-
-            foreach (Transform t2 in m_current.PlayerButton.transform)
-            {
-                if (t2.gameObject.name == "Alert")
-                    t2.gameObject.SetActive(false);
-            }
-        }
 
         for (int slot = 0; slot < data.Slots.Count; ++slot)
         {
@@ -284,16 +264,8 @@ public class VotingDatabaseScene : MonoBehaviour
                     if (player != m_user.Id && !StaticClues.SeenSlots.Any(x => x.Equals(new SlotData(playerNb.ToString(), (slotNb + 1).ToString(), entry.Value))))
                     {
                         foreach (Transform t1 in slot.transform)
-                        {
                             foreach (Transform t in t1)
-                            {
                                 t.gameObject.SetActive(true);
-
-                                foreach (Transform t2 in Data[playerNb].PlayerButton.transform)
-                                    if (t2.gameObject.name == "Alert")
-                                        t2.gameObject.SetActive(true);
-                            }
-                        }
                     }
                 }
                 else if (entry.Key.Id == "image")
@@ -360,7 +332,16 @@ public class VotingDatabaseScene : MonoBehaviour
 
             bool isHighlighted = (entry.Value.HasValue && entry.Value.Value);
 
-            slot.GetComponent<Image>().color = (isHighlighted ? Color.black : Color.white);
+            foreach (Transform t in slot.transform)
+            {
+                foreach (Transform t2 in t)
+                {
+                    if (t2.gameObject.name == "Alert")
+                    {
+                        t2.gameObject.SetActive(isHighlighted);
+                    }
+                }
+            }
         }
     }
 

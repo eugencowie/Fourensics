@@ -144,27 +144,6 @@ public class VotingDatabaseScene : MonoBehaviour
         }
         data.CluePanel.SetActive(true);
 
-        if (m_current != null)
-        {
-            for (int slot = 0; slot < m_current.Slots.Count; ++slot)
-            {
-                foreach (Transform t in m_current.Slots[slot].transform)
-                {
-                    foreach (Transform t2 in t)
-                    {
-                        if (t2.gameObject.name == "Alert")
-                            t2.gameObject.SetActive(false);
-                    }
-                }
-            }
-
-            foreach (Transform t2 in m_current.PlayerButton.transform)
-            {
-                if (t2.gameObject.name == "Alert")
-                    t2.gameObject.SetActive(false);
-            }
-        }
-
         for (int slot = 0; slot < data.Slots.Count; ++slot)
         {
             StaticClues.SeenSlots.Add(new SlotData(
@@ -285,16 +264,8 @@ public class VotingDatabaseScene : MonoBehaviour
                     if (player != m_user.Id && !StaticClues.SeenSlots.Any(x => x.Equals(new SlotData(playerNb.ToString(), (slotNb + 1).ToString(), entry.Value))))
                     {
                         foreach (Transform t1 in slot.transform)
-                        {
                             foreach (Transform t in t1)
-                            {
                                 t.gameObject.SetActive(true);
-
-                                foreach (Transform t2 in Data[playerNb].PlayerButton.transform)
-                                    if (t2.gameObject.name == "Alert")
-                                        t2.gameObject.SetActive(true);
-                            }
-                        }
                     }
                 }
                 else if (entry.Key.Id == "image")
@@ -361,7 +332,16 @@ public class VotingDatabaseScene : MonoBehaviour
 
             bool isHighlighted = (entry.Value.HasValue && entry.Value.Value);
 
-            slot.GetComponent<Image>().color = (isHighlighted ? Color.black : Color.white);
+            foreach (Transform t in slot.transform)
+            {
+                foreach (Transform t2 in t)
+                {
+                    if (t2.gameObject.name == "Alert")
+                    {
+                        t2.gameObject.SetActive(isHighlighted);
+                    }
+                }
+            }
         }
     }
 

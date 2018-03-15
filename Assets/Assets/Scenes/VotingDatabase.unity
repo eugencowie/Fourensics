@@ -1249,7 +1249,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 95091856}
 --- !u!1 &95091858 stripped
 GameObject:
-  m_PrefabParentObject: {fileID: 1203005230870778, guid: efbd59ba03a8e7f47aec5d853eec8f0a,
+  m_PrefabParentObject: {fileID: 1374264284581258, guid: efbd59ba03a8e7f47aec5d853eec8f0a,
     type: 2}
   m_PrefabInternal: {fileID: 95091856}
 --- !u!1 &95091859 stripped
@@ -1921,7 +1921,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 121584902}
 --- !u!1 &121584904 stripped
 GameObject:
-  m_PrefabParentObject: {fileID: 1203005230870778, guid: efbd59ba03a8e7f47aec5d853eec8f0a,
+  m_PrefabParentObject: {fileID: 1374264284581258, guid: efbd59ba03a8e7f47aec5d853eec8f0a,
     type: 2}
   m_PrefabInternal: {fileID: 121584902}
 --- !u!1 &121584905 stripped
@@ -2296,11 +2296,6 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 189877014}
---- !u!1 &363417140 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1203005230870778, guid: efbd59ba03a8e7f47aec5d853eec8f0a,
-    type: 2}
-  m_PrefabInternal: {fileID: 729170443}
 --- !u!1 &397072697
 GameObject:
   m_ObjectHideFlags: 0
@@ -3791,7 +3786,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 688179309}
 --- !u!1 &688179311 stripped
 GameObject:
-  m_PrefabParentObject: {fileID: 1203005230870778, guid: efbd59ba03a8e7f47aec5d853eec8f0a,
+  m_PrefabParentObject: {fileID: 1374264284581258, guid: efbd59ba03a8e7f47aec5d853eec8f0a,
     type: 2}
   m_PrefabInternal: {fileID: 688179309}
 --- !u!1 &688179312 stripped
@@ -4275,6 +4270,11 @@ Prefab:
 --- !u!224 &729170444 stripped
 RectTransform:
   m_PrefabParentObject: {fileID: 224400674763285828, guid: efbd59ba03a8e7f47aec5d853eec8f0a,
+    type: 2}
+  m_PrefabInternal: {fileID: 729170443}
+--- !u!1 &729170445 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1374264284581258, guid: efbd59ba03a8e7f47aec5d853eec8f0a,
     type: 2}
   m_PrefabInternal: {fileID: 729170443}
 --- !u!1001 &741602734
@@ -5660,7 +5660,7 @@ MonoBehaviour:
   - {fileID: 2079670387}
   Data:
   - PlayerButton: {fileID: 1967687006}
-    CluePanel: {fileID: 363417140}
+    CluePanel: {fileID: 729170445}
     Slots:
     - {fileID: 1577560935}
     - {fileID: 1577560934}

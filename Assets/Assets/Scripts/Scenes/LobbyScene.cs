@@ -8,7 +8,6 @@ class LobbyScene : MonoBehaviour
 {
     [SerializeField] Text m_codeLabel = null;
     [SerializeField] Text m_playersLabel = null;
-    [SerializeField] InputField m_codeField = null;
 
     [SerializeField] GameObject m_startPanel = null;
     [SerializeField] GameObject m_createPanel = null;
@@ -17,6 +16,7 @@ class LobbyScene : MonoBehaviour
     [SerializeField] GameObject m_waitPanel = null;
 
     [SerializeField] GameObject m_startButton = null;
+    [SerializeField] GameObject m_joinButtonTemplate = null;
 
     const int m_maxPlayers = 4;
 
@@ -106,7 +106,7 @@ class LobbyScene : MonoBehaviour
     /// </summary>
     public async void SubmitButtonPressed()
     {
-        if (!string.IsNullOrEmpty(m_codeField.text))
+        //if (!string.IsNullOrEmpty(m_codeField.text))
         {
             // Show wait panel
             SwitchPanel(m_waitPanel);
@@ -115,7 +115,7 @@ class LobbyScene : MonoBehaviour
             User user = await User.Get();
 
             // Update user lobby value
-            user.Lobby.Value = m_codeField.text.ToUpper();
+            user.Lobby.Value = "";// m_codeField.text.ToUpper();
 
             // Fetch lobby from cloud
             Lobby lobby = await Lobby.Get(user);
@@ -140,7 +140,7 @@ class LobbyScene : MonoBehaviour
                 user.Lobby.Value = null;
 
                 // Show join panel
-                m_codeField.text = "";
+                //m_codeField.text = "";
                 SwitchPanel(m_joinPanel);
             }
         }
@@ -258,7 +258,7 @@ class LobbyScene : MonoBehaviour
     public void CodeFieldChanged(string s)
     {
         // Make code field text uppercase
-        m_codeField.text = m_codeField.text.ToUpper();
+        //m_codeField.text = m_codeField.text.ToUpper();
     }
 
     void SwitchPanel(GameObject panel)

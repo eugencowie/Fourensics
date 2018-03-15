@@ -83,7 +83,6 @@ public class VotingDatabaseScene : MonoBehaviour
         Lobby lobby = await Lobby.Get(user);
 
         foreach (LobbyUserItem clue in lobby.Users
-            .Where(u => u.UserId.Value != user.Id)
             .Select(u => u.Items)
             .SelectMany(i => i))
         {
@@ -98,7 +97,6 @@ public class VotingDatabaseScene : MonoBehaviour
         Lobby lobby = await Lobby.Get(user);
 
         foreach (LobbyUserItem clue in lobby.Users
-            .Where(u => u.UserId.Value != user.Id)
             .Select(u => u.Items)
             .SelectMany(i => i))
         {
@@ -260,13 +258,6 @@ public class VotingDatabaseScene : MonoBehaviour
                 else if (entry.Key.Id == "description")
                 {
                     slot.GetComponent<Slot>().Text.GetComponent<Text>().text = entry.Value;
-
-                    if (player != m_user.Id && !StaticClues.SeenSlots.Any(x => x.Equals(new SlotData(playerNb.ToString(), (slotNb + 1).ToString(), entry.Value))))
-                    {
-                        foreach (Transform t1 in slot.transform)
-                            foreach (Transform t in t1)
-                                t.gameObject.SetActive(true);
-                    }
                 }
                 else if (entry.Key.Id == "image")
                 {
@@ -333,15 +324,13 @@ public class VotingDatabaseScene : MonoBehaviour
             bool isHighlighted = (entry.Value.HasValue && entry.Value.Value);
 
             foreach (Transform t in slot.transform)
-            {
                 foreach (Transform t2 in t)
-                {
                     if (t2.gameObject.name == "Alert")
-                    {
                         t2.gameObject.SetActive(isHighlighted);
-                    }
-                }
-            }
+
+            foreach (Transform t3 in Data[playerNb].PlayerButton.transform)
+                if (t3.gameObject.name == "Alert")
+                    t3.gameObject.SetActive(isHighlighted);
         }
     }
 

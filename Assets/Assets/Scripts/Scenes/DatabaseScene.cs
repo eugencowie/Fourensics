@@ -381,23 +381,27 @@ public class DatabaseScene : MonoBehaviour
                     {
                         slot.GetComponent<Slot>().EditButton.gameObject.SetActive(true);
                         slot.GetComponent<Slot>().EditButton.onClick.AddListener(() => {
-                            MainScreen.SetActive(false);
-                            EditScreen.gameObject.SetActive(true);
-                            EditScreen.SetTextField(entry.Value);
-                            EditScreen.OnCancel = () => {
-                                EditScreen.OnCancel = null;
-                                EditScreen.OnSubmit = null;
-                                EditScreen.gameObject.SetActive(false);
-                                MainScreen.SetActive(true);
-                            };
-                            EditScreen.OnSubmit = newText => {
-                                EditScreen.OnCancel = null;
-                                EditScreen.OnSubmit = null;
-                                EditScreen.gameObject.SetActive(false);
-                                MainScreen.SetActive(true);
-                                slot.GetComponent<Slot>().Text.GetComponent<Text>().text = newText;
-                                entry.Value = newText;
-                            };
+                            if (StaticSlot.TimesRemoved < StaticSlot.MaxRemovals)
+                            {
+                                MainScreen.SetActive(false);
+                                EditScreen.gameObject.SetActive(true);
+                                EditScreen.SetTextField(entry.Value);
+                                EditScreen.OnCancel = () => {
+                                    EditScreen.OnCancel = null;
+                                    EditScreen.OnSubmit = null;
+                                    EditScreen.gameObject.SetActive(false);
+                                    MainScreen.SetActive(true);
+                                };
+                                EditScreen.OnSubmit = newText => {
+                                    EditScreen.OnCancel = null;
+                                    EditScreen.OnSubmit = null;
+                                    EditScreen.gameObject.SetActive(false);
+                                    MainScreen.SetActive(true);
+                                    slot.GetComponent<Slot>().Text.GetComponent<Text>().text = newText;
+                                    entry.Value = newText;
+                                    StaticSlot.TimesRemoved++;
+                                };
+                            }
                         });
                     }
                 }

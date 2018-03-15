@@ -109,24 +109,28 @@ class Slot : MonoBehaviour, IDropHandler
                 Text.GetComponent<Text>().text = hint.Hint;
                 EditButton.gameObject.SetActive(true);
                 EditButton.onClick.AddListener(() => {
-                    MainScreen.SetActive(false);
-                    EditItemText.gameObject.SetActive(true);
-                    EditItemText.SetTextField(hint.Hint);
-                    EditItemText.OnCancel = () => {
-                        EditItemText.OnCancel = null;
-                        EditItemText.OnSubmit = null;
-                        EditItemText.gameObject.SetActive(false);
-                        MainScreen.SetActive(true);
-                    };
-                    EditItemText.OnSubmit = async newText => {
-                        EditItemText.OnCancel = null;
-                        EditItemText.OnSubmit = null;
-                        EditItemText.gameObject.SetActive(false);
-                        MainScreen.SetActive(true);
-                        hint.Hint = newText;
-                        Text.GetComponent<Text>().text = hint.Hint;
-                        await DatabaseController.UploadItem(SlotNumber, hint);
-                    };
+                    if (StaticSlot.TimesRemoved < StaticSlot.MaxRemovals)
+                    {
+                        MainScreen.SetActive(false);
+                        EditItemText.gameObject.SetActive(true);
+                        EditItemText.SetTextField(hint.Hint);
+                        EditItemText.OnCancel = () => {
+                            EditItemText.OnCancel = null;
+                            EditItemText.OnSubmit = null;
+                            EditItemText.gameObject.SetActive(false);
+                            MainScreen.SetActive(true);
+                        };
+                        EditItemText.OnSubmit = async newText => {
+                            EditItemText.OnCancel = null;
+                            EditItemText.OnSubmit = null;
+                            EditItemText.gameObject.SetActive(false);
+                            MainScreen.SetActive(true);
+                            hint.Hint = newText;
+                            Text.GetComponent<Text>().text = hint.Hint;
+                            await DatabaseController.UploadItem(SlotNumber, hint);
+                            StaticSlot.TimesRemoved++;
+                        };
+                    }
                 });
 
                 await DatabaseController.UploadItem(SlotNumber, hint);

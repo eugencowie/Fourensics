@@ -339,6 +339,10 @@ public class VotingDatabaseScene : MonoBehaviour
                     if (t2.gameObject.name == "Alert")
                     {
                         t2.gameObject.SetActive(isHighlighted);
+
+                        foreach (Transform t3 in Data[playerNb].PlayerButton.transform)
+                            if (t3.gameObject.name == "Alert")
+                                t3.gameObject.SetActive(isHighlighted);
                     }
                 }
             }

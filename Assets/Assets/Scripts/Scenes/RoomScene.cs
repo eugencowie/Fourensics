@@ -36,7 +36,7 @@ public class RoomScene : MonoBehaviour
         ReadyButton.SetActive(false);
         DatabaseButton.SetActive(false);
 
-        User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+        User m_user; try { m_user = User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
         Lobby m_lobby = await Lobby.Get(m_user);
         if (m_lobby == null)
         {
@@ -57,7 +57,7 @@ public class RoomScene : MonoBehaviour
 
     private async Task RegisterListeners()
     {
-        User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+        User m_user; try { m_user = User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
         Lobby m_lobby = await Lobby.Get(m_user);
 
         foreach (LobbyUserItem clue in CloudManager.OtherUsers(m_lobby, m_user).Select(u => u.Items).SelectMany(i => i))
@@ -89,7 +89,7 @@ public class RoomScene : MonoBehaviour
 
             if (value == true)
             {
-                User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+                User m_user; try { m_user = User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
                 Lobby m_lobby = await Lobby.Get(m_user);
 
                 bool everyoneReady = CloudManager.AllUsers(m_lobby).All(x => x.Ready.Value.HasValue && x.Ready.Value == true);
@@ -106,7 +106,7 @@ public class RoomScene : MonoBehaviour
 
     public async void ConfirmLeave()
     {
-        User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+        User m_user; try { m_user = User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
         Lobby m_lobby = await Lobby.Get(m_user);
         CloudManager.LeaveLobby(m_user, m_lobby);
         SceneManager.LoadScene("Lobby");
@@ -121,7 +121,7 @@ public class RoomScene : MonoBehaviour
         if (ReadyButton.activeSelf)
         {
             ReadyButton.SetActive(false);
-            User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+            User m_user; try { m_user = User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
             Lobby m_lobby = await Lobby.Get(m_user);
             ReadyButton.SetActive(true);
             ReadyButton.GetComponent<Image>().color = Color.yellow;
@@ -145,7 +145,7 @@ public class RoomScene : MonoBehaviour
             {
                 string value = entry.Value;
 
-                User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+                User m_user; try { m_user = User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
                 Lobby m_lobby = await Lobby.Get(m_user);
 
                 string player = m_lobby.Users.First(x => x.Id == entry.Key.Parent.Parent.Parent.Id).UserId.Value;

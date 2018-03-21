@@ -63,7 +63,7 @@ public class DatabaseScene : MonoBehaviour
 
     async void Start()
     {
-        User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+        User m_user; try { m_user = User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
         Lobby m_lobby = await Lobby.Get(m_user);
 
         if (m_lobby == null)
@@ -102,7 +102,7 @@ public class DatabaseScene : MonoBehaviour
 
     async Task RegisterListeners()
     {
-        User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+        User m_user; try { m_user = User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
         Lobby m_lobby = await Lobby.Get(m_user);
 
         foreach (LobbyUserItem clue in CloudManager.OtherUsers(m_lobby, m_user).Select(u => u.Items).SelectMany(i => i))
@@ -128,7 +128,7 @@ public class DatabaseScene : MonoBehaviour
         if (ReadyButton.activeSelf)
         {
             ReadyButton.SetActive(false);
-            User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+            User m_user; try { m_user = User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
             Lobby m_lobby = await Lobby.Get(m_user);
             ReadyButton.SetActive(true);
             ReadyButton.GetComponent<Image>().color = Color.yellow;
@@ -150,7 +150,7 @@ public class DatabaseScene : MonoBehaviour
             ReturnButton.SetActive(false);
 
             // Get database objects
-            User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+            User m_user; try { m_user = User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
             Lobby m_lobby = await Lobby.Get(m_user);
 
             // Get lobby case number
@@ -173,7 +173,7 @@ public class DatabaseScene : MonoBehaviour
 
     async Task DeregisterListeners()
     {
-        User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+        User m_user; try { m_user = User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
         Lobby m_lobby = await Lobby.Get(m_user);
 
         foreach (LobbyUserItem clue in m_lobby.Users.Where(u => u.UserId.Value != m_user.Id).Select(u => u.Items).SelectMany(i => i))
@@ -270,7 +270,7 @@ public class DatabaseScene : MonoBehaviour
 
     public async Task UploadItem(int slot, ObjectHintData hint)
     {
-        User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+        User m_user; try { m_user = User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
         Lobby m_lobby = await Lobby.Get(m_user);
 
         CloudManager.UploadDatabaseItem(m_user, m_lobby, slot, hint);
@@ -280,7 +280,7 @@ public class DatabaseScene : MonoBehaviour
     {
         //if (!m_readyPlayers.Any(p => p.Value == false))
         //{
-        User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+        User m_user; try { m_user = User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
         Lobby m_lobby = await Lobby.Get(m_user);
 
         CloudManager.RemoveDatabaseItem(m_user, m_lobby, slot);
@@ -289,7 +289,7 @@ public class DatabaseScene : MonoBehaviour
 
     async Task DownloadItems()
     {
-        User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+        User m_user; try { m_user = User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
         Lobby m_lobby = await Lobby.Get(m_user);
 
         foreach (LobbyUserItem item in CloudManager.AllUsers(m_lobby).Select(x => x.Items).SelectMany(x => x))
@@ -315,7 +315,7 @@ public class DatabaseScene : MonoBehaviour
         int slotNb = -1;
         if (int.TryParse(entry.Key.Parent.Id, out slotNb))
         {
-            User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+            User m_user; try { m_user = User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
             Lobby m_lobby = await Lobby.Get(m_user);
 
             string player = m_lobby.Users.First(x => x.Id == entry.Key.Parent.Parent.Parent.Id).UserId.Value;
@@ -469,7 +469,7 @@ public class DatabaseScene : MonoBehaviour
 
             if (value == true)
             {
-                User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+                User m_user; try { m_user = User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
                 Lobby m_lobby = await Lobby.Get(m_user);
 
                 bool everyoneReady = CloudManager.AllUsers(m_lobby).All(x => x.Ready.Value.HasValue && x.Ready.Value == true);

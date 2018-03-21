@@ -1,44 +1,54 @@
+using Firebase;
 using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-[Serializable]
-class SignInPanels
-{
-    public GameObject Main = null;
-    public GameObject Wait = null;
-
-    public GameObject[] All => new GameObject[] { Main, Wait };
-}
-
 class SignInScene : MonoBehaviour
 {
+    [Serializable]
+    class SignInPanels
+    {
+        public GameObject Wait = null;
+        public GameObject Main = null;
+        public GameObject[] All => new GameObject[] { Wait, Main };
+    }
+
     [SerializeField] SignInPanels m_panels = null;
 
-    void Start()
+    async void Start()
     {
         // Show wait panel
         SwitchPanel(m_panels.Wait);
 
+        // Check for Firebase dependencies
+        DependencyStatus status = await FirebaseApp.CheckAndFixDependenciesAsync();
+        if (status != DependencyStatus.Available) { throw new Exception("Unable to satisfy dependencies."); }
+
         // Show start panel
         SwitchPanel(m_panels.Main);
     }
-
-    /// <summary>
-    /// Called when the google sign in button in the main panel is pressed.
-    /// </summary>
+    
     public async void GoogleSignInButtonPressed()
     {
-        await User.Create(UserType.Google);
+        // Show wait panel
+        SwitchPanel(m_panels.Wait);
+
+        // Create google user
+        await User.SignInWithGoogle();
+
+        // Load lobby scene
         SceneManager.LoadScene("Lobby");
     }
-
-    /// <summary>
-    /// Called when the guest sign in button in the main panel is pressed.
-    /// </summary>
+    
     public async void GuestSignInButtonPressed()
     {
-        await User.Create(UserType.Device);
+        // Show wait panel
+        SwitchPanel(m_panels.Wait);
+
+        // Create guest user
+        await User.SignInAsGuest();
+
+        // Load lobby scene
         SceneManager.LoadScene("Lobby");
     }
 
@@ -46,9 +56,7 @@ class SignInScene : MonoBehaviour
     {
         // Disable all panels
         foreach (var p in m_panels.All)
-        {
             p.SetActive(false);
-        }
 
         // Enable specified panel
         panel.SetActive(true);

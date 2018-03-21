@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -10,7 +9,7 @@ public class VotingWaitScene : MonoBehaviour
 
     async void Start()
     {
-        User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+        User m_user; try { m_user = User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
         Lobby m_lobby = await Lobby.Get(m_user);
 
         if (m_lobby == null)
@@ -31,7 +30,7 @@ public class VotingWaitScene : MonoBehaviour
 
     private async Task RegisterListeners()
     {
-        User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+        User m_user; try { m_user = User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
         Lobby m_lobby = await Lobby.Get(m_user);
 
         foreach (LobbyUser user in CloudManager.OtherUsers(m_lobby, m_user))
@@ -40,7 +39,7 @@ public class VotingWaitScene : MonoBehaviour
 
     private async Task DeregisterListeners()
     {
-        User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+        User m_user; try { m_user = User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
         Lobby m_lobby = await Lobby.Get(m_user);
 
         foreach (LobbyUser user in CloudManager.OtherUsers(m_lobby, m_user))
@@ -55,7 +54,7 @@ public class VotingWaitScene : MonoBehaviour
 
             if (!string.IsNullOrEmpty(value))
             {
-                User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+                User m_user; try { m_user = User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
                 Lobby m_lobby = await Lobby.Get(m_user);
 
                 bool everyoneVoted = CloudManager.AllUsers(m_lobby).All(x => !string.IsNullOrWhiteSpace(x.Vote.Value));

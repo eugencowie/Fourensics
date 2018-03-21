@@ -62,8 +62,7 @@ class User : ICloudObject
     {
         // Authenticate as a guest user
         FirebaseAuth.GetAuth(Cloud.Firebase);
-        Credential credential = EmailAuthProvider.GetCredential(SystemInfo.deviceUniqueIdentifier, "notasecret");
-        FirebaseUser firebaseUser = await Cloud.Auth.SignInWithCredentialAsync(credential);
+        FirebaseUser firebaseUser = await Cloud.Auth.SignInAnonymouslyAsync();
 
         // Fetch user from the cloud using Firebase user id
         m_instance = await Cloud.Fetch<User>(new Key("users").Child(firebaseUser.UserId));

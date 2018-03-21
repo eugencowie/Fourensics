@@ -30,8 +30,11 @@ class SignInScene : MonoBehaviour
     
     public async void GoogleSignInButtonPressed()
     {
+        // Show wait panel
+        SwitchPanel(m_panels.Wait);
+
         // Create google user
-        await User.Create(UserType.Google);
+        await User.SignInWithGoogle();
 
         // Load lobby scene
         SceneManager.LoadScene("Lobby");
@@ -39,8 +42,11 @@ class SignInScene : MonoBehaviour
     
     public async void GuestSignInButtonPressed()
     {
+        // Show wait panel
+        SwitchPanel(m_panels.Wait);
+
         // Create guest user
-        await User.Create(UserType.Device);
+        await User.SignInAsGuest();
 
         // Load lobby scene
         SceneManager.LoadScene("Lobby");

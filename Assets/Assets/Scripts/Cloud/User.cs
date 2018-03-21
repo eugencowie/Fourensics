@@ -36,87 +36,44 @@ class User : ICloudObject
     }
 
     static User m_instance = null;
-
-    async static Task<User> Authenticate()
+    
+    public async static Task SignInWithGoogle()
     {
-        // Initialise Firebase authentication
+        // Set up Google sign in service
+        GoogleSignIn.Configuration = new GoogleSignInConfiguration {
+            WebClientId = "1066471497679-ceos2isgtrb36rctu7coq1da2igs922r.apps.googleusercontent.com",
+            RequestIdToken = true
+        };
+
+        // Sign in using Google
+        GoogleSignInUser googleUser = await Cloud.Google.SignIn();
+
+        // Authenticate as a Google user
         FirebaseAuth.GetAuth(Cloud.Firebase);
+        Credential credential = GoogleAuthProvider.GetCredential(googleUser.IdToken, null);
+        FirebaseUser firebaseUser = await Cloud.Auth.SignInWithCredentialAsync(credential);
 
-        if (m_instance.Type.Value == (long)UserType.Google)
-        {
-            // Authenticate as a Google user
-            Credential credential = GoogleAuthProvider.GetCredential(m_instance.Token.Value, null);
-            FirebaseUser user = await Cloud.Auth.SignInWithCredentialAsync(credential);
-        }
-        else
-        {
-            // Authenticate as a guest user
-            Credential credential = EmailAuthProvider.GetCredential(m_instance.Token.Value, m_instance.Token.Value);
-            FirebaseUser user = await Cloud.Auth.SignInWithCredentialAsync(credential);
-        }
-
-        return m_instance;
+        // Fetch user from the cloud using Firebase user id
+        m_instance = await Cloud.Fetch<User>(new Key("users").Child(firebaseUser.UserId));
+        m_instance.Name.Value = firebaseUser.DisplayName;
     }
 
-    public async static Task<User> Create(UserType type)
+    public async static Task SignInAsGuest()
     {
-        if (type == UserType.Google)
-        {
-            // Set up Google sign in service
-            GoogleSignIn.Configuration = new GoogleSignInConfiguration {
-                WebClientId = "1066471497679-ceos2isgtrb36rctu7coq1da2igs922r.apps.googleusercontent.com",
-                RequestIdToken = true
-            };
+        // Authenticate as a guest user
+        FirebaseAuth.GetAuth(Cloud.Firebase);
+        Credential credential = EmailAuthProvider.GetCredential(SystemInfo.deviceUniqueIdentifier, "notasecret");
+        FirebaseUser firebaseUser = await Cloud.Auth.SignInWithCredentialAsync(credential);
 
-            // Sign in using Google
-            GoogleSignInUser googleUser = await Cloud.Google.SignIn();
-
-            // Create database object
-            Key userKey = new Key("users").Child(SystemInfo.deviceUniqueIdentifier);
-            m_instance = Cloud.Create<User>(userKey);
-            m_instance.Type.Value = (long)UserType.Google;
-            m_instance.Token.Value = googleUser.IdToken;
-            m_instance.Name.Value = googleUser.DisplayName;
-        }
-        else
-        {
-            // Create database object
-            Key userKey = new Key("users").Child(SystemInfo.deviceUniqueIdentifier);
-            m_instance = Cloud.Create<User>(userKey);
-            m_instance.Type.Value = (long)UserType.Device;
-            m_instance.Token.Value = userKey.Id;
-            m_instance.Name.Value = "Guest";
-        }
-
-        await Authenticate();
-
-        return m_instance;
+        // Fetch user from the cloud using Firebase user id
+        m_instance = await Cloud.Fetch<User>(new Key("users").Child(firebaseUser.UserId));
+        m_instance.Name.Value = "Guest";
     }
 
-    public async static Task<User> Get()
+    public static User Get()
     {
         if (m_instance == null)
-        {
-            // Check for Firebase dependencies
-            DependencyStatus status = await FirebaseApp.CheckAndFixDependenciesAsync();
-            if (status != DependencyStatus.Available) { throw new Exception("Unable to satisfy dependencies."); }
-
-            // Fetch user from the cloud using unique device id
-            m_instance = await Cloud.Fetch<User>(new Key("users").Child(SystemInfo.deviceUniqueIdentifier));
-
-            if (!m_instance.Type.Value.HasValue || string.IsNullOrWhiteSpace(m_instance.Token.Value))
-            {
-                throw new Exception();
-            }
-            else if (m_instance.Type.Value == (long)UserType.Google)
-            {
-                await Authenticate();
-            }
-            else
-            {
-                await Authenticate();
-            }
-        }
+            throw new Exception();
 
         return m_instance;
     }

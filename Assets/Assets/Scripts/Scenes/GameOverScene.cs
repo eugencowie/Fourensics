@@ -25,7 +25,7 @@ public class GameOverScene : MonoBehaviour
 
     async void Start()
     {
-        User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+        User m_user; try { m_user = User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
         Lobby m_lobby = await Lobby.Get(m_user);
 
         if (m_lobby == null)
@@ -51,7 +51,7 @@ public class GameOverScene : MonoBehaviour
 
     private async Task RegisterListeners()
     {
-        User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+        User m_user; try { m_user = User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
         Lobby m_lobby = await Lobby.Get(m_user);
 
         foreach (LobbyUser user in CloudManager.OtherUsers(m_lobby, m_user))
@@ -60,7 +60,7 @@ public class GameOverScene : MonoBehaviour
 
     private async Task DeregisterListeners()
     {
-        User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+        User m_user; try { m_user = User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
         Lobby m_lobby = await Lobby.Get(m_user);
 
         foreach (LobbyUser user in CloudManager.OtherUsers(m_lobby, m_user))
@@ -76,7 +76,7 @@ public class GameOverScene : MonoBehaviour
 
     public async void ResetButtonPressed()
     {
-        User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+        User m_user; try { m_user = User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
         Lobby m_lobby = await Lobby.Get(m_user);
 
         await DeregisterListeners();
@@ -92,7 +92,7 @@ public class GameOverScene : MonoBehaviour
 
             if (!string.IsNullOrEmpty(value))
             {
-                User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+                User m_user; try { m_user = User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
                 Lobby m_lobby = await Lobby.Get(m_user);
 
                 bool everyoneVoted = CloudManager.AllUsers(m_lobby).All(x => !string.IsNullOrWhiteSpace(x.Vote.Value));

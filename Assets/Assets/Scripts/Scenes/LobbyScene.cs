@@ -8,14 +8,13 @@ using UnityEngine.UI;
 [Serializable]
 class LobbyPanels
 {
-    public GameObject SignIn = null;
     public GameObject Main = null;
     public GameObject Create = null;
     public GameObject Join = null;
     public GameObject Lobby = null;
     public GameObject Wait = null;
 
-    public GameObject[] All => new GameObject[] { SignIn, Main, Create, Join, Lobby, Wait };
+    public GameObject[] All => new GameObject[] { Main, Create, Join, Lobby, Wait };
 }
 
 class LobbyScene : MonoBehaviour
@@ -90,16 +89,6 @@ class LobbyScene : MonoBehaviour
         // Deregister lobby user id change callbacks
         foreach (LobbyUser lobbyUser in lobby.Users)
             lobbyUser.UserId.ValueChanged -= LobbyUserIdChanged;
-    }
-
-    public void SignInWithGoogleButtonPressed()
-    {
-
-    }
-
-    public void SignInAsGuestButtonPressed()
-    {
-
     }
 
     /// <summary>

@@ -1,9 +1,6 @@
 using System;
-using System.Linq;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 [Serializable]
 class SignInPanels
@@ -30,15 +27,19 @@ class SignInScene : MonoBehaviour
     /// <summary>
     /// Called when the google sign in button in the main panel is pressed.
     /// </summary>
-    public void GoogleSignInButtonPressed()
+    public async void GoogleSignInButtonPressed()
     {
+        await User.Create(UserType.Google);
+        SceneManager.LoadScene("Lobby");
     }
 
     /// <summary>
     /// Called when the guest sign in button in the main panel is pressed.
     /// </summary>
-    public void GuestSignInButtonPressed()
+    public async void GuestSignInButtonPressed()
     {
+        await User.Create(UserType.Device);
+        SceneManager.LoadScene("Lobby");
     }
 
     void SwitchPanel(GameObject panel)

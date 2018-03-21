@@ -27,7 +27,7 @@ public class VotingScene : MonoBehaviour
 
     async void Start()
     {
-        User m_user = await User.Get();
+        User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
         Lobby m_lobby = await Lobby.Get(m_user);
 
         if (m_lobby == null)
@@ -146,7 +146,7 @@ public class VotingScene : MonoBehaviour
 
     public async void ConfirmVote()
     {
-        User m_user = await User.Get();
+        User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
         Lobby m_lobby = await Lobby.Get(m_user);
 
         var current = Suspects.First(s => s.gameObject.activeSelf);

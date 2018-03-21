@@ -21,6 +21,9 @@ EditorBuildSettings:
     path: Assets/Assets/Scenes/Rooms/Bartender.unity
     guid: d858c1784694de949a44880b19d2d3c1
   - enabled: 1
+    path: Assets/Assets/Scenes/SignIn.unity
+    guid: 93dbfd4199a559a44ac0cfdde7dd33a0
+  - enabled: 1
     path: Assets/Assets/Scenes/Database.unity
     guid: 02d35302db79d7e479cf809d7054dc2b
   - enabled: 1

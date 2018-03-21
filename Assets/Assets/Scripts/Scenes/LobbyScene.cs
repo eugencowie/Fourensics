@@ -1,3 +1,4 @@
+using Firebase.Database;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -21,8 +22,8 @@ class LobbyScene : MonoBehaviour
 {
     [SerializeField] Text m_codeLabel = null;
     [SerializeField] Text m_playersLabel = null;
-    [SerializeField] InputField m_codeField = null;
     [SerializeField] GameObject m_startButton = null;
+    [SerializeField] GameObject m_joinButtonTemplate = null;
 
     [SerializeField] LobbyPanels m_panels = null;
 
@@ -94,8 +95,32 @@ class LobbyScene : MonoBehaviour
     /// <summary>
     /// Called when the join button in the start panel is pressed.
     /// </summary>
-    public void JoinButtonPressed()
+    public async void JoinButtonPressed()
     {
+        // Destroy all existing buttons
+        foreach (Transform t in m_joinButtonTemplate.transform.parent)
+            if (t.gameObject.activeSelf && t.gameObject.name != "Back button")
+                Destroy(t.gameObject);
+
+        // Get lobbies database entry
+        DataSnapshot lobbyData = await FirebaseDatabase.DefaultInstance.RootReference.Child("lobbies").GetValueAsync();
+        
+        foreach (DataSnapshot lobby in lobbyData.Children)
+        {
+            // Create new button
+            GameObject newButton = Instantiate(m_joinButtonTemplate, m_joinButtonTemplate.transform.parent);
+            newButton.SetActive(true);
+            newButton.name = lobby.Key;
+
+            // Add on-click listener
+            newButton.GetComponent<Button>().onClick.AddListener(() => LobbyButtonPressed(lobby.Key));
+            
+            // Set button text
+            foreach (Transform t in newButton.transform)
+                if (t.gameObject.GetComponent<Text>() != null)
+                    t.gameObject.GetComponent<Text>().text = lobby.Key;
+        }
+
         // Show join panel
         SwitchPanel(m_panels.Join);
     }
@@ -112,9 +137,9 @@ class LobbyScene : MonoBehaviour
     /// <summary>
     /// Called when the submit button in the join panel is pressed.
     /// </summary>
-    public async void SubmitButtonPressed()
+    public async void LobbyButtonPressed(string code)
     {
-        if (!string.IsNullOrEmpty(m_codeField.text))
+        if (!string.IsNullOrEmpty(code))
         {
             // Show wait panel
             SwitchPanel(m_panels.Wait);
@@ -123,7 +148,7 @@ class LobbyScene : MonoBehaviour
             User user; try { user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
 
             // Update user lobby value
-            user.Lobby.Value = m_codeField.text.ToUpper();
+            user.Lobby.Value = code.ToUpper();
 
             // Fetch lobby from cloud
             Lobby lobby = await Lobby.Get(user);
@@ -148,8 +173,7 @@ class LobbyScene : MonoBehaviour
                 user.Lobby.Value = null;
 
                 // Show join panel
-                m_codeField.text = "";
-                SwitchPanel(m_panels.Join);
+                JoinButtonPressed();
             }
         }
     }
@@ -261,12 +285,6 @@ class LobbyScene : MonoBehaviour
         // Set lobby state value
         lobby.State.Value = (int)LobbyState.InGame;
         LobbyStateChanged(lobby.State);
-    }
-
-    public void CodeFieldChanged(string s)
-    {
-        // Make code field text uppercase
-        m_codeField.text = m_codeField.text.ToUpper();
     }
 
     void SwitchPanel(GameObject panel)

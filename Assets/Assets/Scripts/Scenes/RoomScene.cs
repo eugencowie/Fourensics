@@ -36,7 +36,7 @@ public class RoomScene : MonoBehaviour
         ReadyButton.SetActive(false);
         DatabaseButton.SetActive(false);
 
-        User m_user; try { m_user = User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+        /*User m_user; try { m_user = User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
         Lobby m_lobby = await Lobby.Get(m_user);
         if (m_lobby == null)
         {
@@ -52,7 +52,7 @@ public class RoomScene : MonoBehaviour
             ReadyButton.SetActive(true);
             DatabaseButton.SetActive(true);
         }
-        else SceneManager.LoadScene("Lobby");
+        else SceneManager.LoadScene("Lobby");*/
     }
 
     private async Task RegisterListeners()

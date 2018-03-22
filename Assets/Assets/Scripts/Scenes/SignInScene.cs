@@ -27,7 +27,7 @@ class SignInScene : MonoBehaviour
         // Show start panel
         SwitchPanel(m_panels.Main);
     }
-    
+
     public async void GoogleSignInButtonPressed()
     {
         // Show wait panel
@@ -39,7 +39,7 @@ class SignInScene : MonoBehaviour
         // Load lobby scene
         SceneManager.LoadScene("Lobby");
     }
-    
+
     public async void GuestSignInButtonPressed()
     {
         // Show wait panel

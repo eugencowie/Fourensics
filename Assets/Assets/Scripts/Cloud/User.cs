@@ -1,9 +1,7 @@
-using Firebase;
 using Firebase.Auth;
 using Google;
 using System;
 using System.Threading.Tasks;
-using UnityEngine;
 
 enum UserType { Google, Device }
 
@@ -56,6 +54,8 @@ class User : ICloudObject
         // Fetch user from the cloud using Firebase user id
         m_instance = await Cloud.Fetch<User>(new Key("users").Child(firebaseUser.UserId));
         m_instance.Name.Value = firebaseUser.DisplayName;
+        m_instance.Type.Value = (long)UserType.Google;
+        m_instance.Token.Value = firebaseUser.UserId;
     }
 
     public async static Task SignInAsGuest()
@@ -67,6 +67,8 @@ class User : ICloudObject
         // Fetch user from the cloud using Firebase user id
         m_instance = await Cloud.Fetch<User>(new Key("users").Child(firebaseUser.UserId));
         m_instance.Name.Value = "Guest";
+        m_instance.Type.Value = (long)UserType.Device;
+        m_instance.Token.Value = firebaseUser.UserId;
     }
 
     public static User Get()

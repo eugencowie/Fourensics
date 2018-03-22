@@ -299,7 +299,12 @@ public class DatabaseScene : MonoBehaviour
                 if (t.gameObject.GetComponent<Text>() != null)
                 {
                     if (CloudManager.AllUsers(m_lobby).Count() > i)
-                        t.gameObject.GetComponent<Text>().text = CloudManager.AllUsers(m_lobby).ElementAt(i).Name.Value;
+                    {
+                        string name = CloudManager.AllUsers(m_lobby).ElementAt(i).Name.Value;
+                        if (name.Length > 8) name = name.Split(' ')[0];
+                        if (name.Length > 8) name = name.Substring(0, 8) + "…";
+                        t.gameObject.GetComponent<Text>().text = name;
+                    }
                     else
                         t.gameObject.GetComponent<Text>().text = "";
                 }

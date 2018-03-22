@@ -72,10 +72,25 @@ class User : ICloudObject
         m_instance.Token.Value = firebaseUser.UserId;
     }
 
-    public static User Get()
+    public async static Task<User> Get()
     {
         if (m_instance == null)
-            throw new Exception();
+        {
+            // Fetch user from the cloud using Firebase user id
+            m_instance = await Cloud.Fetch<User>(new Key("users").Child(SystemInfo.deviceUniqueIdentifier));
+
+            // Check if device has signed-in before
+            if (m_instance.Type.Value.HasValue)
+            {
+                // Use whichever sign-in type was used before
+                if (m_instance.Type.Value == (long)UserType.Google)
+                    await SignInWithGoogle();
+                else
+                    await SignInAsGuest();
+            }
+            else
+                throw new Exception();
+        }
 
         return m_instance;
     }

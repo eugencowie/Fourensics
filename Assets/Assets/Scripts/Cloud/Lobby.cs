@@ -67,6 +67,7 @@ class LobbyUser : ICloudObject
 {
     public Key Key { get; private set; }
     public CloudNode UserId { get; private set; }
+    public CloudNode Name { get; private set; }
     public CloudNode<long> Scene { get; private set; }
     public CloudNode<bool> Ready { get; private set; }
     public CloudNode Vote { get; private set; }
@@ -78,6 +79,7 @@ class LobbyUser : ICloudObject
     {
         Key = key;
         UserId = CloudNode.Create(Key.Child("user-id"));
+        Name = CloudNode.Create(Key.Child("name"));
         Scene = CloudNode<long>.Create(Key.Child("scene"));
         Ready = CloudNode<bool>.Create(Key.Child("ready"));
         Vote = CloudNode.Create(Key.Child("vote"));
@@ -88,6 +90,7 @@ class LobbyUser : ICloudObject
     {
         Key = key;
         UserId = await CloudNode.Fetch(Key.Child("user-id"));
+        Name = await CloudNode.Fetch(Key.Child("name"));
         Scene = await CloudNode<long>.Fetch(Key.Child("scene"));
         Ready = await CloudNode<bool>.Fetch(Key.Child("ready"));
         Vote = await CloudNode.Fetch(Key.Child("vote"));
@@ -97,6 +100,7 @@ class LobbyUser : ICloudObject
     public void Reset()
     {
         UserId.Value = null;
+        Name.Value = null;
         Scene.Value = null;
         Ready.Value = null;
         Vote.Value = null;

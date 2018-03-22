@@ -292,6 +292,25 @@ public class DatabaseScene : MonoBehaviour
         User m_user; try { m_user = User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
         Lobby m_lobby = await Lobby.Get(m_user);
 
+        for (int i = 0; i < Data.Count; i++)
+        {
+            foreach (Transform t in Data[i].PlayerButton.transform)
+            {
+                if (t.gameObject.GetComponent<Text>() != null)
+                {
+                    if (CloudManager.AllUsers(m_lobby).Count() > i)
+                    {
+                        string name = CloudManager.AllUsers(m_lobby).ElementAt(i).Name.Value;
+                        if (name.Length > 8) name = name.Split(' ')[0];
+                        if (name.Length > 8) name = name.Substring(0, 8) + "…";
+                        t.gameObject.GetComponent<Text>().text = name;
+                    }
+                    else
+                        t.gameObject.GetComponent<Text>().text = "";
+                }
+            }
+        }
+
         foreach (LobbyUserItem item in CloudManager.AllUsers(m_lobby).Select(x => x.Items).SelectMany(x => x))
         {
             await OnSlotChangedAsync(item.Name);

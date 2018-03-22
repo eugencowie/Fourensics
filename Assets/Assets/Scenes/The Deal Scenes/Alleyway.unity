@@ -4097,7 +4097,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f4eebfafefce1e47829fbae1d8fe1a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetCamera: {fileID: 0}
+  TargetCamera: {fileID: 1805590040}
   Duration: 1
   audioSource: {fileID: 0}
   audioClip: {fileID: 0}
@@ -7814,6 +7814,7 @@ Transform:
   - {fileID: 227767748}
   - {fileID: 29916776}
   - {fileID: 1805590041}
+  - {fileID: 2034848723}
   m_Father: {fileID: 0}
   m_RootOrder: 22
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -8310,6 +8311,53 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2cb34ec0d6274f041a0fb2a7f3936ee4, type: 3}
   m_IsPrefabParent: 0
+--- !u!1 &942775492 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 100002, guid: 2e5a5e15f5405a644b20a2e148f3c9e4, type: 3}
+  m_PrefabInternal: {fileID: 1631567238}
+--- !u!114 &942775493
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 942775492}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73f3d3f0475c0554ba134c76b6d91a57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: Fire escape
+  Hint: ThThe fire escape is too far up to be reached from the ground. It looks rusty
+    and not really safe.
+  Image: {fileID: 0}
+  ImagePath: 
+--- !u!114 &942775494
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 942775492}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f4eebfafefce1e47829fbae1d8fe1a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetCamera: {fileID: 2034848722}
+  Duration: 1
+  audioSource: {fileID: 0}
+  audioClip: {fileID: 0}
+--- !u!65 &942775495
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 942775492}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 44.58543, y: 83.2329, z: 32.754807}
+  m_Center: {x: -22.98289, y: 38.353558, z: -1.436401}
 --- !u!1001 &945612681
 Prefab:
   m_ObjectHideFlags: 0
@@ -9165,7 +9213,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 2e5a5e15f5405a644b20a2e148f3c9e4, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 142.4
+      value: 155
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 2e5a5e15f5405a644b20a2e148f3c9e4, type: 3}
       propertyPath: m_LocalPosition.z
@@ -12747,12 +12795,12 @@ GameObject:
   - component: {fileID: 1805590043}
   - component: {fileID: 1805590042}
   m_Layer: 0
-  m_Name: Camera
+  m_Name: ExitSignCam
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1805590041
 Transform:
   m_ObjectHideFlags: 0
@@ -13025,6 +13073,95 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6dcc25e1a2b78b244b56eee80af85c03, type: 3}
   m_IsPrefabParent: 0
+--- !u!1 &2034848722
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 2034848723}
+  - component: {fileID: 2034848727}
+  - component: {fileID: 2034848726}
+  - component: {fileID: 2034848725}
+  - component: {fileID: 2034848724}
+  m_Layer: 0
+  m_Name: FireExitCam
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &2034848723
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2034848722}
+  m_LocalRotation: {x: 0.02399768, y: 0.97500426, z: 0.176919, w: -0.1322521}
+  m_LocalPosition: {x: 80.7, y: 88.00001, z: 55.60006}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 529452101}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: -20.569, y: 195.44899, z: 0}
+--- !u!81 &2034848724
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2034848722}
+  m_Enabled: 1
+--- !u!92 &2034848725
+Behaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2034848722}
+  m_Enabled: 1
+--- !u!124 &2034848726
+Behaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2034848722}
+  m_Enabled: 1
+--- !u!20 &2034848727
+Camera:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2034848722}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_ClearFlags: 1
+  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: 0.3
+  far clip plane: 1000
+  field of view: 60
+  orthographic: 0
+  orthographic size: 5
+  m_Depth: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 0
+  m_TargetEye: 3
+  m_HDR: 1
+  m_AllowMSAA: 1
+  m_ForceIntoRT: 0
+  m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: 0.022
+  m_StereoMirrorMode: 0
 --- !u!1001 &2036073825
 Prefab:
   m_ObjectHideFlags: 0

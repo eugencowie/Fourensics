@@ -41,7 +41,7 @@ public class VotingDatabaseScene : MonoBehaviour
             m_welcomeScreen.ShowDialog();
         }
 
-        User m_user; try { m_user = User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+        User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
         Lobby m_lobby = await Lobby.Get(m_user);
         if (m_lobby == null)
         {
@@ -79,7 +79,7 @@ public class VotingDatabaseScene : MonoBehaviour
 
     async Task RegisterListeners()
     {
-        User user; try { user = User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+        User user; try { user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
         Lobby lobby = await Lobby.Get(user);
 
         foreach (LobbyUserItem clue in lobby.Users
@@ -93,7 +93,7 @@ public class VotingDatabaseScene : MonoBehaviour
 
     async Task DeregisterListeners()
     {
-        User user; try { user = User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+        User user; try { user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
         Lobby lobby = await Lobby.Get(user);
 
         foreach (LobbyUserItem clue in lobby.Users
@@ -188,8 +188,27 @@ public class VotingDatabaseScene : MonoBehaviour
 
     async Task DownloadItems()
     {
-        User m_user; try { m_user = User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+        User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
         Lobby m_lobby = await Lobby.Get(m_user);
+
+        for (int i = 0; i < Data.Count; i++)
+        {
+            foreach (Transform t in Data[i].PlayerButton.transform)
+            {
+                if (t.gameObject.GetComponent<Text>() != null)
+                {
+                    if (CloudManager.AllUsers(m_lobby).Count() > i)
+                    {
+                        string name = CloudManager.AllUsers(m_lobby).ElementAt(i).Name.Value;
+                        if (name.Length > 8) name = name.Split(' ')[0];
+                        if (name.Length > 8) name = name.Substring(0, 8) + "…";
+                        t.gameObject.GetComponent<Text>().text = name;
+                    }
+                    else
+                        t.gameObject.GetComponent<Text>().text = "";
+                }
+            }
+        }
 
         foreach (LobbyUserItem item in CloudManager.AllUsers(m_lobby).Select(x => x.Items).SelectMany(x => x))
         {
@@ -212,7 +231,7 @@ public class VotingDatabaseScene : MonoBehaviour
         int slotNb = -1;
         if (int.TryParse(entry.Key.Parent.Id, out slotNb))
         {
-            User m_user; try { m_user = User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+            User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
             Lobby m_lobby = await Lobby.Get(m_user);
 
             string player = m_lobby.Users.First(x => x.Id == entry.Key.Parent.Parent.Parent.Id).UserId.Value;
@@ -313,7 +332,7 @@ public class VotingDatabaseScene : MonoBehaviour
         int slotNb = -1;
         if (int.TryParse(entry.Key.Parent.Id, out slotNb))
         {
-            User user; try { user = User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+            User user; try { user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
             Lobby lobby = await Lobby.Get(user);
 
             string player = lobby.Users.First(x => x.Id == entry.Key.Parent.Parent.Parent.Id).UserId.Value;

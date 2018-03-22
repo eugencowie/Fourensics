@@ -1,4 +1,3 @@
-using Firebase;
 using Firebase.Auth;
 using Google;
 using System;
@@ -36,7 +35,7 @@ class User : ICloudObject
     }
 
     static User m_instance = null;
-    
+
     public async static Task SignInWithGoogle()
     {
         // Set up Google sign in service
@@ -54,8 +53,10 @@ class User : ICloudObject
         FirebaseUser firebaseUser = await Cloud.Auth.SignInWithCredentialAsync(credential);
 
         // Fetch user from the cloud using Firebase user id
-        m_instance = await Cloud.Fetch<User>(new Key("users").Child(firebaseUser.UserId));
+        m_instance = await Cloud.Fetch<User>(new Key("users").Child(SystemInfo.deviceUniqueIdentifier));
         m_instance.Name.Value = firebaseUser.DisplayName;
+        m_instance.Type.Value = (long)UserType.Google;
+        m_instance.Token.Value = firebaseUser.UserId;
     }
 
     public async static Task SignInAsGuest()
@@ -65,14 +66,31 @@ class User : ICloudObject
         FirebaseUser firebaseUser = await Cloud.Auth.SignInAnonymouslyAsync();
 
         // Fetch user from the cloud using Firebase user id
-        m_instance = await Cloud.Fetch<User>(new Key("users").Child(firebaseUser.UserId));
+        m_instance = await Cloud.Fetch<User>(new Key("users").Child(SystemInfo.deviceUniqueIdentifier));
         m_instance.Name.Value = "Guest";
+        m_instance.Type.Value = (long)UserType.Device;
+        m_instance.Token.Value = firebaseUser.UserId;
     }
 
-    public static User Get()
+    public async static Task<User> Get()
     {
         if (m_instance == null)
-            throw new Exception();
+        {
+            // Fetch user from the cloud using Firebase user id
+            m_instance = await Cloud.Fetch<User>(new Key("users").Child(SystemInfo.deviceUniqueIdentifier));
+
+            // Check if device has signed-in before
+            if (m_instance.Type.Value.HasValue)
+            {
+                // Use whichever sign-in type was used before
+                if (m_instance.Type.Value == (long)UserType.Google)
+                    await SignInWithGoogle();
+                else
+                    await SignInAsGuest();
+            }
+            else
+                throw new Exception();
+        }
 
         return m_instance;
     }

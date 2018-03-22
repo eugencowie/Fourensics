@@ -26,9 +26,8 @@ static class CloudManager
             return false;
 
         // Add player to lobby
-        players.Add(user.Id);
-        for (int i = 0; i < players.Count; i++)
-            lobby.Users[i].UserId.Value = players[i];
+        lobby.Users[players.Count].UserId.Value = user.Id;
+        lobby.Users[players.Count].Name.Value = user.Name.Value;
 
         return true;
     }

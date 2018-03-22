@@ -191,6 +191,20 @@ public class VotingDatabaseScene : MonoBehaviour
         User m_user; try { m_user = User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
         Lobby m_lobby = await Lobby.Get(m_user);
 
+        for (int i = 0; i < Data.Count; i++)
+        {
+            foreach (Transform t in Data[i].PlayerButton.transform)
+            {
+                if (t.gameObject.GetComponent<Text>() != null)
+                {
+                    if (CloudManager.AllUsers(m_lobby).Count() > i)
+                        t.gameObject.GetComponent<Text>().text = CloudManager.AllUsers(m_lobby).ElementAt(i).Name.Value;
+                    else
+                        t.gameObject.GetComponent<Text>().text = "";
+                }
+            }
+        }
+
         foreach (LobbyUserItem item in CloudManager.AllUsers(m_lobby).Select(x => x.Items).SelectMany(x => x))
         {
             await OnSlotChangedAsync(item.Name);

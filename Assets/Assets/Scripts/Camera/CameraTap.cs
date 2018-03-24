@@ -174,7 +174,7 @@ public class CameraTap : MonoBehaviour
             }
 
             // Create an inactive clone of this camera in its current location
-            GameObject StartCamera = Instantiate(gameObject);
+            GameObject StartCamera = Instantiate(gameObject, gameObject.transform.parent);
             StartCamera.SetActive(false);
 
             //Play audio

@@ -78,6 +78,7 @@ public class Inventory : MonoBehaviour
             {
                 StaticInventory.Hints.Add(new ObjectHintData(item.Name, item.Hint, item.Image)); // TODO
             }
+            else return;
 
             // Create new button
             GameObject newButton = Instantiate(Button);

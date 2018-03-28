@@ -1035,6 +1035,36 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 7.2, y: 1.29, z: 9.75}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &833326667
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 833326665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73f3d3f0475c0554ba134c76b6d91a57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: Ceramic plate
+  Hint: The ceramic plates are burnt in places. They look fairly expensive.
+  Image: {fileID: 0}
+  ImagePath: 
+--- !u!114 &833326668
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 833326665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0a8ecbd9b98fe940ac61450a8fb6b1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  InspectRotation: {x: 0, y: 0, z: 0}
+  InspectScale: 1
+  audioSource: {fileID: 0}
+  audioClip: {fileID: 0}
 --- !u!1 &865987206 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 100002, guid: 4dc4cdfa99ffbb640a0d02bf00ffa17c, type: 3}

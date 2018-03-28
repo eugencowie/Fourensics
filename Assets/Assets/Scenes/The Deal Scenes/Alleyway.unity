@@ -220,7 +220,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   InspectRotation: {x: 0, y: 0, z: 0}
-  InspectScale: 0.005
+  InspectScale: 0.01
   audioSource: {fileID: 0}
   audioClip: {fileID: 0}
 --- !u!65 &24784641

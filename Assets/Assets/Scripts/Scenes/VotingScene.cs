@@ -84,14 +84,29 @@ public class VotingScene : MonoBehaviour
         }
     }
 
-    private void SetBackground()
+    async void SetBackground()
     {
-        if (m_scene <= Backgrounds.Length)
-        {
-            foreach (var bg in Backgrounds)
-                bg.SetActive(false);
+        User user; try { user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+        Lobby lobby = await Lobby.Get(user);
 
-            Backgrounds[m_scene - 1].SetActive(true);
+        int caseNb = (int)(lobby.Case.Value ?? 0);
+        if (caseNb >= 1 && caseNb <= 2)
+        {
+            const int scenesPerCase = 4;
+
+            int scene = (int)(CloudManager.OnlyUser(lobby, user).Scene.Value ?? 0);
+            if (scene >= 1 && scene <= scenesPerCase)
+            {
+                int x = ((caseNb - 1) * scenesPerCase) + scene;
+
+                if (x <= Backgrounds.Length)
+                {
+                    foreach (var bg in Backgrounds)
+                        bg.SetActive(false);
+
+                    Backgrounds[x - 1].SetActive(true);
+                }
+            }
         }
     }
 

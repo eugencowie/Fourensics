@@ -23,6 +23,7 @@ class LobbyScene : MonoBehaviour
     [SerializeField] Text m_playersLabel = null;
     [SerializeField] GameObject m_startButton = null;
     [SerializeField] GameObject m_joinButtonTemplate = null;
+    [SerializeField] GameObject m_joinButtonsContainer = null;
 
     [SerializeField] LobbyPanels m_panels = null;
 
@@ -98,14 +99,24 @@ class LobbyScene : MonoBehaviour
     {
         // Destroy all existing buttons
         foreach (Transform t in m_joinButtonTemplate.transform.parent)
+        {
             if (t.gameObject.activeSelf && t.gameObject.name != "Back button")
+            {
+                // Decrease button container size
+                m_joinButtonsContainer.GetComponent<RectTransform>().sizeDelta = new Vector2(m_joinButtonsContainer.GetComponent<RectTransform>().sizeDelta.x, m_joinButtonsContainer.GetComponent<RectTransform>().sizeDelta.y - 152.5f);
+
                 Destroy(t.gameObject);
+            }
+        }
 
         // Get lobbies database entry
         DataSnapshot lobbyData = await FirebaseDatabase.DefaultInstance.RootReference.Child("lobbies").GetValueAsync();
         
         foreach (DataSnapshot lobby in lobbyData.Children)
         {
+            // Increase button container size
+            m_joinButtonsContainer.GetComponent<RectTransform>().sizeDelta = new Vector2(m_joinButtonsContainer.GetComponent<RectTransform>().sizeDelta.x, m_joinButtonsContainer.GetComponent<RectTransform>().sizeDelta.y + 152.5f);
+
             // Create new button
             GameObject newButton = Instantiate(m_joinButtonTemplate, m_joinButtonTemplate.transform.parent);
             newButton.SetActive(true);

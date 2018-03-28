@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public static class StaticRoom
 {
     public static bool SeenWelcome = false;
+    public static Quaternion PrevCameraRotation; 
 
     public static void Reset()
     {
@@ -30,6 +31,7 @@ public class RoomScene : MonoBehaviour
         {
             mainScreen.SetActive(true);
             welcomeScreen.SetActive(false);
+            Camera.main.transform.localRotation = StaticRoom.PrevCameraRotation;
         }
         StaticRoom.SeenWelcome = true;
 
@@ -71,6 +73,7 @@ public class RoomScene : MonoBehaviour
     {
         if (DatabaseButton.activeSelf)
         {
+            StaticRoom.PrevCameraRotation = Camera.main.transform.localRotation;
             DatabaseButton.SetActive(false);
             SceneManager.LoadScene("Database");
         }

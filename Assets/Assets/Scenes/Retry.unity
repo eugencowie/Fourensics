@@ -282,6 +282,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 536839593}
+  - component: {fileID: 536839594}
   m_Layer: 0
   m_Name: Scene
   m_TagString: Untagged
@@ -302,6 +303,17 @@ Transform:
   m_Father: {fileID: 80984418}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &536839594
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 536839592}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37033eb62c1a72a4e9b6b3cb75027542, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &745828162
 Prefab:
   m_ObjectHideFlags: 0

@@ -195,7 +195,7 @@ class GameOverScene : MonoBehaviour
             string newCode = await CloudManager.CreateLobbyCode();
 
             // Create new lobby
-            Lobby newLobby = Lobby.Create(newCode);
+            Lobby newLobby = Cloud.Create<Lobby>(new Key("lobbies").Child(newCode));
             newLobby.State.Value = (long)LobbyState.Lobby;
             newLobby.Case.Value = lobby.Case.Value;
 
@@ -278,6 +278,9 @@ class GameOverScene : MonoBehaviour
         User user; try { user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
         Lobby lobby = await Lobby.Get(user);
 
+        // Store new lobby code
+        string newLobby = lobby.Retry.Value;
+
         // Store scene number
         int prevScene = (int)CloudManager.OnlyUser(lobby, user).Scene.Value;
 
@@ -290,6 +293,10 @@ class GameOverScene : MonoBehaviour
         StaticRoom.Reset();
         StaticSlot.Reset();
         StaticSuspects.Reset();
+
+        // Fetch new lobby
+        user.Lobby.Value = newLobby;
+        lobby = await Lobby.Get(user);
 
         // Join new lobby
         CloudManager.JoinLobby(user, lobby, LobbyScene.MaxPlayers);

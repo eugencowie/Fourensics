@@ -59,7 +59,7 @@ class GameOverScene : MonoBehaviour
             x.Vote.ValueChanged += OnVoteChanged;
             x.Retry.ValueChanged += OnRetryChanged;
         }
-        //m_lobby.State.ValueChanged += OnLobbyStateChanged;
+        m_lobby.Retry.ValueChanged += OnLobbyRetryChanged;
 
         // Trigger vote changed event handler for current user
         OnVoteChanged(CloudManager.OnlyUser(m_lobby, m_user).Vote);
@@ -97,7 +97,7 @@ class GameOverScene : MonoBehaviour
             x.Vote.ValueChanged -= OnVoteChanged;
             x.Retry.ValueChanged -= OnRetryChanged;
         }
-        //m_lobby.State.ValueChanged -= OnLobbyStateChanged;
+        m_lobby.Retry.ValueChanged -= OnLobbyRetryChanged;
 
         // Remove user from lobby
         CloudManager.LeaveLobby(m_user, m_lobby);
@@ -189,9 +189,19 @@ class GameOverScene : MonoBehaviour
         Lobby lobby = await Lobby.Get(user);
 
         // Check if we are the lobby creator and everyone wants to retry
-        if (CloudManager.AllUsers(lobby).All(x => x.Retry.Value.HasValue && x.Ready.Value.Value == true))
+        if (CloudManager.OnlyUser(lobby, user).Scene.Value == 1 && CloudManager.AllUsers(lobby).All(x => x.Retry.Value.HasValue && x.Ready.Value.Value == true))
         {
-            SceneManager.LoadScene("Retry");
+            // Attempt to create unique lobby code
+            string newCode = await CloudManager.CreateLobbyCode();
+
+            // Create new lobby
+            Lobby newLobby = Lobby.Create(newCode);
+            newLobby.State.Value = (long)LobbyState.Lobby;
+            newLobby.Case.Value = lobby.Case.Value;
+
+            // Store the new code in the database
+            lobby.Retry.Value = newCode;
+            OnLobbyRetryChanged(lobby.Retry);
 
             /*
             // Store current case
@@ -260,6 +270,34 @@ class GameOverScene : MonoBehaviour
             }
             */
         }
+    }
+
+    async void OnLobbyRetryChanged(CloudNode retry)
+    {
+        // Get database objects
+        User user; try { user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+        Lobby lobby = await Lobby.Get(user);
+
+        // Store scene number
+        int prevScene = (int)CloudManager.OnlyUser(lobby, user).Scene.Value;
+
+        // Leave lobby
+        CloudManager.LeaveLobby(user, lobby);
+
+        // Reset static data
+        StaticClues.Reset();
+        StaticInventory.Reset();
+        StaticRoom.Reset();
+        StaticSlot.Reset();
+        StaticSuspects.Reset();
+
+        // Join new lobby
+        CloudManager.JoinLobby(user, lobby, LobbyScene.MaxPlayers);
+
+        // Calculate new scene number
+        int newScene = (prevScene + 1 > LobbyScene.ScenesPerCase ? prevScene + 1 : 1);
+
+        SceneManager.LoadScene("Retry");
     }
 
     /*

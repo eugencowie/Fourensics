@@ -1,136 +1,146 @@
-using System.Collections.Generic;
+using System;
 using System.Linq;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.Video;
 
-public class GameOverScene : MonoBehaviour
+class GameOverScene : MonoBehaviour
 {
-    public VideoPlayer WinVideo;
-    public VideoPlayer LoseVideo;
-    public GameObject ResetButton;
+    [Serializable]
+    struct Case
+    {
+        public string CorrectAnswer;
+        public Text WinText;
+        public Text LoseText;
+    }
 
-    public Text WaitText;
-    public Text WinText;
-    public Text LoseText;
+    [SerializeField] VideoPlayer m_winVideo;
+    [SerializeField] VideoPlayer m_loseVideo;
+    [SerializeField] Button m_resetButton;
+
+    [SerializeField] Text m_waitText;
+    [SerializeField] Case[] m_cases;
 
     [Range(0, 100)]
-    public int RequiredVotePercentage = 51;
+    [SerializeField]
+    int RequiredVotePercentage = 51;
 
-    private string m_roomCode;
+    string m_roomCode;
 
-    private Text m_winOrLoseText;
+    Text m_winOrLoseText;
 
     async void Start()
     {
+        // Get database objects
         User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
         Lobby m_lobby = await Lobby.Get(m_user);
 
-        if (m_lobby == null)
+        if (m_lobby == null && !string.IsNullOrEmpty(m_lobby.Id))
         {
+            // Load lobby scene
             SceneManager.LoadScene("Lobby");
             return;
         }
 
-        ResetButton.SetActive(false);
+        // Disable reset button
+        m_resetButton.gameObject.SetActive(false);
 
-        WinVideo.loopPointReached += VideoLoopPointReached;
-        LoseVideo.loopPointReached += VideoLoopPointReached;
+        // Set video end event handlers
+        m_winVideo.loopPointReached += VideoLoopPointReached;
+        m_loseVideo.loopPointReached += VideoLoopPointReached;
 
-        string room = m_lobby.Id;
-        if (!string.IsNullOrEmpty(room))
-        {
-            m_roomCode = room;
-            await RegisterListeners();
-            OnVoteChanged(CloudManager.OnlyUser(m_lobby, m_user).Vote);
-        }
-        else SceneManager.LoadScene("Lobby");
-    }
-
-    private async Task RegisterListeners()
-    {
-        User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
-        Lobby m_lobby = await Lobby.Get(m_user);
-
+        // Register vote changed event handlers
         foreach (LobbyUser user in CloudManager.OtherUsers(m_lobby, m_user))
             user.Vote.ValueChanged += OnVoteChanged;
-    }
 
-    private async Task DeregisterListeners()
-    {
-        User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
-        Lobby m_lobby = await Lobby.Get(m_user);
-
-        foreach (LobbyUser user in CloudManager.OtherUsers(m_lobby, m_user))
-            user.Vote.ValueChanged -= OnVoteChanged;
-    }
-
-    private void VideoLoopPointReached(VideoPlayer source)
-    {
-        //source.gameObject.SetActive(false);
-        m_winOrLoseText.gameObject.SetActive(true);
-        ResetButton.SetActive(true);
+        // Trigger vote changed event handler for current user
+        OnVoteChanged(CloudManager.OnlyUser(m_lobby, m_user).Vote);
     }
 
     public async void ResetButtonPressed()
     {
+        // Get database objects
         User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
         Lobby m_lobby = await Lobby.Get(m_user);
 
-        await DeregisterListeners();
+        // Deregister vote changed event handlers
+        foreach (LobbyUser user in CloudManager.OtherUsers(m_lobby, m_user))
+            user.Vote.ValueChanged -= OnVoteChanged;
+
+        // Remove user from lobby
         CloudManager.LeaveLobby(m_user, m_lobby);
+
+        // Load lobby scene
         SceneManager.LoadScene("Lobby");
     }
 
-    private async void OnVoteChanged(CloudNode entry)
+    void VideoLoopPointReached(VideoPlayer source)
     {
-        if (entry.Value != null)
+        // Enable win/lose text
+        m_winOrLoseText.gameObject.SetActive(true);
+
+        // Enable reset button
+        m_resetButton.gameObject.SetActive(true);
+    }
+
+    async void OnVoteChanged(CloudNode entry)
+    {
+        if (entry.Value != null && !string.IsNullOrEmpty(entry.Value))
         {
-            string value = entry.Value;
+            // Get database objects
+            User user; try { user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+            Lobby lobby = await Lobby.Get(user);
 
-            if (!string.IsNullOrEmpty(value))
+            // Get lobby case number
+            int caseNb = (int)(lobby.Case.Value ?? 0);
+
+            if (caseNb >= 1 && caseNb <= 2 && (caseNb - 1) < m_cases.Length)
             {
-                User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
-                Lobby m_lobby = await Lobby.Get(m_user);
-
-                bool everyoneVoted = CloudManager.AllUsers(m_lobby).All(x => !string.IsNullOrWhiteSpace(x.Vote.Value));
-
-                if (everyoneVoted)
+                // Check if everyone has voted
+                if (CloudManager.AllUsers(lobby).All(x => !string.IsNullOrWhiteSpace(x.Vote.Value)))
                 {
-                    IEnumerable<LobbyUser> allUsers = CloudManager.AllUsers(m_lobby);
+                    // Get number of correct answers and total answers
+                    float correctAnswers = CloudManager.AllUsers(lobby).Count(x => x.Vote.Value == m_cases[caseNb - 1].CorrectAnswer);
+                    float totalAnswers = CloudManager.AllUsers(lobby).Count();
 
-                    float correctAnswers = allUsers.Count(x => x.Vote.Value == "Caleb Holden");
-                    float totalAnswers = allUsers.Count();
-
+                    // Calculate percentage of correct answers
                     float percentage = correctAnswers / totalAnswers;
                     float requiredPercentage = RequiredVotePercentage / 100.0f;
 
+                    // Check if enough players have voted correctly
                     if (percentage >= requiredPercentage)
                     {
-                        WinText.text += $"\n\nYou voted for {CloudManager.OnlyUser(m_lobby, m_user).Vote.Value}";
+                        // Append current users vote to win text
+                        m_cases[caseNb - 1].WinText.text += $"\n\nYou voted for {CloudManager.OnlyUser(lobby, user).Vote.Value}";
 
-                        IEnumerable<LobbyUser> otherUsers = CloudManager.OtherUsers(m_lobby, m_user);
-
+                        // Append other users votes to win text
                         int counter = 2;
-                        foreach (LobbyUser user in otherUsers)
+                        foreach (LobbyUser u in CloudManager.OtherUsers(lobby, user))
                         {
-                            WinText.text += $"\nPlayer {counter} voted for {user.Vote.Value}";
+                            m_cases[caseNb - 1].WinText.text += $"\nPlayer {counter} voted for {u.Vote.Value}";
                             counter++;
                         }
 
-                        WaitText.gameObject.SetActive(false);
-                        WinVideo.gameObject.SetActive(true);
+                        // Hide wait text
+                        m_waitText.gameObject.SetActive(false);
 
-                        m_winOrLoseText = WinText;
+                        // Show win video
+                        m_winVideo.gameObject.SetActive(true);
+
+                        // Set win/lose text
+                        m_winOrLoseText = m_cases[caseNb - 1].WinText;
                     }
                     else
                     {
-                        WaitText.gameObject.SetActive(false);
-                        LoseVideo.gameObject.SetActive(true);
+                        // Hide wait text
+                        m_waitText.gameObject.SetActive(false);
 
-                        m_winOrLoseText = LoseText;
+                        // Show lose video
+                        m_loseVideo.gameObject.SetActive(true);
+
+                        // Set win/lose text
+                        m_winOrLoseText = m_cases[caseNb - 1].LoseText;
                     }
                 }
             }

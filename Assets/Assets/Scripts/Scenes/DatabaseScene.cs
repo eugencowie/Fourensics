@@ -160,9 +160,11 @@ public class DatabaseScene : MonoBehaviour
 
     public async void ReturnButtonPressed()
     {
-        if (ReturnButton.activeSelf)
+        if (ReturnButton.GetComponent<Button>().enabled)
         {
-            ReturnButton.SetActive(false);
+            // Disable return button
+            ReturnButton.GetComponent<Button>().enabled = false;
+            ReturnButton.GetComponent<Image>().enabled = false;
 
             // Get database objects
             User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
@@ -179,7 +181,10 @@ public class DatabaseScene : MonoBehaviour
 
                 if (scene >= 1 && scene <= scenesPerCase)
                 {
+                    // Deregister listeners
                     await DeregisterListeners();
+
+                    // Load scene
                     SceneManager.LoadScene(((caseNb - 1) * scenesPerCase) + scene);
                 }
             }

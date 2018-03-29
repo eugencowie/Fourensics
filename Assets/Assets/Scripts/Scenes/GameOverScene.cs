@@ -201,6 +201,8 @@ class GameOverScene : MonoBehaviour
 
             // Store the new code in the database
             lobby.Retry.Value = newCode;
+            lobby.Case.Value = null;
+            lobby.State.Value = null;
             OnLobbyRetryChanged(lobby.Retry);
 
             /*
@@ -310,7 +312,9 @@ class GameOverScene : MonoBehaviour
         CloudManager.JoinLobby(user, lobby, LobbyScene.MaxPlayers);
 
         // Calculate new scene number
-        int newScene = (prevScene + 1 > LobbyScene.ScenesPerCase ? prevScene + 1 : 1);
+        int newScene = prevScene + 1;
+        if (newScene > LobbyScene.ScenesPerCase)
+            newScene = -1;
 
         // Store new scene number in database
         CloudManager.OnlyUser(lobby, user).Scene.Value = newScene;

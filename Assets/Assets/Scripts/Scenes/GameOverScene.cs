@@ -70,6 +70,8 @@ class GameOverScene : MonoBehaviour
         // Hide retry button
         m_retryButton.enabled = false;
         m_retryButton.image.enabled = false;
+        foreach (Transform t in m_retryButton.gameObject.transform)
+            t.gameObject.SetActive(false);
 
         // Get database objects
         User user; try { user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
@@ -185,6 +187,9 @@ class GameOverScene : MonoBehaviour
         // Get database objects
         User user; try { user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
         Lobby lobby = await Lobby.Get(user);
+
+        if (string.IsNullOrWhiteSpace(user.Lobby.Value) || lobby.State.Value.HasValue)
+            return;
 
         // Check if we are the lobby creator and everyone wants to retry
         if (CloudManager.OnlyUser(lobby, user).Scene.Value == 1)

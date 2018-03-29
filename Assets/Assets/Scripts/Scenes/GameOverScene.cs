@@ -59,7 +59,7 @@ class GameOverScene : MonoBehaviour
             x.Vote.ValueChanged += OnVoteChanged;
             x.Retry.ValueChanged += OnRetryChanged;
         }
-        m_lobby.State.ValueChanged += OnLobbyStateChanged;
+        //m_lobby.State.ValueChanged += OnLobbyStateChanged;
 
         // Trigger vote changed event handler for current user
         OnVoteChanged(CloudManager.OnlyUser(m_lobby, m_user).Vote);
@@ -97,7 +97,7 @@ class GameOverScene : MonoBehaviour
             x.Vote.ValueChanged -= OnVoteChanged;
             x.Retry.ValueChanged -= OnRetryChanged;
         }
-        m_lobby.State.ValueChanged -= OnLobbyStateChanged;
+        //m_lobby.State.ValueChanged -= OnLobbyStateChanged;
 
         // Remove user from lobby
         CloudManager.LeaveLobby(m_user, m_lobby);
@@ -188,82 +188,81 @@ class GameOverScene : MonoBehaviour
         User user; try { user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
         Lobby lobby = await Lobby.Get(user);
 
-        if (string.IsNullOrWhiteSpace(user.Lobby.Value) || lobby.State.Value.HasValue)
-            return;
-
         // Check if we are the lobby creator and everyone wants to retry
-        if (CloudManager.OnlyUser(lobby, user).Scene.Value == 1)
+        if (CloudManager.AllUsers(lobby).All(x => x.Retry.Value.HasValue && x.Ready.Value.Value == true))
         {
-            if (CloudManager.AllUsers(lobby).All(x => x.Retry.Value.HasValue && x.Ready.Value.Value == true))
+            SceneManager.LoadScene("Retry");
+
+            /*
+            // Store current case
+            int caseNb = (int)lobby.Case.Value;
+
+            // Create dictionary to store user's current scenes
+            Dictionary<string, int> scenes = new Dictionary<string, int>();
+
+            foreach (LobbyUser x in CloudManager.OtherUsers(lobby, user))
             {
-                // Store current case
-                int caseNb = (int)lobby.Case.Value;
+                // Deregister vote/retry changed event handlers
+                x.Vote.ValueChanged -= OnVoteChanged;
+                x.Retry.ValueChanged -= OnRetryChanged;
 
-                // Create dictionary to store user's current scenes
-                Dictionary<string, int> scenes = new Dictionary<string, int>();
+                // Get user
+                User u = await Cloud.Fetch<User>(new Key("users").Child(x.UserId.Value));
 
-                foreach (LobbyUser x in CloudManager.OtherUsers(lobby, user))
+                // Store user's current scene
+                scenes[x.UserId.Value] = (int)x.Scene.Value;
+
+                // Remove user from lobby
+                CloudManager.LeaveLobby(u, lobby);
+            }
+
+            // Leave lobby
+            CloudManager.LeaveLobby(user, lobby);
+
+            // Attempt to create unique lobby code
+            string newCode = await CloudManager.CreateLobbyCode();
+
+            if (!string.IsNullOrEmpty(newCode))
+            {
+                // Create new lobby
+                lobby = Lobby.Create(newCode);
+                lobby.State.Value = (int)LobbyState.Lobby;
+                lobby.Case.Value = caseNb;
+
+                // Join lobby
+                bool joinSuccess = CloudManager.JoinLobby(user, lobby, LobbyScene.MaxPlayers);
+                if (joinSuccess)
                 {
-                    // Deregister vote/retry changed event handlers
-                    x.Vote.ValueChanged -= OnVoteChanged;
-                    x.Retry.ValueChanged -= OnRetryChanged;
+                    // Assign scene
+                    CloudManager.OnlyUser(lobby, user).Scene.Value = (scenes[user.Id] + 1 > LobbyScene.ScenesPerCase ? scenes[user.Id] + 1 : 1);
 
-                    // Get user
-                    User u = await Cloud.Fetch<User>(new Key("users").Child(x.UserId.Value));
+                    // Clear static data
+                    StaticInventory.Hints.Clear();
 
-                    // Store user's current scene
-                    scenes[x.UserId.Value] = (int)x.Scene.Value;
-
-                    // Remove user from lobby
-                    CloudManager.LeaveLobby(u, lobby);
-                }
-
-                // Leave lobby
-                CloudManager.LeaveLobby(user, lobby);
-
-                // Attempt to create unique lobby code
-                string newCode = await CloudManager.CreateLobbyCode();
-
-                if (!string.IsNullOrEmpty(newCode))
-                {
-                    // Create new lobby
-                    lobby = Lobby.Create(newCode);
-                    lobby.State.Value = (int)LobbyState.Lobby;
-                    lobby.Case.Value = caseNb;
-
-                    // Join lobby
-                    bool joinSuccess = CloudManager.JoinLobby(user, lobby, LobbyScene.MaxPlayers);
-                    if (joinSuccess)
+                    foreach (var x in scenes)
                     {
-                        // Assign scene
-                        CloudManager.OnlyUser(lobby, user).Scene.Value = (scenes[user.Id] + 1 > LobbyScene.ScenesPerCase ? scenes[user.Id] + 1 : 1);
+                        // Get user
+                        User u = await Cloud.Fetch<User>(new Key("users").Child(x.Key));
 
-                        // Clear static data
-                        StaticInventory.Hints.Clear();
-
-                        foreach (var x in scenes)
+                        // Add user to lobby
+                        bool success = CloudManager.JoinLobby(u, lobby, LobbyScene.MaxPlayers);
+                        if (success)
                         {
-                            // Get user
-                            User u = await Cloud.Fetch<User>(new Key("users").Child(x.Key));
-
-                            // Add user to lobby
-                            bool success = CloudManager.JoinLobby(u, lobby, LobbyScene.MaxPlayers);
-                            if (success)
-                            {
-                                // Assign scene to user
-                                CloudManager.OnlyUser(lobby, u).Scene.Value = (scenes[u.Id] + 1 > LobbyScene.ScenesPerCase ? scenes[u.Id] + 1 : 1);
-                            }
+                            // Assign scene to user
+                            CloudManager.OnlyUser(lobby, u).Scene.Value = (scenes[u.Id] + 1 > LobbyScene.ScenesPerCase ? scenes[u.Id] + 1 : 1);
                         }
-
-                        // Set lobby state value
-                        lobby.State.Value = (int)LobbyState.InGame;
-                        OnLobbyStateChanged(lobby.State);
                     }
+
+                    // Set lobby state value
+                    lobby.State.Value = (int)LobbyState.InGame;
+                    OnLobbyStateChanged(lobby.State);
                 }
             }
+            */
         }
     }
 
+    /*
     async void OnLobbyStateChanged(CloudNode<long> state)
     {
         if (state.Value.HasValue && (LobbyState)state.Value.Value == LobbyState.InGame)
@@ -290,4 +289,5 @@ class GameOverScene : MonoBehaviour
             }
         }
     }
+    */
 }

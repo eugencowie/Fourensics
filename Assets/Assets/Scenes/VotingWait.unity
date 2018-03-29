@@ -267,7 +267,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Waiting for other players to vote...
+  m_Text: Waiting for all players to vote...
 --- !u!222 &526895888
 CanvasRenderer:
   m_ObjectHideFlags: 0

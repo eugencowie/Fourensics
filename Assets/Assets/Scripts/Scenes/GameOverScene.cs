@@ -319,6 +319,7 @@ class GameOverScene : MonoBehaviour
         // Store new scene number in database
         CloudManager.OnlyUser(lobby, user).Scene.Value = newScene;
 
+        // Load the retry scene
         SceneManager.LoadScene("Retry");
     }
 

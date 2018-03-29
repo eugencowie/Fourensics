@@ -5911,7 +5911,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   InspectRotation: {x: 0, y: 0, z: -90}
-  InspectScale: 0.08
+  InspectScale: 3
   audioSource: {fileID: 0}
   audioClip: {fileID: 8300000, guid: 2f7145665bd581747af98d510140c193, type: 3}
 --- !u!65 &880371734
@@ -7847,8 +7847,8 @@ Transform:
   - {fileID: 1196291478}
   - {fileID: 2045560944}
   - {fileID: 690912330}
-  - {fileID: 849341783}
   - {fileID: 1645479713}
+  - {fileID: 849341783}
   - {fileID: 538029946}
   - {fileID: 2132354015}
   - {fileID: 1658702653}
@@ -12682,7 +12682,7 @@ Transform:
   - {fileID: 2053521455}
   - {fileID: 2113845062}
   m_Father: {fileID: 1052585883}
-  m_RootOrder: 9
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1658702653 stripped
 Transform:

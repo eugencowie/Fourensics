@@ -278,6 +278,14 @@ class GameOverScene : MonoBehaviour
         User user; try { user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
         Lobby lobby = await Lobby.Get(user);
 
+        // Deregister vote/retry changed event handlers
+        foreach (LobbyUser x in CloudManager.OtherUsers(lobby, user))
+        {
+            x.Vote.ValueChanged -= OnVoteChanged;
+            x.Retry.ValueChanged -= OnRetryChanged;
+        }
+        lobby.Retry.ValueChanged -= OnLobbyRetryChanged;
+
         // Store new lobby code
         string newLobby = lobby.Retry.Value;
 
@@ -303,6 +311,9 @@ class GameOverScene : MonoBehaviour
 
         // Calculate new scene number
         int newScene = (prevScene + 1 > LobbyScene.ScenesPerCase ? prevScene + 1 : 1);
+
+        // Store new scene number in database
+        CloudManager.OnlyUser(lobby, user).Scene.Value = newScene;
 
         SceneManager.LoadScene("Retry");
     }

@@ -111,8 +111,10 @@ class LobbyScene : MonoBehaviour
 
         // Get lobbies database entry
         DataSnapshot lobbyData = await FirebaseDatabase.DefaultInstance.RootReference.Child("lobbies").GetValueAsync();
-        
-        foreach (DataSnapshot lobby in lobbyData.Children)
+
+        foreach (DataSnapshot lobby in lobbyData.Children
+            .Where(x => x.Child("state").Exists && (long)x.Child("state").Value == (long)LobbyState.Lobby)
+            .OrderBy(x => x.Key))
         {
             // Increase button container size
             m_joinButtonsContainer.GetComponent<RectTransform>().sizeDelta = new Vector2(m_joinButtonsContainer.GetComponent<RectTransform>().sizeDelta.x, m_joinButtonsContainer.GetComponent<RectTransform>().sizeDelta.y + 152.5f);
@@ -124,7 +126,7 @@ class LobbyScene : MonoBehaviour
 
             // Add on-click listener
             newButton.GetComponent<Button>().onClick.AddListener(() => LobbyButtonPressed(lobby.Key));
-            
+
             // Set button text
             foreach (Transform t in newButton.transform)
                 if (t.gameObject.GetComponent<Text>() != null)

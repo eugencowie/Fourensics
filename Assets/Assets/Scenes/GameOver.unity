@@ -156,7 +156,7 @@ MonoBehaviour:
   - CorrectAnswer: Caleb Holden
     WinText: {fileID: 2126108464}
     LoseText: {fileID: 1229489381}
-  - CorrectAnswer: James Swan
+  - CorrectAnswer: Suspect 2
     WinText: {fileID: 851511968}
     LoseText: {fileID: 1031623452}
   RequiredVotePercentage: 51

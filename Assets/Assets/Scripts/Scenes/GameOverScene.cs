@@ -73,6 +73,10 @@ class GameOverScene : MonoBehaviour
         foreach (Transform t in m_retryButton.gameObject.transform)
             t.gameObject.SetActive(false);
 
+        // Show wait text
+        m_winOrLoseText.gameObject.SetActive(false);
+        m_waitText.gameObject.SetActive(true);
+
         // Get database objects
         User user; try { user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
         Lobby lobby = await Lobby.Get(user);

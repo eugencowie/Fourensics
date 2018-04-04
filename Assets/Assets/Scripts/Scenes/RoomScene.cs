@@ -38,11 +38,11 @@ public class RoomScene : MonoBehaviour
         ReadyButton.SetActive(false);
         DatabaseButton.SetActive(false);
 
-        User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+        User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadSceneAsync("SignIn"); return; }
         Lobby m_lobby = await Lobby.Get(m_user);
         if (m_lobby == null)
         {
-            SceneManager.LoadScene("Lobby");
+            SceneManager.LoadSceneAsync("Lobby");
             return;
         }
 
@@ -54,12 +54,12 @@ public class RoomScene : MonoBehaviour
             ReadyButton.SetActive(true);
             DatabaseButton.SetActive(true);
         }
-        else SceneManager.LoadScene("Lobby");
+        else SceneManager.LoadSceneAsync("Lobby");
     }
 
     private async Task RegisterListeners()
     {
-        User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+        User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadSceneAsync("SignIn"); return; }
         Lobby m_lobby = await Lobby.Get(m_user);
 
         foreach (LobbyUserItem clue in CloudManager.OtherUsers(m_lobby, m_user).Select(u => u.Items).SelectMany(i => i))
@@ -75,7 +75,7 @@ public class RoomScene : MonoBehaviour
         {
             StaticRoom.PrevCameraRotation = Camera.main.transform.localRotation;
             DatabaseButton.SetActive(false);
-            SceneManager.LoadScene("Database");
+            SceneManager.LoadSceneAsync("Database");
         }
     }
 
@@ -92,7 +92,7 @@ public class RoomScene : MonoBehaviour
 
             if (value == true)
             {
-                User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+                User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadSceneAsync("SignIn"); return; }
                 Lobby m_lobby = await Lobby.Get(m_user);
 
                 bool everyoneReady = CloudManager.AllUsers(m_lobby).All(x => x.Ready.Value.HasValue && x.Ready.Value == true);
@@ -101,7 +101,7 @@ public class RoomScene : MonoBehaviour
                 {
                     StaticClues.SeenSlots.Clear();
                     StaticVotingDatabase.Reset();
-                    SceneManager.LoadScene("VotingDatabase");
+                    SceneManager.LoadSceneAsync("VotingDatabase");
                 }
             }
         }
@@ -109,13 +109,13 @@ public class RoomScene : MonoBehaviour
 
     public async void ConfirmLeave()
     {
-        User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+        User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadSceneAsync("SignIn"); return; }
         Lobby m_lobby = await Lobby.Get(m_user);
         CloudManager.LeaveLobby(m_user, m_lobby);
-        SceneManager.LoadScene("Lobby");
+        SceneManager.LoadSceneAsync("Lobby");
 
         //NetworkController.LeaveLobby(m_roomCode, success => {
-        //    if (success) SceneManager.LoadScene("Lobby");
+        //    if (success) SceneManager.LoadSceneAsync("Lobby");
         //});
     }
 
@@ -124,7 +124,7 @@ public class RoomScene : MonoBehaviour
         if (ReadyButton.activeSelf)
         {
             ReadyButton.SetActive(false);
-            User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+            User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadSceneAsync("SignIn"); return; }
             Lobby m_lobby = await Lobby.Get(m_user);
             ReadyButton.SetActive(true);
             ReadyButton.GetComponent<Image>().color = Color.yellow;
@@ -148,7 +148,7 @@ public class RoomScene : MonoBehaviour
             {
                 string value = entry.Value;
 
-                User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+                User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadSceneAsync("SignIn"); return; }
                 Lobby m_lobby = await Lobby.Get(m_user);
 
                 string player = m_lobby.Users.First(x => x.Id == entry.Key.Parent.Parent.Parent.Id).UserId.Value;

@@ -9,12 +9,12 @@ public class VotingWaitScene : MonoBehaviour
 
     async void Start()
     {
-        User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+        User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadSceneAsync("SignIn"); return; }
         Lobby m_lobby = await Lobby.Get(m_user);
 
         if (m_lobby == null)
         {
-            SceneManager.LoadScene("Lobby");
+            SceneManager.LoadSceneAsync("Lobby");
             return;
         }
 
@@ -25,12 +25,12 @@ public class VotingWaitScene : MonoBehaviour
             await RegisterListeners();
             OnVoteChanged(CloudManager.OnlyUser(m_lobby, m_user).Vote);
         }
-        else SceneManager.LoadScene("Lobby");
+        else SceneManager.LoadSceneAsync("Lobby");
     }
 
     private async Task RegisterListeners()
     {
-        User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+        User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadSceneAsync("SignIn"); return; }
         Lobby m_lobby = await Lobby.Get(m_user);
 
         foreach (LobbyUser user in CloudManager.OtherUsers(m_lobby, m_user))
@@ -39,7 +39,7 @@ public class VotingWaitScene : MonoBehaviour
 
     private async Task DeregisterListeners()
     {
-        User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+        User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadSceneAsync("SignIn"); return; }
         Lobby m_lobby = await Lobby.Get(m_user);
 
         foreach (LobbyUser user in CloudManager.OtherUsers(m_lobby, m_user))
@@ -54,7 +54,7 @@ public class VotingWaitScene : MonoBehaviour
 
             if (!string.IsNullOrEmpty(value))
             {
-                User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+                User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadSceneAsync("SignIn"); return; }
                 Lobby m_lobby = await Lobby.Get(m_user);
 
                 bool everyoneVoted = CloudManager.AllUsers(m_lobby).All(x => !string.IsNullOrWhiteSpace(x.Vote.Value));
@@ -62,7 +62,7 @@ public class VotingWaitScene : MonoBehaviour
                 if (everyoneVoted)
                 {
                     await DeregisterListeners();
-                    SceneManager.LoadScene("GameOver");
+                    SceneManager.LoadSceneAsync("GameOver");
                 }
             }
         }

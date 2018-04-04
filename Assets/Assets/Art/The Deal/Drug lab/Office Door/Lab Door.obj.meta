@@ -1,17 +1,17 @@
 fileFormatVersion: 2
-guid: e4845efd5f9633d4497d268bfe970ac9
-timeCreated: 1522844595
+guid: ee479dcb3c3be66429734f052ab3478d
+timeCreated: 1522324259
 licenseType: Pro
 ModelImporter:
   serializedVersion: 21
   fileIDToRecycleName:
-    100000: Door
-    100002: //RootNode
-    400000: Door
-    400002: //RootNode
-    2300000: Door
-    3300000: Door
-    4300000: Door
+    100000: //RootNode
+    100002: Lab_Door
+    400000: //RootNode
+    400002: Lab_Door
+    2300000: Lab_Door
+    3300000: Lab_Door
+    4300000: Lab_Door
   materials:
     importMaterials: 1
     materialName: 0

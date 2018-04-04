@@ -947,9 +947,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BlurPlane: {fileID: 985005745}
-  InventoryController: {fileID: 0}
-  HintPanel: {fileID: 0}
-  HintText: {fileID: 0}
+  InventoryController: {fileID: 1925567251}
+  HintPanel: {fileID: 1925567250}
+  HintText: {fileID: 1925567249}
   Spotlight: {fileID: 0}
 --- !u!114 &255482485
 MonoBehaviour:
@@ -7783,6 +7783,21 @@ GameObject:
 --- !u!1 &1925567248 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 1886734614711416, guid: dc26f056f492a8b44b9525b72dda3044,
+    type: 2}
+  m_PrefabInternal: {fileID: 1925567244}
+--- !u!1 &1925567249 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1444225595126394, guid: dc26f056f492a8b44b9525b72dda3044,
+    type: 2}
+  m_PrefabInternal: {fileID: 1925567244}
+--- !u!1 &1925567250 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1084357157529844, guid: dc26f056f492a8b44b9525b72dda3044,
+    type: 2}
+  m_PrefabInternal: {fileID: 1925567244}
+--- !u!1 &1925567251 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1369386345530890, guid: dc26f056f492a8b44b9525b72dda3044,
     type: 2}
   m_PrefabInternal: {fileID: 1925567244}
 --- !u!1001 &1935246563

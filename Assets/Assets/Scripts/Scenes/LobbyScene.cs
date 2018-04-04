@@ -97,6 +97,9 @@ class LobbyScene : MonoBehaviour
     /// </summary>
     public async void JoinButtonPressed()
     {
+        // Show wait panel
+        SwitchPanel(m_panels.Wait);
+
         // Destroy all existing buttons
         foreach (Transform t in m_joinButtonTemplate.transform.parent)
         {

@@ -7,12 +7,10 @@ using UnityEngine.UI;
 
 public static class StaticVotingDatabase
 {
-    public static bool SeenWelcome = false;
     public static bool HighlightedItem = false;
 
     public static void Reset()
     {
-        SeenWelcome = false;
         HighlightedItem = false;
     }
 }
@@ -20,8 +18,6 @@ public static class StaticVotingDatabase
 public class VotingDatabaseScene : MonoBehaviour
 {
     public GameObject MainScreen, WaitScreen;
-
-    [SerializeField] ModalDialog m_welcomeScreen = null;
 
     [SerializeField] ModalDialog m_highlightConfirmScreen = null;
     [SerializeField] GameObject ButtonTemplate = null;
@@ -35,12 +31,6 @@ public class VotingDatabaseScene : MonoBehaviour
 
     async void Start()
     {
-        if (!StaticVotingDatabase.SeenWelcome)
-        {
-            StaticVotingDatabase.SeenWelcome = true;
-            m_welcomeScreen.ShowDialog();
-        }
-
         User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadSceneAsync("SignIn"); return; }
         Lobby m_lobby = await Lobby.Get(m_user);
         if (m_lobby == null)

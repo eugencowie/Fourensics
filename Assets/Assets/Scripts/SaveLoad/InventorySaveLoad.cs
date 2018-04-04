@@ -7,6 +7,7 @@ public class InventorySaveLoad : MonoBehaviour
 {
     private void Start()
     {
+        Application.backgroundLoadingPriority = ThreadPriority.BelowNormal;
         Load();
     }
 

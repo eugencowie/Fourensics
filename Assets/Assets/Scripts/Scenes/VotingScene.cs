@@ -37,7 +37,7 @@ public class VotingScene : MonoBehaviour
     async void Start()
     {
         // Get database objects
-        User user; try { user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+        User user; try { user = await User.Get(); } catch { SceneManager.LoadSceneAsync("SignIn"); return; }
         Lobby lobby = await Lobby.Get(user);
 
         int scene = (int)(CloudManager.OnlyUser(lobby, user).Scene.Value ?? 0);
@@ -45,7 +45,7 @@ public class VotingScene : MonoBehaviour
 
         if (lobby == null || string.IsNullOrEmpty(lobby.Id) || scene <= 0 || caseNb < 1 || caseNb > 2 || (caseNb - 1) >= m_cases.Length)
         {
-            SceneManager.LoadScene("Lobby");
+            SceneManager.LoadSceneAsync("Lobby");
             return;
         }
 
@@ -70,7 +70,7 @@ public class VotingScene : MonoBehaviour
         foreach (var discarded in StaticSuspects.DiscardedSuspects)
         {
             // Get database objects
-            User user; try { user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+            User user; try { user = await User.Get(); } catch { SceneManager.LoadSceneAsync("SignIn"); return; }
             Lobby lobby = await Lobby.Get(user);
 
             // Get lobby case number
@@ -102,7 +102,7 @@ public class VotingScene : MonoBehaviour
 
     async void SetBackground()
     {
-        User user; try { user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+        User user; try { user = await User.Get(); } catch { SceneManager.LoadSceneAsync("SignIn"); return; }
         Lobby lobby = await Lobby.Get(user);
 
         int caseNb = (int)(lobby.Case.Value ?? 0);
@@ -131,7 +131,7 @@ public class VotingScene : MonoBehaviour
         if (ReturnButton.activeSelf)
         {
             ReturnButton.SetActive(false);
-            SceneManager.LoadScene("VotingDatabase");
+            SceneManager.LoadSceneAsync("VotingDatabase");
         }
     }
 
@@ -142,7 +142,7 @@ public class VotingScene : MonoBehaviour
             ResetButton.SetActive(false);
 
             // Get database objects
-            User user; try { user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+            User user; try { user = await User.Get(); } catch { SceneManager.LoadSceneAsync("SignIn"); return; }
             Lobby lobby = await Lobby.Get(user);
 
             // Get lobby case number
@@ -187,11 +187,11 @@ public class VotingScene : MonoBehaviour
 
     public async void ConfirmVote()
     {
-        User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+        User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadSceneAsync("SignIn"); return; }
         Lobby m_lobby = await Lobby.Get(m_user);
 
         // Get database objects
-        User user; try { user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+        User user; try { user = await User.Get(); } catch { SceneManager.LoadSceneAsync("SignIn"); return; }
         Lobby lobby = await Lobby.Get(user);
 
         // Get lobby case number
@@ -203,7 +203,7 @@ public class VotingScene : MonoBehaviour
             if (current != null)
             {
                 CloudManager.OnlyUser(m_lobby, m_user).Vote.Value = current.Name.text;
-                SceneManager.LoadScene("VotingWait");
+                SceneManager.LoadSceneAsync("VotingWait");
             }
         }
     }

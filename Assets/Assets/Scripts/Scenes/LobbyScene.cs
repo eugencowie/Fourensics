@@ -36,7 +36,7 @@ class LobbyScene : MonoBehaviour
         SwitchPanel(m_panels.Wait);
 
         // Get database objects
-        User user; try { user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+        User user; try { user = await User.Get(); } catch { SceneManager.LoadSceneAsync("SignIn"); return; }
         Lobby lobby = await Lobby.Get(user);
 
         if (lobby == null || !lobby.State.Value.HasValue)
@@ -66,7 +66,7 @@ class LobbyScene : MonoBehaviour
     async Task RegisterCallbacks()
     {
         // Get database objects
-        User user; try { user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+        User user; try { user = await User.Get(); } catch { SceneManager.LoadSceneAsync("SignIn"); return; }
         Lobby lobby = await Lobby.Get(user);
 
         // Register lobby state change callback
@@ -81,7 +81,7 @@ class LobbyScene : MonoBehaviour
     async Task DeregisterCallbacks()
     {
         // Get database objects
-        User user; try { user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+        User user; try { user = await User.Get(); } catch { SceneManager.LoadSceneAsync("SignIn"); return; }
         Lobby lobby = await Lobby.Get(user);
 
         // Deregister lobby state change callback
@@ -98,6 +98,9 @@ class LobbyScene : MonoBehaviour
     /// </summary>
     public async void JoinButtonPressed()
     {
+        // Show wait panel
+        SwitchPanel(m_panels.Wait);
+
         // Destroy all existing buttons
         foreach (Transform t in m_joinButtonTemplate.transform.parent)
         {
@@ -158,7 +161,7 @@ class LobbyScene : MonoBehaviour
             SwitchPanel(m_panels.Wait);
 
             // Get user database object
-            User user; try { user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+            User user; try { user = await User.Get(); } catch { SceneManager.LoadSceneAsync("SignIn"); return; }
 
             // Update user lobby value
             user.Lobby.Value = code.ToUpper();
@@ -219,7 +222,7 @@ class LobbyScene : MonoBehaviour
             lobby.Case.Value = caseNb;
 
             // Get user database object
-            User user; try { user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+            User user; try { user = await User.Get(); } catch { SceneManager.LoadSceneAsync("SignIn"); return; }
 
             // Attempt to add user to lobby
             bool joinSuccess = CloudManager.JoinLobby(user, lobby, MaxPlayers);
@@ -263,7 +266,7 @@ class LobbyScene : MonoBehaviour
         SwitchPanel(m_panels.Wait);
 
         // Get database objects
-        User user; try { user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+        User user; try { user = await User.Get(); } catch { SceneManager.LoadSceneAsync("SignIn"); return; }
         Lobby lobby = await Lobby.Get(user);
 
         // Deregister callbacks
@@ -286,7 +289,7 @@ class LobbyScene : MonoBehaviour
         SwitchPanel(m_panels.Wait);
 
         // Get database objects
-        User user; try { user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+        User user; try { user = await User.Get(); } catch { SceneManager.LoadSceneAsync("SignIn"); return; }
         Lobby lobby = await Lobby.Get(user);
 
         // Assign users to their scenes
@@ -313,7 +316,7 @@ class LobbyScene : MonoBehaviour
     async void LobbyUserIdChanged(CloudNode userId)
     {
         // Get database objects
-        User user; try { user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+        User user; try { user = await User.Get(); } catch { SceneManager.LoadSceneAsync("SignIn"); return; }
         Lobby lobby = await Lobby.Get(user);
 
         // Get number of players in lobby
@@ -328,7 +331,7 @@ class LobbyScene : MonoBehaviour
         if (state.Value.HasValue && (LobbyState)state.Value.Value == LobbyState.InGame)
         {
             // Get database objects
-            User user; try { user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+            User user; try { user = await User.Get(); } catch { SceneManager.LoadSceneAsync("SignIn"); return; }
             Lobby lobby = await Lobby.Get(user);
 
             // Get lobby case number
@@ -345,7 +348,7 @@ class LobbyScene : MonoBehaviour
                     await DeregisterCallbacks();
 
                     // Load this user's scene
-                    SceneManager.LoadScene(((caseNb - 1) * ScenesPerCase) + scene);
+                    SceneManager.LoadSceneAsync(((caseNb - 1) * ScenesPerCase) + scene);
                 }
             }
         }

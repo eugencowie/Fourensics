@@ -39,13 +39,13 @@ class GameOverScene : MonoBehaviour
         m_resetButton.gameObject.SetActive(false);
 
         // Get database objects
-        User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+        User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadSceneAsync("SignIn"); return; }
         Lobby m_lobby = await Lobby.Get(m_user);
 
         if (m_lobby == null && !string.IsNullOrEmpty(m_lobby.Id))
         {
             // Load lobby scene
-            SceneManager.LoadScene("Lobby");
+            SceneManager.LoadSceneAsync("Lobby");
             return;
         }
 
@@ -92,7 +92,7 @@ class GameOverScene : MonoBehaviour
     public async void ResetButtonPressed()
     {
         // Get database objects
-        User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+        User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadSceneAsync("SignIn"); return; }
         Lobby m_lobby = await Lobby.Get(m_user);
 
         // Deregister vote/retry changed event handlers
@@ -107,7 +107,7 @@ class GameOverScene : MonoBehaviour
         CloudManager.LeaveLobby(m_user, m_lobby);
 
         // Load lobby scene
-        SceneManager.LoadScene("Lobby");
+        SceneManager.LoadSceneAsync("Lobby");
     }
 
     void VideoLoopPointReached(VideoPlayer source)
@@ -125,7 +125,7 @@ class GameOverScene : MonoBehaviour
         if (entry.Value != null && !string.IsNullOrEmpty(entry.Value))
         {
             // Get database objects
-            User user; try { user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+            User user; try { user = await User.Get(); } catch { SceneManager.LoadSceneAsync("SignIn"); return; }
             Lobby lobby = await Lobby.Get(user);
 
             // Get lobby case number

@@ -7,12 +7,10 @@ using UnityEngine.UI;
 
 public static class StaticVotingDatabase
 {
-    public static bool SeenWelcome = false;
     public static bool HighlightedItem = false;
 
     public static void Reset()
     {
-        SeenWelcome = false;
         HighlightedItem = false;
     }
 }
@@ -20,8 +18,6 @@ public static class StaticVotingDatabase
 public class VotingDatabaseScene : MonoBehaviour
 {
     public GameObject MainScreen, WaitScreen;
-
-    [SerializeField] ModalDialog m_welcomeScreen = null;
 
     [SerializeField] ModalDialog m_highlightConfirmScreen = null;
     [SerializeField] GameObject ButtonTemplate = null;
@@ -35,17 +31,11 @@ public class VotingDatabaseScene : MonoBehaviour
 
     async void Start()
     {
-        if (!StaticVotingDatabase.SeenWelcome)
-        {
-            StaticVotingDatabase.SeenWelcome = true;
-            m_welcomeScreen.ShowDialog();
-        }
-
-        User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+        User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadSceneAsync("SignIn"); return; }
         Lobby m_lobby = await Lobby.Get(m_user);
         if (m_lobby == null)
         {
-            SceneManager.LoadScene("Lobby");
+            SceneManager.LoadSceneAsync("Lobby");
             return;
         }
 
@@ -64,9 +54,9 @@ public class VotingDatabaseScene : MonoBehaviour
                 await RegisterListeners();
                 await DownloadItems();
             }
-            else SceneManager.LoadScene("Lobby");
+            else SceneManager.LoadSceneAsync("Lobby");
         }
-        else SceneManager.LoadScene("Lobby");
+        else SceneManager.LoadSceneAsync("Lobby");
 
         for (int i = 0; i < Data.Count; i++)
         {
@@ -79,7 +69,7 @@ public class VotingDatabaseScene : MonoBehaviour
 
     async Task RegisterListeners()
     {
-        User user; try { user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+        User user; try { user = await User.Get(); } catch { SceneManager.LoadSceneAsync("SignIn"); return; }
         Lobby lobby = await Lobby.Get(user);
 
         foreach (LobbyUserItem clue in lobby.Users
@@ -93,7 +83,7 @@ public class VotingDatabaseScene : MonoBehaviour
 
     async Task DeregisterListeners()
     {
-        User user; try { user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+        User user; try { user = await User.Get(); } catch { SceneManager.LoadSceneAsync("SignIn"); return; }
         Lobby lobby = await Lobby.Get(user);
 
         foreach (LobbyUserItem clue in lobby.Users
@@ -107,7 +97,7 @@ public class VotingDatabaseScene : MonoBehaviour
 
     async void SetBackground()
     {
-        User user; try { user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+        User user; try { user = await User.Get(); } catch { SceneManager.LoadSceneAsync("SignIn"); return; }
         Lobby lobby = await Lobby.Get(user);
 
         int caseNb = (int)(lobby.Case.Value ?? 0);
@@ -134,7 +124,7 @@ public class VotingDatabaseScene : MonoBehaviour
     public async void VotingButtonPressed()
     {
         await DeregisterListeners();
-        SceneManager.LoadScene("Voting");
+        SceneManager.LoadSceneAsync("Voting");
     }
 
     Data m_current = null;
@@ -203,7 +193,7 @@ public class VotingDatabaseScene : MonoBehaviour
 
     async Task DownloadItems()
     {
-        User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+        User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadSceneAsync("SignIn"); return; }
         Lobby m_lobby = await Lobby.Get(m_user);
 
         for (int i = 0; i < Data.Count; i++)
@@ -246,7 +236,7 @@ public class VotingDatabaseScene : MonoBehaviour
         int slotNb = -1;
         if (int.TryParse(entry.Key.Parent.Id, out slotNb))
         {
-            User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+            User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadSceneAsync("SignIn"); return; }
             Lobby m_lobby = await Lobby.Get(m_user);
 
             string player = m_lobby.Users.First(x => x.Id == entry.Key.Parent.Parent.Parent.Id).UserId.Value;
@@ -347,7 +337,7 @@ public class VotingDatabaseScene : MonoBehaviour
         int slotNb = -1;
         if (int.TryParse(entry.Key.Parent.Id, out slotNb))
         {
-            User user; try { user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
+            User user; try { user = await User.Get(); } catch { SceneManager.LoadSceneAsync("SignIn"); return; }
             Lobby lobby = await Lobby.Get(user);
 
             string player = lobby.Users.First(x => x.Id == entry.Key.Parent.Parent.Parent.Id).UserId.Value;

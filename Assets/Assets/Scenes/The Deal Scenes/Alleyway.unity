@@ -17,7 +17,7 @@ RenderSettings:
   m_Fog: 1
   m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   m_FogMode: 3
-  m_FogDensity: 0.16
+  m_FogDensity: 0.15
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
   m_AmbientSkyColor: {r: 0.27357268, g: 0.31532985, b: 0.4044118, a: 1}
@@ -66,14 +66,14 @@ LightmapSettings:
     m_Padding: 2
     m_LightmapParameters: {fileID: 15204, guid: 0000000000000000f000000000000000,
       type: 0}
-    m_LightmapsBakeMode: 1
+    m_LightmapsBakeMode: 0
     m_TextureCompression: 1
     m_FinalGather: 0
     m_FinalGatherFiltering: 1
     m_FinalGatherRayCount: 256
     m_ReflectionCompression: 2
     m_MixedBakeMode: 0
-    m_BakeBackend: 1
+    m_BakeBackend: 0
     m_PVRSampling: 1
     m_PVRDirectSampleCount: 50
     m_PVRSampleCount: 500
@@ -709,6 +709,16 @@ Prefab:
     - target: {fileID: 1007810331738248, guid: b4cf21df0c4bb50498a7194cec12805e, type: 2}
       propertyPath: m_Name
       value: Camera
+      objectReference: {fileID: 0}
+    - target: {fileID: 20189122430657728, guid: b4cf21df0c4bb50498a7194cec12805e,
+        type: 2}
+      propertyPath: m_RenderingPath
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 20189122430657728, guid: b4cf21df0c4bb50498a7194cec12805e,
+        type: 2}
+      propertyPath: m_HDR
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b4cf21df0c4bb50498a7194cec12805e, type: 2}
@@ -1987,6 +1997,23 @@ Transform:
 Transform:
   m_PrefabParentObject: {fileID: 400000, guid: 2913b72cf0e075b47b7b50784325db15, type: 3}
   m_PrefabInternal: {fileID: 497319068}
+--- !u!1 &726192126 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1007810331738248, guid: b4cf21df0c4bb50498a7194cec12805e,
+    type: 2}
+  m_PrefabInternal: {fileID: 149173772}
+--- !u!114 &726192132
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 726192126}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff26db721962cdf4a8edcdfa9a767d2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  profile: {fileID: 11400000, guid: 9e18451f3fe8cee4d800f3f88feddf17, type: 2}
 --- !u!4 &726737866
 Transform:
   m_ObjectHideFlags: 0

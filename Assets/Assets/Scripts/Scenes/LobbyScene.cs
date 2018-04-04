@@ -27,7 +27,8 @@ class LobbyScene : MonoBehaviour
 
     [SerializeField] LobbyPanels m_panels = null;
 
-    const int m_maxPlayers = 4;
+    public const int MaxPlayers = 4;
+    public const int ScenesPerCase = 4;
 
     async void Start()
     {
@@ -166,7 +167,7 @@ class LobbyScene : MonoBehaviour
             Lobby lobby = await Lobby.Get(user);
 
             // Attempt to join lobby
-            bool success = CloudManager.JoinLobby(user, lobby, m_maxPlayers);
+            bool success = CloudManager.JoinLobby(user, lobby, MaxPlayers);
 
             if (success)
             {
@@ -221,7 +222,7 @@ class LobbyScene : MonoBehaviour
             User user; try { user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
 
             // Attempt to add user to lobby
-            bool joinSuccess = CloudManager.JoinLobby(user, lobby, m_maxPlayers);
+            bool joinSuccess = CloudManager.JoinLobby(user, lobby, MaxPlayers);
 
             if (joinSuccess)
             {
@@ -319,7 +320,7 @@ class LobbyScene : MonoBehaviour
         int playerCount = lobby.Users.Count(x => !string.IsNullOrWhiteSpace(x.UserId.Value));
 
         // Set players text
-        m_playersLabel.text = $"{playerCount} / {m_maxPlayers}";
+        m_playersLabel.text = $"{playerCount} / {MaxPlayers}";
     }
 
     async void LobbyStateChanged(CloudNode<long> state)
@@ -335,18 +336,16 @@ class LobbyScene : MonoBehaviour
 
             if (caseNb >= 1 && caseNb <= 2)
             {
-                const int scenesPerCase = 4;
-
                 // Get this user's scene
                 int scene = (int)(CloudManager.OnlyUser(lobby, user).Scene.Value ?? 0);
 
-                if (scene >= 1 && scene <= scenesPerCase)
+                if (scene >= 1 && scene <= ScenesPerCase)
                 {
                     // Deregister callbacks
                     await DeregisterCallbacks();
 
                     // Load this user's scene
-                    SceneManager.LoadScene(((caseNb - 1) * scenesPerCase) + scene);
+                    SceneManager.LoadScene(((caseNb - 1) * ScenesPerCase) + scene);
                 }
             }
         }

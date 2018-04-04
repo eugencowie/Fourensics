@@ -37,7 +37,7 @@ class SignInScene : MonoBehaviour
         await User.SignInWithGoogle();
 
         // Load lobby scene
-        SceneManager.LoadScene("Lobby");
+        SceneManager.LoadSceneAsync("Lobby");
     }
 
     public async void GuestSignInButtonPressed()
@@ -49,7 +49,7 @@ class SignInScene : MonoBehaviour
         await User.SignInAsGuest();
 
         // Load lobby scene
-        SceneManager.LoadScene("Lobby");
+        SceneManager.LoadSceneAsync("Lobby");
     }
 
     void SwitchPanel(GameObject panel)

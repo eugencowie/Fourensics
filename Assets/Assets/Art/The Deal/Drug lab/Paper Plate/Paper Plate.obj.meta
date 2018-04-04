@@ -1,17 +1,17 @@
 fileFormatVersion: 2
-guid: e4845efd5f9633d4497d268bfe970ac9
-timeCreated: 1522844595
+guid: 98b59245c39fb5d49ab6015e127ea7b7
+timeCreated: 1522845394
 licenseType: Pro
 ModelImporter:
   serializedVersion: 21
   fileIDToRecycleName:
-    100000: Door
-    100002: //RootNode
-    400000: Door
-    400002: //RootNode
-    2300000: Door
-    3300000: Door
-    4300000: Door
+    100000: //RootNode
+    100002: Paper_Plate
+    400000: //RootNode
+    400002: Paper_Plate
+    2300000: Paper_Plate
+    3300000: Paper_Plate
+    4300000: Paper_Plate
   materials:
     importMaterials: 1
     materialName: 0

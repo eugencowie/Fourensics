@@ -10,6 +10,7 @@ class Lobby : ICloudObject
     public CloudNode<long> State { get; private set; }
     public CloudNode<long> Case { get; private set; }
     public LobbyUser[] Users { get; private set; }
+    public CloudNode Retry { get; private set; }
 
     public string Id => Key.Id;
 
@@ -18,6 +19,7 @@ class Lobby : ICloudObject
         Key = key;
         State = CloudNode<long>.Create(Key.Child("state"));
         Case = CloudNode<long>.Create(Key.Child("case"));
+        Retry = CloudNode.Create(Key.Child("retry"));
         Users = "0123".Select(n => Cloud.Create<LobbyUser>(Key.Child("users").Child(n.ToString()))).ToArray();
     }
 
@@ -26,6 +28,7 @@ class Lobby : ICloudObject
         Key = key;
         State = await CloudNode<long>.Fetch(Key.Child("state"));
         Case = await CloudNode<long>.Fetch(Key.Child("case"));
+        Retry = await CloudNode.Fetch(Key.Child("retry"));
         Users = await Task.WhenAll("0123".Select(n => Cloud.Fetch<LobbyUser>(Key.Child("users").Child(n.ToString()))));
     }
 
@@ -33,6 +36,7 @@ class Lobby : ICloudObject
     {
         State.Value = null;
         Case.Value = null;
+        Retry.Value = null;
 
         foreach (LobbyUser userInfo in Users)
         {
@@ -69,9 +73,10 @@ class LobbyUser : ICloudObject
     public CloudNode UserId { get; private set; }
     public CloudNode Name { get; private set; }
     public CloudNode<long> Scene { get; private set; }
+    public LobbyUserItem[] Items { get; private set; }
     public CloudNode<bool> Ready { get; private set; }
     public CloudNode Vote { get; private set; }
-    public LobbyUserItem[] Items { get; private set; }
+    public CloudNode<bool> Retry { get; private set; }
 
     public string Id => Key.Id;
 
@@ -81,9 +86,10 @@ class LobbyUser : ICloudObject
         UserId = CloudNode.Create(Key.Child("user-id"));
         Name = CloudNode.Create(Key.Child("name"));
         Scene = CloudNode<long>.Create(Key.Child("scene"));
+        Items = "012345".Select(n => Cloud.Create<LobbyUserItem>(Key.Child("items").Child(n.ToString()))).ToArray();
         Ready = CloudNode<bool>.Create(Key.Child("ready"));
         Vote = CloudNode.Create(Key.Child("vote"));
-        Items = "012345".Select(n => Cloud.Create<LobbyUserItem>(Key.Child("items").Child(n.ToString()))).ToArray();
+        Retry = CloudNode<bool>.Create(Key.Child("retry"));
     }
 
     async Task ICloudObject.Fetch(Key key)
@@ -92,9 +98,10 @@ class LobbyUser : ICloudObject
         UserId = await CloudNode.Fetch(Key.Child("user-id"));
         Name = await CloudNode.Fetch(Key.Child("name"));
         Scene = await CloudNode<long>.Fetch(Key.Child("scene"));
+        Items = await Task.WhenAll("012345".Select(n => Cloud.Fetch<LobbyUserItem>(Key.Child("items").Child(n.ToString()))));
         Ready = await CloudNode<bool>.Fetch(Key.Child("ready"));
         Vote = await CloudNode.Fetch(Key.Child("vote"));
-        Items = await Task.WhenAll("012345".Select(n => Cloud.Fetch<LobbyUserItem>(Key.Child("items").Child(n.ToString()))));
+        Retry = await CloudNode<bool>.Fetch(Key.Child("retry"));
     }
 
     public void Reset()
@@ -102,11 +109,10 @@ class LobbyUser : ICloudObject
         UserId.Value = null;
         Name.Value = null;
         Scene.Value = null;
+        foreach (var x in Items) x.Reset();
         Ready.Value = null;
         Vote.Value = null;
-
-        foreach (LobbyUserItem item in Items)
-            item.Reset();
+        Retry.Value = null;
     }
 }
 

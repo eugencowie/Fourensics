@@ -68,11 +68,11 @@ static class CloudManager
     {
         user.Lobby.Value = null;
 
-        if (lobby.Users[0].UserId.Value == user.Id)
+        /*if (lobby.Users[0].UserId.Value == user.Id)
         {
             lobby.Reset();
         }
-        else
+        else*/
         {
             LobbyUser userInfo = lobby.Users.FirstOrDefault(u => u.UserId.Value == user.Id);
 

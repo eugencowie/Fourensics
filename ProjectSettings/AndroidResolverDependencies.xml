@@ -7,6 +7,8 @@
     <package>com.google.firebase:firebase-auth-unity:4.4.2</package>
     <package>com.google.firebase:firebase-common:11.8.0</package>
     <package>com.google.firebase:firebase-core:11.8.0</package>
+    <package>com.google.firebase:firebase-messaging:11.8.0</package>
+    <package>com.google.firebase:firebase-messaging-unity:4.4.2</package>
     <package>com.google.signin:google-signin-support:1.0.3</package>
   </packages>
   <files>
@@ -41,6 +43,9 @@
     <file>Assets/Plugins/Android/com.google.firebase.firebase-core-11.8.0</file>
     <file>Assets/Plugins/Android/com.google.firebase.firebase-iid-11.8.0</file>
     <file>Assets/Plugins/Android/com.google.firebase.firebase-iid-license-11.8.0</file>
+    <file>Assets/Plugins/Android/com.google.firebase.firebase-messaging-11.8.0.aar</file>
+    <file>Assets/Plugins/Android/com.google.firebase.firebase-messaging-license-11.8.0</file>
+    <file>Assets/Plugins/Android/com.google.firebase.firebase-messaging-unity-4.4.2</file>
     <file>Assets/Plugins/Android/com.google.signin.google-signin-support-1.0.3</file>
   </files>
 </dependencies>

@@ -56,9 +56,6 @@ public class DatabaseScene : MonoBehaviour
     [SerializeField] GameObject[] Backgrounds = new GameObject[4];
     [SerializeField] List<Data> Data = new List<Data>();
 
-    string m_lobbyCode;
-    int m_scene;
-
     int playerItemsLoaded = 0;
 
     async void Start()
@@ -78,12 +75,10 @@ public class DatabaseScene : MonoBehaviour
         int scene = (int)(CloudManager.OnlyUser(m_lobby, m_user).Scene.Value ?? 0);
         if (scene > 0)
         {
-            m_scene = scene;
             SetBackground();
             string lobby = m_lobby.Id;
             if (!string.IsNullOrEmpty(lobby))
             {
-                m_lobbyCode = lobby;
                 await RegisterListeners();
                 await DownloadItems();
             }

@@ -2133,7 +2133,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: e4845efd5f9633d4497d268bfe970ac9, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -134.68
+      value: -136.8
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: e4845efd5f9633d4497d268bfe970ac9, type: 3}
       propertyPath: m_LocalRotation.x
@@ -2533,6 +2533,14 @@ Prefab:
     - target: {fileID: 400002, guid: 81b33503f83db7742bba8543f68ae2c3, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: -157.035
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 81b33503f83db7742bba8543f68ae2c3, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: 81b33503f83db7742bba8543f68ae2c3, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 81b33503f83db7742bba8543f68ae2c3, type: 3}
@@ -6173,6 +6181,23 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 5, y: 2, z: 5}
   m_Center: {x: 0, y: 0.37, z: 0}
+--- !u!1 &1404511920 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1007810331738248, guid: b4cf21df0c4bb50498a7194cec12805e,
+    type: 2}
+  m_PrefabInternal: {fileID: 998815305}
+--- !u!114 &1404511926
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1404511920}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff26db721962cdf4a8edcdfa9a767d2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  profile: {fileID: 11400000, guid: 57371c9e38b937a4490045da962b861b, type: 2}
 --- !u!1001 &1405611021
 Prefab:
   m_ObjectHideFlags: 0
@@ -6239,6 +6264,14 @@ Prefab:
     - target: {fileID: 400000, guid: 01b1dc54240454b4f82f989be74d35fe, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 01b1dc54240454b4f82f989be74d35fe, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: 01b1dc54240454b4f82f989be74d35fe, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 01b1dc54240454b4f82f989be74d35fe, type: 3}

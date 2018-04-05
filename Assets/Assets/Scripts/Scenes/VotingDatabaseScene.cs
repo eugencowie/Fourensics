@@ -24,9 +24,6 @@ public class VotingDatabaseScene : MonoBehaviour
     [SerializeField] GameObject[] Backgrounds = new GameObject[4];
     [SerializeField] List<Data> Data = new List<Data>();
 
-    string m_lobbyCode;
-    int m_scene;
-
     int playerItemsLoaded = 0;
 
     async void Start()
@@ -45,12 +42,9 @@ public class VotingDatabaseScene : MonoBehaviour
         int scene = (int)(CloudManager.OnlyUser(m_lobby, m_user).Scene.Value ?? 0);
         if (scene > 0)
         {
-            m_scene = scene;
             SetBackground();
-            string lobby = m_lobby.Id;
-            if (!string.IsNullOrEmpty(lobby))
+            if (!string.IsNullOrEmpty(m_lobby.Id))
             {
-                m_lobbyCode = lobby;
                 await RegisterListeners();
                 await DownloadItems();
             }
@@ -127,8 +121,6 @@ public class VotingDatabaseScene : MonoBehaviour
         SceneManager.LoadSceneAsync("Voting");
     }
 
-    Data m_current = null;
-
     private void PlayerButtonPressed(Data data)
     {
         foreach (var button in Data.Select(d => d.PlayerButton))
@@ -155,8 +147,6 @@ public class VotingDatabaseScene : MonoBehaviour
                 data.Slots[slot].GetComponent<Slot>().Text.GetComponent<Text>().text,
                 data.Slots[slot]));
         }
-
-        m_current = data;
     }
 
     public void PageChanged(GameObject oldPage, GameObject newPage)

@@ -31,9 +31,6 @@ public class VotingScene : MonoBehaviour
     [SerializeField] private GameObject[] Backgrounds = new GameObject[4];
     [SerializeField] private Case[] m_cases = new Case[2];
 
-    private string m_lobbyCode;
-    private int m_scene;
-
     async void Start()
     {
         // Get database objects
@@ -56,9 +53,7 @@ public class VotingScene : MonoBehaviour
         ReturnButton.SetActive(false);
         //VoteButton.SetActive(false);
 
-        m_scene = scene;
         SetBackground();
-        m_lobbyCode = lobby.Id;
         ResetButton.SetActive(true);
         ReturnButton.SetActive(true);
         //VoteButton.SetActive(true);

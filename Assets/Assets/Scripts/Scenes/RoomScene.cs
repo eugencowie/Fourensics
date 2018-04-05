@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public static class StaticRoom
 {
     public static bool SeenWelcome = false;
-    public static Quaternion PrevCameraRotation; 
+    public static Quaternion PrevCameraRotation;
 
     public static void Reset()
     {
@@ -19,8 +19,6 @@ public class RoomScene : MonoBehaviour
 {
     [SerializeField] private GameObject ReadyButton = null;
     [SerializeField] private GameObject DatabaseButton = null;
-
-    private string m_roomCode;
 
     public GameObject mainScreen;
     public GameObject welcomeScreen;
@@ -49,7 +47,6 @@ public class RoomScene : MonoBehaviour
         string room = m_lobby.Id;
         if (!string.IsNullOrEmpty(room))
         {
-            m_roomCode = room;
             await RegisterListeners();
             ReadyButton.SetActive(true);
             DatabaseButton.SetActive(true);

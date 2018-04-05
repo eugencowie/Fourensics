@@ -40,13 +40,13 @@ MonoBehaviour:
         stationaryBlending: 0.95
         motionBlending: 0.85
   ambientOcclusion:
-    m_Enabled: 0
+    m_Enabled: 1
     m_Settings:
-      intensity: 1
+      intensity: 0.51
       radius: 0.3
-      sampleCount: 10
+      sampleCount: 6
       downsampling: 1
-      forceForwardCompatibility: 0
+      forceForwardCompatibility: 1
       ambientOnly: 0
       highPrecision: 0
   screenSpaceReflection:
@@ -79,9 +79,9 @@ MonoBehaviour:
   motionBlur:
     m_Enabled: 1
     m_Settings:
-      shutterAngle: 270
-      sampleCount: 10
-      frameBlending: 0.067
+      shutterAngle: 0
+      sampleCount: 6
+      frameBlending: 0.03
   eyeAdaptation:
     m_Enabled: 0
     m_Settings:
@@ -103,7 +103,7 @@ MonoBehaviour:
         intensity: 16.9
         threshold: 1.18
         softKnee: 0.5
-        radius: 4
+        radius: 7
         antiFlicker: 1
       lensDirt:
         texture: {fileID: 0}

@@ -1,4 +1,5 @@
 using Firebase.Auth;
+using Firebase.Messaging;
 using Google;
 using System;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ class User : ICloudObject
     public Key Key { get; private set; }
     public CloudNode<long> Type { get; private set; }
     public CloudNode Token { get; private set; }
+    public CloudNode NotificationToken { get; private set; }
     public CloudNode Name { get; private set; }
     public CloudNode Lobby { get; private set; }
 
@@ -21,6 +23,7 @@ class User : ICloudObject
         Key = key;
         Type = CloudNode<long>.Create(Key.Child("type"));
         Token = CloudNode.Create(Key.Child("token"));
+        NotificationToken = CloudNode.Create(Key.Child("notification-token"));
         Name = CloudNode.Create(Key.Child("name"));
         Lobby = CloudNode.Create(Key.Child("lobby"));
     }
@@ -30,16 +33,35 @@ class User : ICloudObject
         Key = key;
         Type = await CloudNode<long>.Fetch(Key.Child("type"));
         Token = await CloudNode.Fetch(Key.Child("token"));
+        NotificationToken = await CloudNode.Fetch(Key.Child("notification-token"));
         Name = await CloudNode.Fetch(Key.Child("name"));
         Lobby = await CloudNode.Fetch(Key.Child("lobby"));
     }
+
+    #region Push notification methods
+
+    void OnTokenReceived(object sender, TokenReceivedEventArgs token)
+    {
+        Debug.Log("Received registration token: " + token.Token);
+        NotificationToken.Value = token.Token;
+    }
+
+    void OnMessageReceived(object sender, MessageReceivedEventArgs e)
+    {
+        Debug.Log("Received a new message from: " + e.Message.From);
+    }
+
+    #endregion
+
+    #region Static methods
 
     static User m_instance = null;
 
     public async static Task SignInWithGoogle()
     {
         // Set up Google sign in service
-        GoogleSignIn.Configuration = new GoogleSignInConfiguration {
+        GoogleSignIn.Configuration = new GoogleSignInConfiguration
+        {
             WebClientId = "1066471497679-ceos2isgtrb36rctu7coq1da2igs922r.apps.googleusercontent.com",
             RequestIdToken = true
         };
@@ -57,6 +79,10 @@ class User : ICloudObject
         m_instance.Name.Value = firebaseUser.DisplayName;
         m_instance.Type.Value = (long)UserType.Google;
         m_instance.Token.Value = firebaseUser.UserId;
+
+        // Set up push notifications
+        FirebaseMessaging.TokenReceived += m_instance.OnTokenReceived;
+        FirebaseMessaging.MessageReceived += m_instance.OnMessageReceived;
     }
 
     public async static Task SignInAsGuest()
@@ -70,6 +96,10 @@ class User : ICloudObject
         m_instance.Name.Value = "Guest";
         m_instance.Type.Value = (long)UserType.Device;
         m_instance.Token.Value = firebaseUser.UserId;
+
+        // Set up push notifications
+        FirebaseMessaging.TokenReceived += m_instance.OnTokenReceived;
+        FirebaseMessaging.MessageReceived += m_instance.OnMessageReceived;
     }
 
     public async static Task<User> Get()
@@ -94,4 +124,6 @@ class User : ICloudObject
 
         return m_instance;
     }
+
+    #endregion
 }

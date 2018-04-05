@@ -5,8 +5,6 @@ using UnityEngine.SceneManagement;
 
 public class VotingWaitScene : MonoBehaviour
 {
-    private string m_roomCode;
-
     async void Start()
     {
         User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadSceneAsync("SignIn"); return; }
@@ -21,7 +19,6 @@ public class VotingWaitScene : MonoBehaviour
         string room = m_lobby.Id;
         if (!string.IsNullOrEmpty(room))
         {
-            m_roomCode = room;
             await RegisterListeners();
             OnVoteChanged(CloudManager.OnlyUser(m_lobby, m_user).Vote);
         }

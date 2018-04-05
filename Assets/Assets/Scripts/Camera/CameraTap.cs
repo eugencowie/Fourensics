@@ -136,6 +136,9 @@ public class CameraTap : MonoBehaviour
                 Quaternion.AngleAxis(180, Vector3.up) *
                 Quaternion.Euler(inspectable.InspectRotation);
 
+            foreach (var mesh in newObject.GetComponentsInChildren<MeshRenderer>())
+                mesh.enabled = true;
+
             newObject.AddComponent<ObjectInspecting>().OnInspectEnded = () => {
                 HideHintPanel();
                 BlurPlane.SetActive(false);

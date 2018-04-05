@@ -24,8 +24,8 @@ exports.playerJoinedLobby = functions.database.ref('/lobbies/{id}/users/{uid}/us
 
         const payload = {
             notification: {
-                title: 'Player has joined the game!',
-                body: 'A new player has joined the lobby!'
+                title: 'A player has joined the game!',
+                body: 'A player has joined the game!'
             }
         };
 
@@ -56,8 +56,8 @@ exports.playerLeftLobby = functions.database.ref('/lobbies/{id}/users/{uid}/user
 
         const payload = {
             notification: {
-                title: 'Player has left the game!',
-                body: 'A player has left the lobby!'
+                title: 'A player has left the game!',
+                body: 'A player has left the game!'
             }
         };
 
@@ -88,7 +88,7 @@ exports.lobbyStarted = functions.database.ref('/lobbies/{id}/state').onUpdate((s
         const payload = {
             notification: {
                 title: 'The game has started!',
-                body: 'The lobby has been started!'
+                body: 'The game has started!'
             }
         };
 

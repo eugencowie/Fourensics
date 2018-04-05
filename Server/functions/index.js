@@ -101,6 +101,7 @@ exports.lobbyStarted = functions.database.ref('/lobbies/{id}/state').onUpdate((s
 exports.clueChanged = functions.database.ref('/lobbies/{id}/users/{uid}/items/{iid}/description').onWrite((snapshot, context) => {
 
     const getLobbyUserIds = "0123".split('')
+        .filter(x => x !== context.params.uid)
         .map(x => admin.database().ref(`/lobbies/${context.params.id}/users/${x}/user-id`).once('value'));
 
     return Promise.all(getLobbyUserIds).then(results => {

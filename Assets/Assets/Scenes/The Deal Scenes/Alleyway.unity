@@ -14,7 +14,7 @@ OcclusionCullingSettings:
 RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 8
-  m_Fog: 0
+  m_Fog: 1
   m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   m_FogMode: 3
   m_FogDensity: 0.15
@@ -728,7 +728,7 @@ Prefab:
     - target: {fileID: 20189122430657728, guid: b4cf21df0c4bb50498a7194cec12805e,
         type: 2}
       propertyPath: m_RenderingPath
-      value: 3
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 20189122430657728, guid: b4cf21df0c4bb50498a7194cec12805e,
         type: 2}
@@ -747,122 +747,6 @@ Transform:
   m_PrefabParentObject: {fileID: 4770660436952536, guid: b4cf21df0c4bb50498a7194cec12805e,
     type: 2}
   m_PrefabInternal: {fileID: 149173772}
---- !u!1 &170454160
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 100002, guid: 2e2c050b847016142ad05e92e90189dd, type: 3}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 170454161}
-  - component: {fileID: 170454163}
-  - component: {fileID: 170454162}
-  - component: {fileID: 170454166}
-  - component: {fileID: 170454164}
-  - component: {fileID: 170454165}
-  m_Layer: 0
-  m_Name: Window003
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 4294967295
-  m_IsActive: 1
---- !u!4 &170454161
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 400002, guid: 2e2c050b847016142ad05e92e90189dd, type: 3}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 170454160}
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.9, y: -5.1, z: -0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 726737866}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!23 &170454162
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 2300000, guid: 2e2c050b847016142ad05e92e90189dd,
-    type: 3}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 170454160}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_Materials:
-  - {fileID: 2100000, guid: 838b1171ab310f840bbf0721cd578d85, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
---- !u!33 &170454163
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 3300000, guid: 2e2c050b847016142ad05e92e90189dd,
-    type: 3}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 170454160}
-  m_Mesh: {fileID: 4300000, guid: 2e2c050b847016142ad05e92e90189dd, type: 3}
---- !u!114 &170454164
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 170454160}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 73f3d3f0475c0554ba134c76b6d91a57, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Name: Lit Window
-  Hint: The window was not lit at the time the police first arrived.
-  Image: {fileID: 0}
-  ImagePath: 
---- !u!114 &170454165
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 170454160}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f4eebfafefce1e47829fbae1d8fe1a8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TargetCamera: {fileID: 598509801}
-  Duration: 1
-  audioSource: {fileID: 0}
-  audioClip: {fileID: 0}
---- !u!65 &170454166
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 170454160}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 258.2431, y: 169.03078, z: 6.8255024}
-  m_Center: {x: -3.5156157, y: 0.27206352, z: -0.18525016}
 --- !u!1 &194371267
 GameObject:
   m_ObjectHideFlags: 0
@@ -2115,7 +1999,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 726192126}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ff26db721962cdf4a8edcdfa9a767d2a, type: 3}
   m_Name: 
@@ -2132,7 +2016,6 @@ Transform:
   m_LocalScale: {x: 0.66600025, y: 0.666, z: 0.66600025}
   m_Children:
   - {fileID: 835371891}
-  - {fileID: 170454161}
   m_Father: {fileID: 1635019615}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 270, z: 0}
@@ -2219,6 +2102,52 @@ Light:
 Transform:
   m_PrefabParentObject: {fileID: 400000, guid: e9f262c5f62d0ca448e207cb124c651d, type: 3}
   m_PrefabInternal: {fileID: 1155130446}
+--- !u!1 &827617262 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 100002, guid: beaf6e91a4069df4ab97d7cdbca49b21, type: 3}
+  m_PrefabInternal: {fileID: 835371890}
+--- !u!114 &827617264
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 827617262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73f3d3f0475c0554ba134c76b6d91a57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: Lit Window
+  Hint: The window was not lit at the time the police first arrived.
+  Image: {fileID: 0}
+  ImagePath: 
+--- !u!65 &827617265
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 827617262}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 258.2431, y: 169.03078, z: 6.8255024}
+  m_Center: {x: -3.5156157, y: 0.27206352, z: -0.18525016}
+--- !u!114 &827617266
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 827617262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f4eebfafefce1e47829fbae1d8fe1a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetCamera: {fileID: 598509801}
+  Duration: 1
+  audioSource: {fileID: 0}
+  audioClip: {fileID: 0}
 --- !u!1001 &835371890
 Prefab:
   m_ObjectHideFlags: 0

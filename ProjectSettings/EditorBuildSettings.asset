@@ -6,8 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Assets/Scenes/SignIn.unity
-    guid: 93dbfd4199a559a44ac0cfdde7dd33a0
+    path: Assets/Assets/Scenes/Lobby.unity
+    guid: 6aa7f954fd1fca3499510d504f8a2756
   - enabled: 0
     path: Assets/Assets/Scenes/Rooms/Bartender.unity
     guid: d858c1784694de949a44880b19d2d3c1
@@ -27,9 +27,6 @@ EditorBuildSettings:
     path: Assets/Assets/Scenes/The Deal Scenes/DrugLab.unity
     guid: 5645f9bec91b230438fa575e0e555564
   - enabled: 1
-    path: Assets/Assets/Scenes/Lobby.unity
-    guid: 6aa7f954fd1fca3499510d504f8a2756
-  - enabled: 1
     path: Assets/Assets/Scenes/Database.unity
     guid: 02d35302db79d7e479cf809d7054dc2b
   - enabled: 1
@@ -47,3 +44,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Assets/Scenes/Retry.unity
     guid: e96eeef1a16ce0f4ba393c2b253da7cf
+  - enabled: 1
+    path: Assets/Assets/Scenes/SignIn.unity
+    guid: 93dbfd4199a559a44ac0cfdde7dd33a0

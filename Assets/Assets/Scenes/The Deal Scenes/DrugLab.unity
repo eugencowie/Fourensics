@@ -59,8 +59,8 @@ LightmapSettings:
     m_BakeResolution: 40
     m_TextureWidth: 1024
     m_TextureHeight: 1024
-    m_AO: 0
-    m_AOMaxDistance: 1
+    m_AO: 1
+    m_AOMaxDistance: 1.4
     m_CompAOExponent: 1
     m_CompAOExponentDirect: 0
     m_Padding: 2
@@ -5248,7 +5248,7 @@ Prefab:
     - target: {fileID: 20189122430657728, guid: b4cf21df0c4bb50498a7194cec12805e,
         type: 2}
       propertyPath: m_RenderingPath
-      value: 3
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 20189122430657728, guid: b4cf21df0c4bb50498a7194cec12805e,
         type: 2}

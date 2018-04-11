@@ -224,8 +224,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Paper Plate
   Hint: A cheap paper plate, it is the home brand of a supermarket nearby.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 255bb94c3414c434ea0084ad9f189915, type: 3}
+  ImagePath: Lab/Ceramic Plate
 --- !u!114 &58486009
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -436,8 +436,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Ceramic plate
   Hint: The ceramic plates are burnt in places. They look fairly expensive.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 255bb94c3414c434ea0084ad9f189915, type: 3}
+  ImagePath: Lab/Ceramic Plate
 --- !u!65 &66023697
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -560,8 +560,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Bunsen burner
   Hint: The bunsen burner is covered in soot and has been used recently.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 8badd13e17fad1f4cb8b307706327b9c, type: 3}
+  ImagePath: Lab/Bunsen Burner
 --- !u!65 &77939143
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -649,51 +649,51 @@ Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 1126905930}
+    m_TransformParent: {fileID: 975480033}
     m_Modifications:
     - target: {fileID: 400000, guid: 25a05cbe639602d41b7ed1cdb629c4ae, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -12.21
+      value: -0.022875488
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 25a05cbe639602d41b7ed1cdb629c4ae, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 13.375001
+      value: 0.5968751
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 25a05cbe639602d41b7ed1cdb629c4ae, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -92.355
+      value: -0.3489288
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 25a05cbe639602d41b7ed1cdb629c4ae, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.8091693
+      value: 0.8180526
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 25a05cbe639602d41b7ed1cdb629c4ae, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.099602155
+      value: 0.05452806
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 25a05cbe639602d41b7ed1cdb629c4ae, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.14367178
+      value: 0.07865435
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 25a05cbe639602d41b7ed1cdb629c4ae, type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.5609661
+      value: -0.56712455
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 25a05cbe639602d41b7ed1cdb629c4ae, type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 25a05cbe639602d41b7ed1cdb629c4ae, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.23821571
+      value: 0.009925654
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 25a05cbe639602d41b7ed1cdb629c4ae, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.23821577
+      value: 0.009925659
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 25a05cbe639602d41b7ed1cdb629c4ae, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.23821583
+      value: 0.009925665
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 25a05cbe639602d41b7ed1cdb629c4ae, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -718,10 +718,6 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 25a05cbe639602d41b7ed1cdb629c4ae, type: 3}
   m_IsPrefabParent: 0
---- !u!4 &125243127 stripped
-Transform:
-  m_PrefabParentObject: {fileID: 400000, guid: 25a05cbe639602d41b7ed1cdb629c4ae, type: 3}
-  m_PrefabInternal: {fileID: 125243126}
 --- !u!1 &128196070
 GameObject:
   m_ObjectHideFlags: 0
@@ -1063,8 +1059,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Flask
   Hint: The translucent flask is empty.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: dd85dc232f19c6447816253ca21167be, type: 3}
+  ImagePath: Lab/Boiling Flask
 --- !u!114 &303676246
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1252,8 +1248,8 @@ MonoBehaviour:
   Name: Bottle
   Hint: The bottle of beer is almost empty and partly hidden under one of the desks.
     It looks like someone has been drinking on the job.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 6dbced713b9eb154c9408351c8bbd8db, type: 3}
+  ImagePath: InventoryImages/BottleofAlcohol
 --- !u!114 &306516784
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1480,8 +1476,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Ceramic plate
   Hint: The ceramic plates are burnt in places. They look fairly expensive.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 255bb94c3414c434ea0084ad9f189915, type: 3}
+  ImagePath: Lab/Ceramic Plate
 --- !u!114 &329401789
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1619,8 +1615,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Flask
   Hint: The translucent flask is empty.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: dd85dc232f19c6447816253ca21167be, type: 3}
+  ImagePath: Lab/Boiling Flask
 --- !u!65 &401514784
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1870,9 +1866,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Name: Boiling flask
-  Hint: 
-  Image: {fileID: 0}
-  ImagePath: 
+  Hint: A worn boiling flask.
+  Image: {fileID: 21300000, guid: dd85dc232f19c6447816253ca21167be, type: 3}
+  ImagePath: Lab/Boiling Flask
 --- !u!114 &497080700
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1994,8 +1990,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Erlenmeyer flask
   Hint: A transparent plastic flask.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: a0133206cb5aad548979a1d704104cda, type: 3}
+  ImagePath: Lab/Erlenmeyer Flask
 --- !u!65 &499156057
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2103,8 +2099,8 @@ MonoBehaviour:
   Name: Headphones
   Hint: Old but sturdy headphones. Noise canceling is certainly useful in an environment
     such as this.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 9056d8401738d7441bdc1fe77378af48, type: 3}
+  ImagePath: InventoryImages/Headphones
 --- !u!65 &502773006
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2216,8 +2212,8 @@ MonoBehaviour:
   Name: Lab Door
   Hint: This door is made out of thick metal. A shift schedule is pinned to it but
     no one bothered to register.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 6638d2dbd171b2a4bbacecee7a8a57b2, type: 3}
+  ImagePath: Lab/door
 --- !u!65 &504644584
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2313,8 +2309,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Erlenmeyer flask
   Hint: A transparent plastic flask.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: a0133206cb5aad548979a1d704104cda, type: 3}
+  ImagePath: Lab/Erlenmeyer Flask
 --- !u!114 &525673275
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2452,8 +2448,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Flask
   Hint: The translucent flask is empty.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: dd85dc232f19c6447816253ca21167be, type: 3}
+  ImagePath: Lab/Boiling Flask
 --- !u!65 &581566792
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2583,8 +2579,8 @@ MonoBehaviour:
   Name: Standing Fan
   Hint: This fan looks like it has been temporarily positioned to disperse the various
     dangerous fumes.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 07a6c4dde371d6d448f5058a82690e7c, type: 3}
+  ImagePath: Lab/fan
 --- !u!65 &622120869
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2954,9 +2950,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Name: Boiling flask
-  Hint: 
-  Image: {fileID: 0}
-  ImagePath: 
+  Hint: Empty.
+  Image: {fileID: 21300000, guid: dd85dc232f19c6447816253ca21167be, type: 3}
+  ImagePath: Lab/Boiling Flask
 --- !u!114 &657833508
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3087,8 +3083,8 @@ MonoBehaviour:
   Name: Trace amounts of meth
   Hint: Different traces of chemical compounds that are found in Meth are ground up
     on the table.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: a52ee3335eeaebc439db45cdb61ffc62, type: 3}
+  ImagePath: Lab/meth
 --- !u!65 &683363278
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3211,8 +3207,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Steel Vat
   Hint: The massive vats contain various chemicals that are not commercially available.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 5595f153e8aaf9040b443d375570df91, type: 3}
+  ImagePath: Lab/vat
 --- !u!65 &726792374
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3312,8 +3308,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Steel Vat
   Hint: The massive vats contain various chemicals that are not commercially available.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 5595f153e8aaf9040b443d375570df91, type: 3}
+  ImagePath: Lab/vat
 --- !u!114 &733141893
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3455,8 +3451,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Funnel
   Hint: This funnel has been used to funnel liquids from one container to another.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: b1c1b9d32292e9f478785b026b3057b4, type: 3}
+  ImagePath: Lab/Funnel
 --- !u!65 &752246006
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3564,8 +3560,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Jerry can
   Hint: Half emptied jerry can containing toxic chemicals.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: e68f7f6d334a2bc42a706f0b1ba47720, type: 3}
+  ImagePath: Lab/jerry can
 --- !u!114 &760761202
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3656,8 +3652,8 @@ MonoBehaviour:
   Name: Laptop
   Hint: No usable fingerprints anywhere. The Laptop is opened to a page that gives
     instructions on how to cook meth.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: b4e16e098c39eaa48968730379c904cb, type: 3}
+  ImagePath: InventoryImages/Laptop
 --- !u!65 &785149191
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3947,9 +3943,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Name: Boiling flask
-  Hint: 
-  Image: {fileID: 0}
-  ImagePath: 
+  Hint: Half empty boiling flask, it has been used recently.
+  Image: {fileID: 21300000, guid: dd85dc232f19c6447816253ca21167be, type: 3}
+  ImagePath: Lab/Boiling Flask
 --- !u!65 &857713368
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4096,8 +4092,8 @@ MonoBehaviour:
   Name: Invoice
   Hint: A bill made out to someone. The address is smudged and unreadable but it looks
     like the recipient has many open bills to pay.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: e28f7b289aba7f84db98be7558c00a80, type: 3}
+  ImagePath: InventoryImages/EnvelopeSummoningLetter
 --- !u!65 &942675916
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4187,7 +4183,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 5acd4414382f4e54d994f960ef78ec96, type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 5acd4414382f4e54d994f960ef78ec96, type: 3}
       propertyPath: m_LocalScale.x
@@ -4969,8 +4965,8 @@ MonoBehaviour:
   Name: Body of Lab Worker
   Hint: The body is dressed in a clean hazmat suit. He has been shot in the chest
     twice as he entered the room and is lying on his back.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: aab1b01f1ad569e46ba300b2df9cef8c, type: 3}
+  ImagePath: Lab/Gas mask
 --- !u!65 &975480037
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5086,8 +5082,8 @@ MonoBehaviour:
   Name: Bottle
   Hint: The bottle of beer is almost empty and partly hidden under one of the desks.
     It looks like someone has been drinking on the job.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 6dbced713b9eb154c9408351c8bbd8db, type: 3}
+  ImagePath: InventoryImages/BottleofAlcohol
 --- !u!65 &980859257
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5650,8 +5646,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Ceramic plate
   Hint: The ceramic plates are burnt in places. They look fairly expensive.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 255bb94c3414c434ea0084ad9f189915, type: 3}
+  ImagePath: Lab/Ceramic Plate
 --- !u!65 &1053017359
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5711,8 +5707,8 @@ MonoBehaviour:
   Name: Bucket
   Hint: The bucket contains lye and the dust on the lid indicates that it has not
     been opened in some time.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 153bb3f966e3e4241879a2948f553955, type: 3}
+  ImagePath: Lab/Bucket
 --- !u!114 &1097509075
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5813,7 +5809,6 @@ Transform:
   - {fileID: 683363274}
   - {fileID: 1156604127}
   - {fileID: 1992341698}
-  - {fileID: 125243127}
   - {fileID: 975480033}
   m_Father: {fileID: 862696676}
   m_RootOrder: 1
@@ -5933,8 +5928,8 @@ MonoBehaviour:
   Name: Trace amounts of meth
   Hint: Different traces of chemical compounds that are found in Meth are ground up
     on the table.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: a52ee3335eeaebc439db45cdb61ffc62, type: 3}
+  ImagePath: Lab/meth
 --- !u!65 &1156604131
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6119,8 +6114,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Ceramic plate
   Hint: The ceramic plates are burnt in places. They look fairly expensive.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 255bb94c3414c434ea0084ad9f189915, type: 3}
+  ImagePath: Lab/Ceramic Plate
 --- !u!114 &1165451979
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6226,9 +6221,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Name: Boiling flask
-  Hint: 
-  Image: {fileID: 0}
-  ImagePath: 
+  Hint: Empty flask.
+  Image: {fileID: 21300000, guid: dd85dc232f19c6447816253ca21167be, type: 3}
+  ImagePath: Lab/Boiling Flask
 --- !u!114 &1168333823
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6500,8 +6495,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Bunsen burner
   Hint: The bunsen burner is covered in soot and has been used recently.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 8badd13e17fad1f4cb8b307706327b9c, type: 3}
+  ImagePath: Lab/Bunsen Burner
 --- !u!114 &1295670673
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6620,8 +6615,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Hairnet
   Hint: A crumpled up hairnet. Several long blonde hairs are stuck in it.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 99fdc835c0a412046b629278b291eb42, type: 3}
+  ImagePath: Lab/hair net
 --- !u!65 &1339550975
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6889,8 +6884,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Paper Plate
   Hint: A cheap paper plate, it is the home brand of a supermarket nearby.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 255bb94c3414c434ea0084ad9f189915, type: 3}
+  ImagePath: Lab/Ceramic Plate
 --- !u!65 &1569439012
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7182,8 +7177,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Paper Plate
   Hint: A cheap paper plate, it is the home brand of a supermarket nearby.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 255bb94c3414c434ea0084ad9f189915, type: 3}
+  ImagePath: Lab/Ceramic Plate
 --- !u!114 &1673523541
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7383,8 +7378,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Ceramic plate
   Hint: The ceramic plates are burnt in places. They look fairly expensive.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 255bb94c3414c434ea0084ad9f189915, type: 3}
+  ImagePath: Lab/Ceramic Plate
 --- !u!114 &1706820858
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7491,8 +7486,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Paper Plate
   Hint: A cheap paper plate, it is the home brand of a supermarket nearby.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 255bb94c3414c434ea0084ad9f189915, type: 3}
+  ImagePath: Lab/Ceramic Plate
 --- !u!114 &1713488488
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7567,8 +7562,8 @@ MonoBehaviour:
   Name: Bucket
   Hint: The bucket contains lye and the dust on the lid indicates that it has not
     been opened in some time.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 153bb3f966e3e4241879a2948f553955, type: 3}
+  ImagePath: Lab/Bucket
 --- !u!114 &1720112697
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7823,8 +7818,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Paper Plate
   Hint: A cheap paper plate, it is the home brand of a supermarket nearby.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 255bb94c3414c434ea0084ad9f189915, type: 3}
+  ImagePath: Lab/Ceramic Plate
 --- !u!114 &1806089248
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7955,8 +7950,8 @@ MonoBehaviour:
   Name: Bucket
   Hint: The bucket contains lye and the dust on the lid indicates that it has not
     been opened in some time.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 153bb3f966e3e4241879a2948f553955, type: 3}
+  ImagePath: Lab/Bucket
 --- !u!65 &1820546254
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8138,8 +8133,8 @@ MonoBehaviour:
   Name: Smartphone text
   Hint: A text reads "They r suspecting someone is skimming off the product, watch
     ur back." The text was recieved at 11:02pm.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 7b08255f5949dc64d98191f373e55ee6, type: 3}
+  ImagePath: InventoryImages/Smartphone
 --- !u!65 &1859757136
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8335,8 +8330,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Funnel
   Hint: This funnel has been used to funnel liquids from one container to another.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: b1c1b9d32292e9f478785b026b3057b4, type: 3}
+  ImagePath: Lab/Funnel
 --- !u!114 &1935246567
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8458,8 +8453,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Lab clock
   Hint: This clock displays the current time. It is 1:09am.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 7695c78cc13184441a73d8e770918525, type: 3}
+  ImagePath: Office/Clock
 --- !u!65 &1992341702
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8551,8 +8546,8 @@ MonoBehaviour:
   Name: Bucket
   Hint: The bucket contains lye and the dust on the lid indicates that it has not
     been opened in some time.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 153bb3f966e3e4241879a2948f553955, type: 3}
+  ImagePath: Lab/Bucket
 --- !u!114 &2108843683
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -51,7 +51,7 @@ class LobbyScene : MonoBehaviour
             // Show start panel
             SwitchPanel(m_panels.Main);
         }
-        else
+        else if (lobby.State.Value == (long)LobbyState.Lobby)
         {
             // Register callbacks
             await RegisterCallbacks();
@@ -60,6 +60,10 @@ class LobbyScene : MonoBehaviour
             m_codeLabel.text = lobby.Id;
             LobbyUserIdChanged(CloudManager.OnlyUser(lobby, user).UserId);
             SwitchPanel(m_panels.Lobby);
+        }
+        else
+        {
+            LobbyStateChanged(lobby.State);
         }
     }
 
@@ -351,6 +355,30 @@ class LobbyScene : MonoBehaviour
                     SceneManager.LoadSceneAsync(((caseNb - 1) * ScenesPerCase) + scene);
                 }
             }
+        }
+        else if (state.Value.HasValue && (LobbyState)state.Value.Value == LobbyState.Voting)
+        {
+            // Deregister callbacks
+            await DeregisterCallbacks();
+
+            // Load voting database scene
+            SceneManager.LoadSceneAsync("VotingDatabase");
+        }
+        else if (state.Value.HasValue && (LobbyState)state.Value.Value == LobbyState.Finished)
+        {
+            // Deregister callbacks
+            await DeregisterCallbacks();
+
+            // Load voting database scene
+            SceneManager.LoadSceneAsync("GameOver");
+        }
+        else if (state.Value.HasValue && (LobbyState)state.Value.Value == LobbyState.RetryLobby)
+        {
+            // Deregister callbacks
+            await DeregisterCallbacks();
+
+            // Load voting database scene
+            SceneManager.LoadSceneAsync("Retry");
         }
     }
 }

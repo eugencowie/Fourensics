@@ -59,6 +59,7 @@ public class VotingWaitScene : MonoBehaviour
                 if (everyoneVoted)
                 {
                     await DeregisterListeners();
+                    m_lobby.State.Value = (long)LobbyState.Finished;
                     SceneManager.LoadSceneAsync("GameOver");
                 }
             }

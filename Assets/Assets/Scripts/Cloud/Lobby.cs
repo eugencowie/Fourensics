@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-enum LobbyState { Lobby, InGame, Voting, Finished }
+enum LobbyState { Lobby, InGame, Voting, Finished, RetryLobby }
 
 class Lobby : ICloudObject
 {

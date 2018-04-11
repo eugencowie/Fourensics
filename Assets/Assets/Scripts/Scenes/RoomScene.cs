@@ -98,6 +98,7 @@ public class RoomScene : MonoBehaviour
                 {
                     StaticClues.SeenSlots.Clear();
                     StaticVotingDatabase.Reset();
+                    m_lobby.State.Value = (long)LobbyState.Voting;
                     SceneManager.LoadSceneAsync("VotingDatabase");
                 }
             }

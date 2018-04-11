@@ -131,8 +131,8 @@ public class Inventory : MonoBehaviour
             m_buttons.Add(newButton);
 
             // Scroll inventory to show the new item
-            float maxScrollAmount = Mathf.Max(0, (m_buttons.Count * m_spacing) - (m_spacing * 5));
-            ScrollTo(maxScrollAmount);
+            //float maxScrollAmount = Mathf.Max(0, (m_buttons.Count * m_spacing) - (m_spacing * 5));
+            //ScrollTo(maxScrollAmount);
         }
     }
 
@@ -144,7 +144,7 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    public void ScrollUpButtonPressed()
+    /*public void ScrollUpButtonPressed()
     {
         Scroll(-m_spacing);
     }
@@ -167,5 +167,5 @@ public class Inventory : MonoBehaviour
         m_scrollAmount = Mathf.Clamp(m_scrollAmount, 0, maxScrollAmount);
 
         ButtonContainer.transform.localPosition = new Vector3(0, m_scrollAmount, 0);
-    }
+    }*/
 }

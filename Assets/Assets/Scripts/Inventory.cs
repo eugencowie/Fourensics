@@ -23,7 +23,7 @@ public class Inventory : MonoBehaviour
     private List<GameObject> m_buttons = new List<GameObject>();
     private const int m_spacing = 235;
     private const float m_scrollSpeed = 2000;
-    private float m_scrollAmount = 0;
+    //private float m_scrollAmount = 0;
 
     //private Vector3 m_touchOrigin;
     //private bool m_isSwiping;
@@ -32,6 +32,9 @@ public class Inventory : MonoBehaviour
     {
         foreach (var button in m_buttons)
         {
+            // Decrease button container size
+            ButtonContainer.GetComponent<RectTransform>().sizeDelta = new Vector2(ButtonContainer.GetComponent<RectTransform>().sizeDelta.x, ButtonContainer.GetComponent<RectTransform>().sizeDelta.y - 250);
+
             Destroy(button);
         }
 
@@ -79,6 +82,9 @@ public class Inventory : MonoBehaviour
                 StaticInventory.Hints.Add(new ObjectHintData(item.Name, item.Hint, item.Image)); // TODO
             }
             else return;
+
+            // Increase button container size
+            ButtonContainer.GetComponent<RectTransform>().sizeDelta = new Vector2(ButtonContainer.GetComponent<RectTransform>().sizeDelta.x, ButtonContainer.GetComponent<RectTransform>().sizeDelta.y + 250);
 
             // Create new button
             GameObject newButton = Instantiate(Button);

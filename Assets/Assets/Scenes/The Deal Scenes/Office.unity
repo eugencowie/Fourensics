@@ -2575,15 +2575,15 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 8f4b61d0cd09ec745b9d7d42080081cb, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 58ef568056c475b4f9d1ff9eeffe58fa, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 10.81, y: 6.07}
+  m_Size: {x: 11.19, y: 6.96}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
 --- !u!1 &921360955
 GameObject:
@@ -3680,6 +3680,10 @@ Prefab:
         type: 2}
       propertyPath: OnConfirm.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: ConfirmReady
+      objectReference: {fileID: 0}
+    - target: {fileID: 1856969743927884, guid: dc26f056f492a8b44b9525b72dda3044, type: 2}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: dc26f056f492a8b44b9525b72dda3044, type: 2}

@@ -128,8 +128,8 @@ MonoBehaviour:
   Name: Plastic bags
   Hint: Garbage bags are scattered around the alley. They mostly contain shredded
     paper and plastic cups with trace amounts of chemicals.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: bcddc099e360b8a4ab235c4c8d82bc7a, type: 3}
+  ImagePath: Alley/Binbags_Thumbnail
 --- !u!114 &24784640
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -357,8 +357,8 @@ MonoBehaviour:
   Name: Bullet holes
   Hint: The bullet holes opposite the door indicate that the person is between 165
     cm and 175cm tall.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: bd28ce0ce486c014fa7becc37015aab1, type: 3}
+  ImagePath: Alley/Gunshot_Thumbnail
 --- !u!1 &41142548 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 100002, guid: 6b303a89bb5d1c1459697163418c3333, type: 3}
@@ -382,8 +382,8 @@ MonoBehaviour:
   Hint: A silencer is lying on the ground. It appears as if the assailant was unaware
     that they lost it. It is still warm, indicating that it has been fired several
     times recently.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 3f536180a64d4794485c28438c33de50, type: 3}
+  ImagePath: Alley/Silencer_Thumbnail
 --- !u!65 &41142551
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -901,8 +901,8 @@ MonoBehaviour:
   Name: Exit sign
   Hint: The exit sign next to the metal door is lit up in green and paints the alley
     in an unnatural green light.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: ae13c9a665443eb4582837ae6df38f02, type: 3}
+  ImagePath: Alley/Exit_Thumbnail
 --- !u!65 &264835585
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1274,8 +1274,8 @@ MonoBehaviour:
   Name: Body in Alleyway
   Hint: The guard dressed in a warm jacket is lying next to the metal exit door. He
     has been shot several times.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 3449f07fbffb9d34e960b7be129d557d, type: 3}
+  ImagePath: Alley/Allayway_Body_Thumbnail
 --- !u!114 &443499744
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2120,8 +2120,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Lit Window
   Hint: The window was not lit at the time the police first arrived.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: a0756c9ec21ee80468b9c70351f253af, type: 3}
+  ImagePath: Alley/Window_Thumbnail
 --- !u!65 &827617265
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2449,8 +2449,8 @@ MonoBehaviour:
   Name: Fire escape
   Hint: The fire escape is too far up to be reached from the ground. It looks rusty
     and not really safe.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 35759c99f3fd7834f8cdac19a0a6a7a1, type: 3}
+  ImagePath: Alley/Fire_Escape_Thumbnail
 --- !u!114 &942775494
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2688,8 +2688,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: AK47
   Hint: An AK47, probably bought off the black market. It has not been shot recently.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 02dbcac0eb18b0a49a21e53c12eeaf14, type: 3}
+  ImagePath: Alley/AK47
 --- !u!114 &1099264258
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3274,8 +3274,8 @@ MonoBehaviour:
   Name: Dumpster
   Hint: A big garbage bin that is filled to the brim with waste and plastic bags.
     It looks like the building next to the decrepit warehouse is still inhabited.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 83ccd3e24f39b9845beb55bae69f9795, type: 3}
+  ImagePath: Alley/Dumpster_Thumbnail
 --- !u!65 &1266030389
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3320,8 +3320,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Air Conditioning Unit
   Hint: 'The AC is turned on and humming faintly. '
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 940a63aac61ccfe40a721ffca336f3a6, type: 3}
+  ImagePath: Alley/AC_Unit_Thumbnail
 --- !u!65 &1289127934
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3552,8 +3552,8 @@ MonoBehaviour:
   Name: 'Alleyway Footrpint '
   Hint: The footprint that has been left in the mud indicates that the person who
     left the scene was either 95kg heavy or was carrying something.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: b1e3b9753fb15ca4d974d97b3b24779f, type: 3}
+  ImagePath: Alley/Mud_Footprint_Thumbnail
 --- !u!1 &1491619641 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 100000, guid: 6dcc25e1a2b78b244b56eee80af85c03, type: 3}
@@ -3572,8 +3572,8 @@ MonoBehaviour:
   Name: Entrance
   Hint: A heavy door with a metal bar that can be pulled to enter the building leads
     to a decrepit warehouse.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 6e8106b77a89db443a62829b9775e4b0, type: 3}
+  ImagePath: Alley/Door_Thumbnail
 --- !u!65 &1491619644
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5419,8 +5419,8 @@ MonoBehaviour:
   Name: Brick Wall
   Hint: This brick wall further back makes the alley a one way street. It is too tall
     for most people to climb.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 8459dce35199ada40af305c6bb57c7fd, type: 3}
+  ImagePath: Alley/BrickWall
 --- !u!114 &2098964376
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5496,5 +5496,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Tire tracks
   Hint: There are several tire tracks in the mud leading out of the alley.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 8b799a8b528e97847afdf81b8ac49dc9, type: 3}
+  ImagePath: Alley/Tires_Thumbnail

@@ -29,21 +29,21 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Assets/Scenes/Lobby.unity
     guid: 6aa7f954fd1fca3499510d504f8a2756
-  - enabled: 0
+  - enabled: 1
     path: Assets/Assets/Scenes/Database.unity
     guid: 02d35302db79d7e479cf809d7054dc2b
-  - enabled: 0
+  - enabled: 1
     path: Assets/Assets/Scenes/Voting.unity
     guid: 2f11c1e94ec26c3488b45d90d7af60d1
-  - enabled: 0
+  - enabled: 1
     path: Assets/Assets/Scenes/VotingDatabase.unity
     guid: 43e9df83c883c024f85c6d85231614e1
-  - enabled: 0
+  - enabled: 1
     path: Assets/Assets/Scenes/VotingWait.unity
     guid: 96ca8b45a19dbe14ea6c40fae20fc06c
-  - enabled: 0
+  - enabled: 1
     path: Assets/Assets/Scenes/GameOver.unity
     guid: 1c7154194d86cd44fa8e141452aaf55b
-  - enabled: 0
+  - enabled: 1
     path: Assets/Assets/Scenes/Retry.unity
     guid: e96eeef1a16ce0f4ba393c2b253da7cf

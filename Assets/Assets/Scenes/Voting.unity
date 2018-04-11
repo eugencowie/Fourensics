@@ -252,7 +252,7 @@ Prefab:
     - target: {fileID: 114569896306991082, guid: 40fc956ba7a47604aaa5bfdbce17ace6,
         type: 2}
       propertyPath: m_Text
-      value: Suspect 5
+      value: Fredric Castle
       objectReference: {fileID: 0}
     - target: {fileID: 1156473526795230, guid: 40fc956ba7a47604aaa5bfdbce17ace6, type: 2}
       propertyPath: m_IsActive
@@ -261,17 +261,17 @@ Prefab:
     - target: {fileID: 114725772865384308, guid: 40fc956ba7a47604aaa5bfdbce17ace6,
         type: 2}
       propertyPath: m_Text
-      value: 'Appearance: Blonde hair, glasses
+      value: 'Appearance: Short blonde hair, long blonde beard
 
-        Height: 1,81m
+        Height: 1,92m
 
-        Weight: 81kg
+        Weight: 84kg
 
         Motivation: Greed
 
-        Occupation: Nurse
+        Occupation: Truck driver
 
-        Additional Information: Caused a car crash'
+        Additional Information: Member of the gang, was scheduled to pick up drugs.'
       objectReference: {fileID: 0}
     - target: {fileID: 114293165632170572, guid: 40fc956ba7a47604aaa5bfdbce17ace6,
         type: 2}
@@ -473,7 +473,7 @@ Prefab:
     - target: {fileID: 114569896306991082, guid: 40fc956ba7a47604aaa5bfdbce17ace6,
         type: 2}
       propertyPath: m_Text
-      value: Suspect 6
+      value: Tobias Simmons
       objectReference: {fileID: 0}
     - target: {fileID: 1156473526795230, guid: 40fc956ba7a47604aaa5bfdbce17ace6, type: 2}
       propertyPath: m_IsActive
@@ -482,17 +482,18 @@ Prefab:
     - target: {fileID: 114725772865384308, guid: 40fc956ba7a47604aaa5bfdbce17ace6,
         type: 2}
       propertyPath: m_Text
-      value: 'Appearance: Bald head, black beard
+      value: 'Appearance: Long blonde hair
 
-        Height: 1,59m
+        Height: 1,71m
 
-        Weight: 99kg
+        Weight: 69kg
 
-        Motivation: Revenge
+        Motivation: Greed
 
-        Occupation: Ex-con, works in a chemical factory
+        Occupation: Drug Manufacturer
 
-        Additional Information: Injured his left leg in a prison fight'
+        Additional Information: Member of the drug gang, is suspected of stealing
+        product.'
       objectReference: {fileID: 0}
     - target: {fileID: 114293165632170572, guid: 40fc956ba7a47604aaa5bfdbce17ace6,
         type: 2}
@@ -2116,7 +2117,7 @@ Prefab:
     - target: {fileID: 114569896306991082, guid: 40fc956ba7a47604aaa5bfdbce17ace6,
         type: 2}
       propertyPath: m_Text
-      value: Suspect 4
+      value: Nic Aston
       objectReference: {fileID: 0}
     - target: {fileID: 1156473526795230, guid: 40fc956ba7a47604aaa5bfdbce17ace6, type: 2}
       propertyPath: m_IsActive
@@ -2711,7 +2712,7 @@ Prefab:
     - target: {fileID: 114569896306991082, guid: 40fc956ba7a47604aaa5bfdbce17ace6,
         type: 2}
       propertyPath: m_Text
-      value: Suspect 3
+      value: Will Reynolds
       objectReference: {fileID: 0}
     - target: {fileID: 1156473526795230, guid: 40fc956ba7a47604aaa5bfdbce17ace6, type: 2}
       propertyPath: m_IsActive
@@ -2720,17 +2721,17 @@ Prefab:
     - target: {fileID: 114725772865384308, guid: 40fc956ba7a47604aaa5bfdbce17ace6,
         type: 2}
       propertyPath: m_Text
-      value: 'Appearance: Blonde hair, glasses
+      value: 'Appearance: Short black hair
 
-        Height: 1,68m
+        Height: 1,74m
 
-        Weight: 87kg
+        Weight: 72kg
 
-        Motivation: Childhood trauma
+        Motivation: Hostile takeover
 
-        Occupation: Veteran Medic
+        Occupation: Hitman
 
-        Additional Information: Injured in combat'
+        Additional Information: Member of different gang'
       objectReference: {fileID: 0}
     - target: {fileID: 114293165632170572, guid: 40fc956ba7a47604aaa5bfdbce17ace6,
         type: 2}
@@ -3053,7 +3054,7 @@ Prefab:
     - target: {fileID: 114569896306991082, guid: 40fc956ba7a47604aaa5bfdbce17ace6,
         type: 2}
       propertyPath: m_Text
-      value: Suspect 7
+      value: Brigham Newton
       objectReference: {fileID: 0}
     - target: {fileID: 1156473526795230, guid: 40fc956ba7a47604aaa5bfdbce17ace6, type: 2}
       propertyPath: m_IsActive
@@ -3062,17 +3063,18 @@ Prefab:
     - target: {fileID: 114725772865384308, guid: 40fc956ba7a47604aaa5bfdbce17ace6,
         type: 2}
       propertyPath: m_Text
-      value: 'Appearance: Black hair, glasses
+      value: 'Appearance: Short brown hair, glasses
 
-        Height: 1,90m
+        Height: 1,68m
 
-        Weight: 113kg
+        Weight: 70kg
 
-        Motivation: Greed
+        Motivation: Revenge
 
-        Occupation: Dentist
+        Occupation: Chemist
 
-        Additional Information: MMA Fighter'
+        Additional Information: Used to sell chemicals to the gang before being found
+        out and fired.'
       objectReference: {fileID: 0}
     - target: {fileID: 1670743388782110, guid: 40fc956ba7a47604aaa5bfdbce17ace6, type: 2}
       propertyPath: m_IsActive
@@ -3349,7 +3351,23 @@ Prefab:
     - target: {fileID: 114569896306991082, guid: 40fc956ba7a47604aaa5bfdbce17ace6,
         type: 2}
       propertyPath: m_Text
-      value: Suspect 1
+      value: Corbin Marlowe
+      objectReference: {fileID: 0}
+    - target: {fileID: 114725772865384308, guid: 40fc956ba7a47604aaa5bfdbce17ace6,
+        type: 2}
+      propertyPath: m_Text
+      value: 'Appearance: Long blonde hair
+
+        Height: 1,74
+
+        Weight: 72kg
+
+        Motivation: Psychotic break
+
+        Occupation: Homeless person
+
+        Additional Information: Has been living on the streets for a few months, cannot
+        drive due to leg injury'
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 40fc956ba7a47604aaa5bfdbce17ace6, type: 2}
@@ -3707,22 +3725,23 @@ Prefab:
     - target: {fileID: 114569896306991082, guid: 40fc956ba7a47604aaa5bfdbce17ace6,
         type: 2}
       propertyPath: m_Text
-      value: Suspect 2
+      value: Johanna Marley
       objectReference: {fileID: 0}
     - target: {fileID: 114725772865384308, guid: 40fc956ba7a47604aaa5bfdbce17ace6,
         type: 2}
       propertyPath: m_Text
-      value: 'Appearance: Dark hair, beard
+      value: 'Appearance: Long blonde hair, glasses
 
-        Height: 1,88m
+        Height: 1,85m
 
-        Weight: 97kg
+        Weight: 84kg
 
         Motivation: Revenge
 
         Occupation: High School Teacher
 
-        Additional Information: Alcoholic, Drunk driver'
+        Additional Information: Vigilante who has lost her husband to drugs, has scoped
+        out premisse before.'
       objectReference: {fileID: 0}
     - target: {fileID: 224245036665185616, guid: 40fc956ba7a47604aaa5bfdbce17ace6,
         type: 2}
@@ -5870,7 +5889,7 @@ Prefab:
     - target: {fileID: 114569896306991082, guid: 40fc956ba7a47604aaa5bfdbce17ace6,
         type: 2}
       propertyPath: m_Text
-      value: Suspect 8
+      value: Baldwin Rigby
       objectReference: {fileID: 0}
     - target: {fileID: 1156473526795230, guid: 40fc956ba7a47604aaa5bfdbce17ace6, type: 2}
       propertyPath: m_IsActive
@@ -5879,17 +5898,18 @@ Prefab:
     - target: {fileID: 114725772865384308, guid: 40fc956ba7a47604aaa5bfdbce17ace6,
         type: 2}
       propertyPath: m_Text
-      value: 'Appearance: Grey hair, glasses
+      value: 'Appearance: Short blonde hair
 
-        Height: 1,85m
+        Height: 1,89m
 
-        Weight: 74kg
+        Weight: 99kg
 
         Motivation: Greed
 
-        Occupation: Lawyer
+        Occupation: Policeman
 
-        Additional Information: Friend of the judge and the lawyer victims'
+        Additional Information: Investigated several times by the Internal Affairs
+        department.'
       objectReference: {fileID: 0}
     - target: {fileID: 114293165632170572, guid: 40fc956ba7a47604aaa5bfdbce17ace6,
         type: 2}

@@ -301,7 +301,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: c08155397500a4641be918635c40abf3, type: 3}
       propertyPath: m_RootOrder
-      value: 15
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: c08155397500a4641be918635c40abf3, type: 3}
       propertyPath: m_LocalScale.x
@@ -421,7 +421,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 0298b308a00c49443afbbfdd5f8c8dce, type: 3}
       propertyPath: m_RootOrder
-      value: 14
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 0298b308a00c49443afbbfdd5f8c8dce, type: 3}
       propertyPath: m_LocalScale.x
@@ -499,8 +499,8 @@ MonoBehaviour:
   Name: Industrial vent
   Hint: The vents come equipped with fans and appear to not have been used in quite
     some time.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 940a63aac61ccfe40a721ffca336f3a6, type: 3}
+  ImagePath: Alley/AC_Unit_Thumbnail
 --- !u!65 &129890147
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -544,17 +544,13 @@ Transform:
   - {fileID: 1483378545}
   - {fileID: 2064776992}
   - {fileID: 1197987055}
-  - {fileID: 1190701757}
-  - {fileID: 1164223026}
   - {fileID: 1038751924}
   - {fileID: 830605129}
   - {fileID: 288802668}
   - {fileID: 267970677}
   - {fileID: 218666593}
-  - {fileID: 233565889}
   - {fileID: 129890143}
   - {fileID: 62440643}
-  - {fileID: 460264623}
   m_Father: {fileID: 973775616}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -595,7 +591,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 6dcc25e1a2b78b244b56eee80af85c03, type: 3}
       propertyPath: m_RootOrder
-      value: 12
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 6dcc25e1a2b78b244b56eee80af85c03, type: 3}
       propertyPath: m_LocalScale.x
@@ -657,8 +653,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Fire Exit
   Hint: This door leads into an alleyway.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 6e8106b77a89db443a62829b9775e4b0, type: 3}
+  ImagePath: Alley/Door_Thumbnail
 --- !u!65 &218666596
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -691,7 +687,7 @@ Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 156587650}
+    m_TransformParent: {fileID: 921360956}
     m_Modifications:
     - target: {fileID: 400002, guid: 0298b308a00c49443afbbfdd5f8c8dce, type: 3}
       propertyPath: m_LocalPosition.x
@@ -703,7 +699,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 0298b308a00c49443afbbfdd5f8c8dce, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -226.6
+      value: -226.60002
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 0298b308a00c49443afbbfdd5f8c8dce, type: 3}
       propertyPath: m_LocalRotation.x
@@ -723,19 +719,19 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 0298b308a00c49443afbbfdd5f8c8dce, type: 3}
       propertyPath: m_RootOrder
-      value: 13
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 0298b308a00c49443afbbfdd5f8c8dce, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1.0000005
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 0298b308a00c49443afbbfdd5f8c8dce, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.99999994
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 0298b308a00c49443afbbfdd5f8c8dce, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1.0000005
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 0298b308a00c49443afbbfdd5f8c8dce, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
@@ -794,8 +790,8 @@ MonoBehaviour:
   Name: Biker body
   Hint: This second body has been shot in the front. A briefcase lies close to him.
     The coroner estimates the time of death at around 11:15pm.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 8abbaeddb31c9d6429fa81705094fec3, type: 3}
+  ImagePath: Warehouse/gang member 02
 --- !u!114 &267970679
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -848,7 +844,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 6334eaf1f9db79d43b26562a5dfd350b, type: 3}
       propertyPath: m_RootOrder
-      value: 10
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 13700000, guid: 6334eaf1f9db79d43b26562a5dfd350b, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -1695,8 +1691,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Oil drum
   Hint: The metal barrel is filled with highly incendiary chemicals.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: aeec9a82784ed654c837c2f3d20b34ff, type: 3}
+  ImagePath: Warehouse/oil drum
 --- !u!65 &333920352
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1903,19 +1899,19 @@ Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 156587650}
+    m_TransformParent: {fileID: 630937013}
     m_Modifications:
     - target: {fileID: 400000, guid: 2913b72cf0e075b47b7b50784325db15, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -304.8
+      value: -4.1096563
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 2913b72cf0e075b47b7b50784325db15, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.20000002
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 2913b72cf0e075b47b7b50784325db15, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 50.4
+      value: -25.369856
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 2913b72cf0e075b47b7b50784325db15, type: 3}
       propertyPath: m_LocalRotation.x
@@ -1923,7 +1919,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 2913b72cf0e075b47b7b50784325db15, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.99985874
+      value: -0.18462788
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 2913b72cf0e075b47b7b50784325db15, type: 3}
       propertyPath: m_LocalRotation.z
@@ -1931,23 +1927,23 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 2913b72cf0e075b47b7b50784325db15, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.016809864
+      value: 0.98280853
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 2913b72cf0e075b47b7b50784325db15, type: 3}
       propertyPath: m_RootOrder
-      value: 16
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 2913b72cf0e075b47b7b50784325db15, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.53000015
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 2913b72cf0e075b47b7b50784325db15, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.53
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 2913b72cf0e075b47b7b50784325db15, type: 3}
       propertyPath: m_LocalScale.z
-      value: -0.5300002
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 2300000, guid: 2913b72cf0e075b47b7b50784325db15, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -1964,10 +1960,6 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2913b72cf0e075b47b7b50784325db15, type: 3}
   m_IsPrefabParent: 0
---- !u!4 &460264623 stripped
-Transform:
-  m_PrefabParentObject: {fileID: 400000, guid: 2913b72cf0e075b47b7b50784325db15, type: 3}
-  m_PrefabInternal: {fileID: 460264622}
 --- !u!1 &538132827
 GameObject:
   m_ObjectHideFlags: 0
@@ -2335,8 +2327,8 @@ MonoBehaviour:
   Name: Mud
   Hint: A footprint that has been left in the muddy area around one of the doors indicates
     that the person who entered the scene is of a light build.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: b1e3b9753fb15ca4d974d97b3b24779f, type: 3}
+  ImagePath: Alley/Mud_Footprint_Thumbnail
 --- !u!114 &630937017
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2581,8 +2573,8 @@ MonoBehaviour:
   Name: Pallet
   Hint: A brittle wooden pallet. It is the right size to be picked up by a pallet
     truck.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 6fec9f4998bfef240911b8475e7fbd0e, type: 3}
+  ImagePath: Warehouse/Wooden Pallet
 --- !u!65 &678782406
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2685,8 +2677,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Wooden Crates
   Hint: The wooden crates are rotten and mostly have been emptied by now.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 32c8e2212b30f45488f736a5d2249201, type: 3}
+  ImagePath: Warehouse/crates
 --- !u!65 &703365346
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2914,7 +2906,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: bb80a3df8f550704a8ea76a8598977d1, type: 3}
       propertyPath: m_RootOrder
-      value: 11
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: bb80a3df8f550704a8ea76a8598977d1, type: 3}
       propertyPath: m_LocalScale.x
@@ -3806,7 +3798,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 211d7f125bd4b0142a9fdf69001cb32d, type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 211d7f125bd4b0142a9fdf69001cb32d, type: 3}
       propertyPath: m_LocalScale.x
@@ -3875,8 +3867,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Tipped rack
   Hint: This rack tipped over and rests against the wall.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 754aa5629f7de5c4fb3c298aec60e263, type: 3}
+  ImagePath: Warehouse/rack
 --- !u!65 &830605132
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3920,8 +3912,8 @@ MonoBehaviour:
   Hint: The gang member's has been shot in the back and lies opposite to the other
     body. He is part of the drug manufacturing ring that has been under investigation
     for quite some time.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 7a02b7881f6bdd5429e28403233cf479, type: 3}
+  ImagePath: Warehouse/gang member 2
 --- !u!114 &850932817
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3974,7 +3966,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 211d7f125bd4b0142a9fdf69001cb32d, type: 3}
       propertyPath: m_RootOrder
-      value: 9
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 211d7f125bd4b0142a9fdf69001cb32d, type: 3}
       propertyPath: m_LocalScale.x
@@ -4075,15 +4067,15 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 8f4b61d0cd09ec745b9d7d42080081cb, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a52487b1934a1d748a173f03f0bedccc, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 10.81, y: 6.07}
+  m_Size: {x: 11.45, y: 5.79}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
 --- !u!1 &921360955
 GameObject:
@@ -4111,6 +4103,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2044217239}
+  - {fileID: 233565889}
   m_Father: {fileID: 412932654}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4162,8 +4155,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Pallet truck
   Hint: This device is used to transport pallets. The left wheel is jammed.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: c881da33529b9ee40822b7fce3536b99, type: 3}
+  ImagePath: Warehouse/pallet truck
 --- !u!114 &924806299
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4427,8 +4420,8 @@ MonoBehaviour:
   Name: Pallet
   Hint: A brittle wooden pallet. It is the right size to be picked up by a pallet
     truck.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 6fec9f4998bfef240911b8475e7fbd0e, type: 3}
+  ImagePath: Warehouse/Wooden Pallet
 --- !u!65 &1010281163
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4520,8 +4513,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Wooden Crates
   Hint: The wooden crates are rotten and mostly have been emptied by now.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 32c8e2212b30f45488f736a5d2249201, type: 3}
+  ImagePath: Warehouse/crates
 --- !u!114 &1011346969
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4585,8 +4578,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Rack
   Hint: Empty rusted metal rack with thick layers of dust on it.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 754aa5629f7de5c4fb3c298aec60e263, type: 3}
+  ImagePath: Warehouse/rack
 --- !u!65 &1038751927
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4681,7 +4674,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1103989322}
-  m_LocalRotation: {x: 0.16705836, y: -0.5313257, z: 0.10778561, w: 0.82350874}
+  m_LocalRotation: {x: 0.16705838, y: -0.53132576, z: 0.10778562, w: 0.8235088}
   m_LocalPosition: {x: -252.3, y: 25.3, z: 19.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -4780,8 +4773,8 @@ MonoBehaviour:
   Name: Suitcase
   Hint: 'A black suitcase. It is opened and empty, a few individual banknotes are
     scattered around it. '
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 6d3a5e1a3c539344bb7e8996335af79a, type: 3}
+  ImagePath: Warehouse/suitcase
 --- !u!114 &1123496604
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4891,39 +4884,39 @@ Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 156587650}
+    m_TransformParent: {fileID: 1123496600}
     m_Modifications:
     - target: {fileID: 400000, guid: 6241aa6ae1477224e9dc9e43fb9cd69a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 110
+      value: -25.010202
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 6241aa6ae1477224e9dc9e43fb9cd69a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.40000004
+      value: 0.49740118
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 6241aa6ae1477224e9dc9e43fb9cd69a, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 36.7
+      value: -28.088078
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 6241aa6ae1477224e9dc9e43fb9cd69a, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.47375637
+      value: 0.39174536
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 6241aa6ae1477224e9dc9e43fb9cd69a, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.5249333
+      value: -0.5886727
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 6241aa6ae1477224e9dc9e43fb9cd69a, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.5249333
+      value: 0.5886727
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 6241aa6ae1477224e9dc9e43fb9cd69a, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.47375637
+      value: 0.39174536
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 6241aa6ae1477224e9dc9e43fb9cd69a, type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 6241aa6ae1477224e9dc9e43fb9cd69a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -4956,48 +4949,44 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6241aa6ae1477224e9dc9e43fb9cd69a, type: 3}
   m_IsPrefabParent: 0
---- !u!4 &1164223026 stripped
-Transform:
-  m_PrefabParentObject: {fileID: 400000, guid: 6241aa6ae1477224e9dc9e43fb9cd69a, type: 3}
-  m_PrefabInternal: {fileID: 1164223025}
 --- !u!1001 &1190701756
 Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 156587650}
+    m_TransformParent: {fileID: 1123496600}
     m_Modifications:
     - target: {fileID: 400000, guid: 6241aa6ae1477224e9dc9e43fb9cd69a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 74.87098
+      value: 7.7000384
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 6241aa6ae1477224e9dc9e43fb9cd69a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.40259886
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 6241aa6ae1477224e9dc9e43fb9cd69a, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 40.592422
+      value: -14.700047
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 6241aa6ae1477224e9dc9e43fb9cd69a, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.44252306
+      value: -0.6436866
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 6241aa6ae1477224e9dc9e43fb9cd69a, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.5515193
+      value: 0.29269
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 6241aa6ae1477224e9dc9e43fb9cd69a, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.55151904
+      value: 0.29269013
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 6241aa6ae1477224e9dc9e43fb9cd69a, type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.442523
+      value: 0.6436868
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 6241aa6ae1477224e9dc9e43fb9cd69a, type: 3}
       propertyPath: m_RootOrder
-      value: 6
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 6241aa6ae1477224e9dc9e43fb9cd69a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -5026,10 +5015,6 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6241aa6ae1477224e9dc9e43fb9cd69a, type: 3}
   m_IsPrefabParent: 0
---- !u!4 &1190701757 stripped
-Transform:
-  m_PrefabParentObject: {fileID: 400000, guid: 6241aa6ae1477224e9dc9e43fb9cd69a, type: 3}
-  m_PrefabInternal: {fileID: 1190701756}
 --- !u!1 &1192982728
 GameObject:
   m_ObjectHideFlags: 0
@@ -5152,8 +5137,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Rack
   Hint: Empty rusted metal rack with thick layers of dust on it.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 754aa5629f7de5c4fb3c298aec60e263, type: 3}
+  ImagePath: Warehouse/rack
 --- !u!114 &1197987058
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5187,8 +5172,8 @@ MonoBehaviour:
   Name: Glock
   Hint: This locked and loaded handgun is lying next to the gang member. It has not
     been fired recently.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: fb80ca1a52acc2a448aeaaaa027fb75b, type: 3}
+  ImagePath: Warehouse/gun
 --- !u!114 &1312048223
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5292,8 +5277,8 @@ MonoBehaviour:
   Name: Pallet
   Hint: A brittle wooden pallet. It is the right size to be picked up by a pallet
     truck.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 6fec9f4998bfef240911b8475e7fbd0e, type: 3}
+  ImagePath: Warehouse/Wooden Pallet
 --- !u!114 &1358746432
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5579,8 +5564,8 @@ MonoBehaviour:
   Name: Pallet
   Hint: A brittle wooden pallet. It is the right size to be picked up by a pallet
     truck.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 6fec9f4998bfef240911b8475e7fbd0e, type: 3}
+  ImagePath: Warehouse/Wooden Pallet
 --- !u!65 &1439014310
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5766,8 +5751,8 @@ MonoBehaviour:
   Name: Shutter
   Hint: This rusty shutter leads into a loading area for trucks. It has not been opened
     in ages.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 2df1484f882e9b14096b4b52ff3347e0, type: 3}
+  ImagePath: Warehouse/shutter
 --- !u!114 &1483378548
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5933,8 +5918,8 @@ MonoBehaviour:
   Name: Industrial vent
   Hint: The vents come equipped with fans and appear to not have been used in quite
     some time.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: cf1bfea57c80cbb4fae81ad01e8e60ee, type: 3}
+  ImagePath: Warehouse/vent
 --- !u!114 &1541845660
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6133,8 +6118,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Oil drum
   Hint: The metal barrel is filled with highly incendiary chemicals.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: aeec9a82784ed654c837c2f3d20b34ff, type: 3}
+  ImagePath: Warehouse/oil drum
 --- !u!114 &1683170633
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6507,8 +6492,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Rusty pipe
   Hint: A metal pipe covered with a thick layer of dust.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 11f7db556012e9f43b4a767c28d8b45a, type: 3}
+  ImagePath: Lab/Pipe
 --- !u!65 &1943079728
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6908,5 +6893,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Office Door
   Hint: This thick metal door leads to an office building.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 5924116670a59b042a7cf04559952681, type: 3}
+  ImagePath: Warehouse/door

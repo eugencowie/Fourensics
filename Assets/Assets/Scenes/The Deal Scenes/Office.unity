@@ -208,7 +208,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 77a8d2b3b72878745a26ff5e372e4193, type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 77a8d2b3b72878745a26ff5e372e4193, type: 3}
       propertyPath: m_LocalScale.x
@@ -266,7 +266,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 109714783da1ac4438f858562d8341dc, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 109714783da1ac4438f858562d8341dc, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -411,15 +411,12 @@ Transform:
   m_Children:
   - {fileID: 524785938}
   - {fileID: 117778191}
-  - {fileID: 704761712}
   - {fileID: 598992360}
-  - {fileID: 313271475}
   - {fileID: 1593044267}
   - {fileID: 397705361}
   - {fileID: 137952550}
   - {fileID: 270820309}
   - {fileID: 544144923}
-  - {fileID: 719040004}
   - {fileID: 575587909}
   - {fileID: 964579873}
   m_Father: {fileID: 973775616}
@@ -462,7 +459,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 109714783da1ac4438f858562d8341dc, type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 109714783da1ac4438f858562d8341dc, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -707,7 +704,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: d3667f554a9bab74f928580d10eb34f0, type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: d3667f554a9bab74f928580d10eb34f0, type: 3}
       propertyPath: m_LocalScale.x
@@ -746,8 +743,8 @@ MonoBehaviour:
   Name: Cork board
   Hint: Several charts and spreadsheets indicate that a member of the gang has secretly
     been steeling product.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 844aff4823c006044b087909fd8c43c6, type: 3}
+  ImagePath: Office/Cork Board
 --- !u!114 &270820312
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -869,51 +866,51 @@ Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 156587650}
+    m_TransformParent: {fileID: 964579873}
     m_Modifications:
     - target: {fileID: 400000, guid: e9f262c5f62d0ca448e207cb124c651d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 78.71
+      value: 11.559928
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: e9f262c5f62d0ca448e207cb124c651d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 49.06
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: e9f262c5f62d0ca448e207cb124c651d, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -59.73
+      value: 4.142681
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: e9f262c5f62d0ca448e207cb124c651d, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: 0.000000104308114
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: e9f262c5f62d0ca448e207cb124c651d, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0.4828794
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: e9f262c5f62d0ca448e207cb124c651d, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.7071068
+      value: -0.000000059604638
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: e9f262c5f62d0ca448e207cb124c651d, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.7071068
+      value: 0.8756868
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: e9f262c5f62d0ca448e207cb124c651d, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: e9f262c5f62d0ca448e207cb124c651d, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.91585785
+      value: 0.999845
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: e9f262c5f62d0ca448e207cb124c651d, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.9158577
+      value: 0.99984455
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: e9f262c5f62d0ca448e207cb124c651d, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.9158577
+      value: 0.9998443
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: e9f262c5f62d0ca448e207cb124c651d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -922,10 +919,6 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e9f262c5f62d0ca448e207cb124c651d, type: 3}
   m_IsPrefabParent: 0
---- !u!4 &313271475 stripped
-Transform:
-  m_PrefabParentObject: {fileID: 400000, guid: e9f262c5f62d0ca448e207cb124c651d, type: 3}
-  m_PrefabInternal: {fileID: 313271474}
 --- !u!1 &352911511
 GameObject:
   m_ObjectHideFlags: 0
@@ -1052,7 +1045,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 07d32e46c08063e4f95fc5ffe6732128, type: 3}
       propertyPath: m_RootOrder
-      value: 6
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 07d32e46c08063e4f95fc5ffe6732128, type: 3}
       propertyPath: m_LocalScale.x
@@ -1164,7 +1157,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 18180dec55c521945b6d2d4211f0f13b, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 18180dec55c521945b6d2d4211f0f13b, type: 3}
       propertyPath: m_LocalScale.x
@@ -1694,7 +1687,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: a4ccfef18c835414fb70e3dc317afd6a, type: 3}
       propertyPath: m_RootOrder
-      value: 9
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: a4ccfef18c835414fb70e3dc317afd6a, type: 3}
       propertyPath: m_LocalScale.x
@@ -1756,7 +1749,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: c642e7a1341ff0348868c834cb2ed1ca, type: 3}
       propertyPath: m_RootOrder
-      value: 11
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: c642e7a1341ff0348868c834cb2ed1ca, type: 3}
       propertyPath: m_LocalScale.x
@@ -1820,8 +1813,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Couch
   Hint: An expensive leather couch, very well maintained.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 3d4ec57d29be7ce46ba66db07b3356f6, type: 3}
+  ImagePath: Office/Coach
 --- !u!114 &598992362
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1867,8 +1860,8 @@ MonoBehaviour:
   Name: Desk
   Hint: Several documents and letters are scattered on the desk. They mostly appear
     to be doctored tax statements and transport schedules.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: d28be874d868fea44b25a2cb1ac41910, type: 3}
+  ImagePath: Office/Desk
 --- !u!114 &640648233
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1940,8 +1933,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Base unit
   Hint: The personal computer is speced better than it looks from the outide.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 7f80210ba07b64543a483431298acc22, type: 3}
+  ImagePath: Office/Base Unit
 --- !u!1001 &667840012
 Prefab:
   m_ObjectHideFlags: 0
@@ -1979,7 +1972,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 109714783da1ac4438f858562d8341dc, type: 3}
       propertyPath: m_RootOrder
-      value: 6
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 109714783da1ac4438f858562d8341dc, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -2055,11 +2048,11 @@ Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 156587650}
+    m_TransformParent: {fileID: 921360956}
     m_Modifications:
     - target: {fileID: 400002, guid: 8d5609560ed8217498c98d415d1ef3b5, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 13.52
+      value: 13.520001
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 8d5609560ed8217498c98d415d1ef3b5, type: 3}
       propertyPath: m_LocalPosition.y
@@ -2087,11 +2080,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 8d5609560ed8217498c98d415d1ef3b5, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 8d5609560ed8217498c98d415d1ef3b5, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.31260657
+      value: 0.31260666
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 8d5609560ed8217498c98d415d1ef3b5, type: 3}
       propertyPath: m_LocalScale.y
@@ -2099,7 +2092,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 8d5609560ed8217498c98d415d1ef3b5, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.31260657
+      value: 0.31260666
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 8d5609560ed8217498c98d415d1ef3b5, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
@@ -2117,7 +2110,7 @@ Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 156587650}
+    m_TransformParent: {fileID: 921360956}
     m_Modifications:
     - target: {fileID: 400000, guid: 54a0196c2455ac04ba4da24d68ca160f, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2149,11 +2142,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 54a0196c2455ac04ba4da24d68ca160f, type: 3}
       propertyPath: m_RootOrder
-      value: 10
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 54a0196c2455ac04ba4da24d68ca160f, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.35195163
+      value: 0.35195166
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 54a0196c2455ac04ba4da24d68ca160f, type: 3}
       propertyPath: m_LocalScale.y
@@ -2161,7 +2154,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 54a0196c2455ac04ba4da24d68ca160f, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.351952
+      value: 0.35195202
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 54a0196c2455ac04ba4da24d68ca160f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
@@ -2191,8 +2184,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Shot clock
   Hint: The clock has been shot several times.The two hands are stuck at 11:09pm.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 7695c78cc13184441a73d8e770918525, type: 3}
+  ImagePath: Office/Clock
 --- !u!114 &741986992
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2265,8 +2258,8 @@ MonoBehaviour:
   Name: File cabinet
   Hint: The file cabinet contains files on the people employed to manufacture and
     transport drugs. Some of them have nigh unreadable notes scribbled on them.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 83beb2d07811d504ea4ada4ca9cea2b0, type: 3}
+  ImagePath: InventoryImages/FilingCabinet
 --- !u!1 &787546649
 GameObject:
   m_ObjectHideFlags: 0
@@ -2393,7 +2386,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 5f3abed49a9429d448816e3392d68072, type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 5f3abed49a9429d448816e3392d68072, type: 3}
       propertyPath: m_LocalScale.x
@@ -2582,15 +2575,15 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 8f4b61d0cd09ec745b9d7d42080081cb, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 58ef568056c475b4f9d1ff9eeffe58fa, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 10.81, y: 6.07}
+  m_Size: {x: 11.19, y: 6.96}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
 --- !u!1 &921360955
 GameObject:
@@ -2624,6 +2617,8 @@ Transform:
   - {fileID: 819851497}
   - {fileID: 667840013}
   - {fileID: 162380842}
+  - {fileID: 704761712}
+  - {fileID: 719040004}
   m_Father: {fileID: 412932654}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2782,8 +2777,8 @@ MonoBehaviour:
   Name: Schedule in pocket book
   Hint: The schedule lying on the office desk indicates that there was a big drug
     deal going down at 11:15pm.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: a6b90ab7af7fc2744a12bc3640896447, type: 3}
+  ImagePath: InventoryImages/Notebook
 --- !u!114 &956163936
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2848,7 +2843,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: e9f262c5f62d0ca448e207cb124c651d, type: 3}
       propertyPath: m_RootOrder
-      value: 12
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: e9f262c5f62d0ca448e207cb124c651d, type: 3}
       propertyPath: m_LocalScale.x
@@ -2899,8 +2894,8 @@ MonoBehaviour:
   Name: Bullet holes
   Hint: The angle of the bullet hole impact indicate that the killer must be around
     170cm tall.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: bd28ce0ce486c014fa7becc37015aab1, type: 3}
+  ImagePath: Alley/Gunshot_Thumbnail
 --- !u!114 &964579876
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3021,8 +3016,8 @@ MonoBehaviour:
   Name: Wallet
   Hint: The wallet is empty. Neither credit cards nor paper money is found inside
     of it.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 2f5a3e1cbfd629f42a3a576aeb7be5d4, type: 3}
+  ImagePath: InventoryImages/Wallet
 --- !u!65 &996944413
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3072,7 +3067,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 8b45551acf900bd4aab3db70161b2d13, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 8b45551acf900bd4aab3db70161b2d13, type: 3}
       propertyPath: m_LocalScale.x
@@ -3289,8 +3284,8 @@ MonoBehaviour:
   Name: Boss' body
   Hint: The body is wearing a shabby suit and is lying face down in front of the cork
     board. He has been shot from behind.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: 1bf33627e32813d4dbe13295fb67e540, type: 3}
+  ImagePath: Office/Boss
 --- !u!114 &1270893993
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3335,8 +3330,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Office door
   Hint: This door leads into the outside hallway.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: d708ac83f09e58546a429baa745d0153, type: 3}
+  ImagePath: Office/Office door
 --- !u!114 &1487185043
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3447,7 +3442,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 14fd71c179efa3f47986bd9c73a3b745, type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 14fd71c179efa3f47986bd9c73a3b745, type: 3}
       propertyPath: m_LocalScale.x
@@ -3606,6 +3601,10 @@ Prefab:
         type: 2}
       propertyPath: OnConfirm.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: ConfirmReady
+      objectReference: {fileID: 0}
+    - target: {fileID: 1856969743927884, guid: dc26f056f492a8b44b9525b72dda3044, type: 2}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: dc26f056f492a8b44b9525b72dda3044, type: 2}
@@ -3996,8 +3995,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Chair
   Hint: This chair sits on the opposite side of the boss' desk.
-  Image: {fileID: 0}
-  ImagePath: 
+  Image: {fileID: 21300000, guid: f4f0f8f2db0df07459db58aca1a506de, type: 3}
+  ImagePath: Office/Guest Chair
 --- !u!114 &2106456592
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4062,7 +4061,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: f6782f229898d694eb3f1661eb8a9353, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: f6782f229898d694eb3f1661eb8a9353, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

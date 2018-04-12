@@ -873,7 +873,7 @@ Prefab:
         type: 2}
       propertyPath: Spotlight
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 149173774}
     - target: {fileID: 108838946847967778, guid: b4cf21df0c4bb50498a7194cec12805e,
         type: 2}
       propertyPath: m_Intensity
@@ -984,6 +984,11 @@ Prefab:
 --- !u!4 &149173773 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4770660436952536, guid: b4cf21df0c4bb50498a7194cec12805e,
+    type: 2}
+  m_PrefabInternal: {fileID: 149173772}
+--- !u!1 &149173774 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1406534460842214, guid: b4cf21df0c4bb50498a7194cec12805e,
     type: 2}
   m_PrefabInternal: {fileID: 149173772}
 --- !u!1 &194371267

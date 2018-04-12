@@ -25,8 +25,11 @@ makeAllUserNbrs = () => "0123".split('');
 // Make an array of all user numbers except for the specified user number
 makeOtherUserNbrs = uid => makeAllUserNbrs().filter(x => x !== uid);
 
+// Get the ready status of all users
+getAllLobbyUserReadys = id => Promise.all(makeAllUserNbrs().map(x => getRefValue(`/lobbies/${id}/users/${x}/ready`))).then(extractValidResults);
+
 // Get the user ids of all users
-getAllLobbyUserIds = (id, uid) => Promise.all(makeAllUserNbrs().map(x => getRefValue(`/lobbies/${id}/users/${x}/user-id`))).then(extractValidResults);
+getAllLobbyUserIds = id => Promise.all(makeAllUserNbrs().map(x => getRefValue(`/lobbies/${id}/users/${x}/user-id`))).then(extractValidResults);
 
 // Get the user ids of all users except for the one specified
 getOtherLobbyUserIds = (id, uid) => Promise.all(makeOtherUserNbrs(uid).map(x => getRefValue(`/lobbies/${id}/users/${x}/user-id`))).then(extractValidResults);
@@ -40,21 +43,21 @@ sendNotification = (title, body) => tokens => admin.messaging().sendToDevice(tok
 // Send the specified notification to the specified tokens
 sendSimpleNotification = body => sendNotification(body, body);
 
-exports.playerJoinedLobby = onCreate('/lobbies/{id}/users/{uid}/user-id', (snapshot, context) => {
+/*exports.playerJoinedLobby = onCreate('/lobbies/{id}/users/{uid}/user-id', (snapshot, context) => {
     return getOtherLobbyUserIds(context.params.id, context.params.uid)
         .then(getUserNotificationTokens)
         .then(sendSimpleNotification('A player has joined the game!'));
-});
+});*/
 
-exports.playerLeftLobby = onDelete('/lobbies/{id}/users/{uid}/user-id', (snapshot, context) => {
+/*exports.playerLeftLobby = onDelete('/lobbies/{id}/users/{uid}/user-id', (snapshot, context) => {
     return getOtherLobbyUserIds(context.params.id, context.params.uid)
         .then(getUserNotificationTokens)
         .then(sendSimpleNotification('A player has left the game!'));
-});
+});*/
 
 exports.allPlayersJoinedLobby = onCreate('/lobbies/{id}/users/{uid}/user-id', (snapshot, context) => {
-    return getAllLobbyUserIds(context.params.id, context.params.uid).then(userIds => {
-        if (userIds.length == 4) {
+    return getAllLobbyUserIds(context.params.id).then(userIds => {
+        if (userIds.length === 4) {
             return getUserNotificationTokens(userIds)
                 .then(sendSimpleNotification('All players have joined the game!'));
         }
@@ -62,7 +65,7 @@ exports.allPlayersJoinedLobby = onCreate('/lobbies/{id}/users/{uid}/user-id', (s
 });
 
 exports.lobbyStarted = onUpdate('/lobbies/{id}/state', (snapshot, context) => {
-    return getAllLobbyUserIds(context.params.id, context.params.uid)
+    return getAllLobbyUserIds(context.params.id)
         .then(getUserNotificationTokens)
         .then(sendSimpleNotification('The game has started!'));
 });
@@ -73,27 +76,23 @@ exports.clueChanged = onWrite('/lobbies/{id}/users/{uid}/items/{iid}/description
         .then(sendSimpleNotification('New items have been added to the database!'));
 });
 
-exports.playerReady = onCreate('/lobbies/{id}/users/{uid}/ready', (snapshot, context) => {
+/*exports.playerReady = onCreate('/lobbies/{id}/users/{uid}/ready', (snapshot, context) => {
     return getOtherLobbyUserIds(context.params.id, context.params.uid)
         .then(getUserNotificationTokens)
         .then(sendSimpleNotification('A player is ready to vote!'));
-
-});
+});*/
 
 exports.allPlayersReady = onCreate('/lobbies/{id}/users/{uid}/ready', (snapshot, context) => {
-
-    return Promise.all("0123".split('').map(x => x))
-
-    return getAllLobbyUserIds(context.params.id, context.params.uid).then(userIds => {
-        if (userIds.length == 4) {
-            return getUserNotificationTokens(userIds)
+    return getAllLobbyUserReadys(context.params.id).then(readys => {
+        if (readys.filter(x => x===true).length === 4) {
+            return getOtherLobbyUserIds(context.params.id, context.params.uid)
                 .then(sendSimpleNotification('All players have joined the game!'));
         }
     });
 });
 
 exports.clueHighlighted = onCreate('/lobbies/{id}/users/{uid}/items/{iid}/highlight', (snapshot, context) => {
-    return getAllLobbyUserIds(context.params.id, context.params.uid)
+    return getAllLobbyUserIds(context.params.id)
         .then(getUserNotificationTokens)
         .then(sendSimpleNotification('New items have been highlighted in the database!'));
 });
@@ -102,12 +101,10 @@ exports.playerVoted = onCreate('/lobbies/{id}/users/{uid}/vote', (snapshot, cont
     return getOtherLobbyUserIds(context.params.id, context.params.uid)
         .then(getUserNotificationTokens)
         .then(sendSimpleNotification('A player has voted!'));
-
 });
 
 exports.playerRetry = onCreate('/lobbies/{id}/users/{uid}/retry', (snapshot, context) => {
     return getOtherLobbyUserIds(context.params.id, context.params.uid)
         .then(getUserNotificationTokens)
         .then(sendSimpleNotification('A player wants to retry!'));
-
 });

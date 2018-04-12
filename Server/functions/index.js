@@ -14,16 +14,16 @@ onWrite  = (path, func) => funcRef(path).onWrite(func);
 getRefValue = path => admin.database().ref(path).once('value');
 
 // Extracts values from an array of DataSnapshot
-extractAllResults = (results) => results.map(x => x.val());
+extractAllResults = results => results.map(x => x.val());
 
 // Extracts non-empty values from an array of DataSnapshot
-extractValidResults = (results) => extractAllResults(results).filter(x => !!x);
+extractValidResults = results => extractAllResults(results).filter(x => !!x);
 
 // Make an array of all user numbers
 makeAllUserNbrs = () => "0123".split('');
 
 // Make an array of all user numbers except for the specified user number
-makeOtherUserNbrs = (uid) => makeAllUserNbrs().filter(x => x !== uid);
+makeOtherUserNbrs = uid => makeAllUserNbrs().filter(x => x !== uid);
 
 // Get the user ids of all users
 getAllLobbyUserIds = (id, uid) => Promise.all(makeAllUserNbrs().map(x => getRefValue(`/lobbies/${id}/users/${x}/user-id`))).then(extractValidResults);
@@ -32,13 +32,13 @@ getAllLobbyUserIds = (id, uid) => Promise.all(makeAllUserNbrs().map(x => getRefV
 getOtherLobbyUserIds = (id, uid) => Promise.all(makeOtherUserNbrs(uid).map(x => getRefValue(`/lobbies/${id}/users/${x}/user-id`))).then(extractValidResults);
 
 // Get the notification tokens of all specified users
-getUserNotificationTokens = (userIds) => Promise.all(userIds.map(x => getRefValue(`/users/${x}/notification-token`))).then(extractValidResults);
+getUserNotificationTokens = userIds => Promise.all(userIds.map(x => getRefValue(`/users/${x}/notification-token`))).then(extractValidResults);
 
 // Send the specified notification to the specified tokens
-sendNotification = (title, body) => (tokens) => admin.messaging().sendToDevice(tokens, { notification: { title: title, body: body }});
+sendNotification = (title, body) => tokens => admin.messaging().sendToDevice(tokens, { notification: { title: title, body: body }});
 
 // Send the specified notification to the specified tokens
-sendSimpleNotification = (body) => sendNotification(body, body);
+sendSimpleNotification = body => sendNotification(body, body);
 
 exports.playerJoinedLobby = onCreate('/lobbies/{id}/users/{uid}/user-id', (snapshot, context) => {
     return getOtherLobbyUserIds(context.params.id, context.params.uid)

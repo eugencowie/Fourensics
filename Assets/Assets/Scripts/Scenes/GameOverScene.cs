@@ -39,7 +39,7 @@ class GameOverScene : MonoBehaviour
         m_resetButton.gameObject.SetActive(false);
 
         // Get database objects
-        User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadSceneAsync("SignIn"); return; }
+        User m_user = await User.Get(); if (m_user == null) { SceneManager.LoadSceneAsync("SignIn"); return; }
         Lobby m_lobby = await Lobby.Get(m_user);
 
         if (m_lobby == null && !string.IsNullOrEmpty(m_lobby.Id))
@@ -92,7 +92,7 @@ class GameOverScene : MonoBehaviour
     public async void ResetButtonPressed()
     {
         // Get database objects
-        User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadSceneAsync("SignIn"); return; }
+        User m_user = await User.Get(); if (m_user == null) { SceneManager.LoadSceneAsync("SignIn"); return; }
         Lobby m_lobby = await Lobby.Get(m_user);
 
         // Deregister vote/retry changed event handlers
@@ -125,7 +125,7 @@ class GameOverScene : MonoBehaviour
         if (entry.Value != null && !string.IsNullOrEmpty(entry.Value))
         {
             // Get database objects
-            User user; try { user = await User.Get(); } catch { SceneManager.LoadSceneAsync("SignIn"); return; }
+            User user = await User.Get(); if (user == null) { SceneManager.LoadSceneAsync("SignIn"); return; }
             Lobby lobby = await Lobby.Get(user);
 
             // Get lobby case number

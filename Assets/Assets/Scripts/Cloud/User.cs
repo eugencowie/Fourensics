@@ -3,6 +3,7 @@ using Firebase.Auth;
 using Firebase.Messaging;
 using Google;
 using System;
+using System.IO;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -88,6 +89,8 @@ class User : ICloudObject
         // Set up push notifications
         FirebaseMessaging.TokenReceived += m_instance.OnTokenReceived;
         FirebaseMessaging.MessageReceived += m_instance.OnMessageReceived;
+
+        File.WriteAllText(Application.persistentDataPath + "/auth.gd", "0");
     }
 
     public async static Task SignInAsGuest()
@@ -109,30 +112,22 @@ class User : ICloudObject
         // Set up push notifications
         FirebaseMessaging.TokenReceived += m_instance.OnTokenReceived;
         FirebaseMessaging.MessageReceived += m_instance.OnMessageReceived;
+
+        File.WriteAllText(Application.persistentDataPath + "/auth.gd", "1");
     }
 
     public async static Task<User> Get()
     {
         if (m_instance == null)
         {
-            // Check for Firebase dependencies
-            DependencyStatus status = await FirebaseApp.CheckAndFixDependenciesAsync();
-            if (status != DependencyStatus.Available) { throw new Exception("Unable to satisfy dependencies."); }
+            if (!File.Exists(Application.persistentDataPath + "/auth.gd"))
+                return null;
 
-            // Fetch user from the cloud using Firebase user id
-            m_instance = await Cloud.Fetch<User>(new Key("users").Child(SystemInfo.deviceUniqueIdentifier));
+            string s = File.ReadAllText(Application.persistentDataPath + "/auth.gd");
 
-            // Check if device has signed-in before
-            if (m_instance.Type.Value.HasValue)
-            {
-                // Use whichever sign-in type was used before
-                if (m_instance.Type.Value == (long)UserType.Google)
-                    await SignInWithGoogle();
-                else
-                    await SignInAsGuest();
-            }
-            else
-                throw new Exception();
+            if (s[0] == '0') await SignInWithGoogle();
+            else if (s[0] == '1') await SignInAsGuest();
+            else return null;
         }
 
         return m_instance;

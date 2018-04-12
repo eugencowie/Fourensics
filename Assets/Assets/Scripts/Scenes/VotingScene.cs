@@ -34,7 +34,7 @@ public class VotingScene : MonoBehaviour
     async void Start()
     {
         // Get database objects
-        User user; try { user = await User.Get(); } catch { SceneManager.LoadSceneAsync("SignIn"); return; }
+        User user = await User.Get(); if (user == null) { SceneManager.LoadSceneAsync("SignIn"); return; }
         Lobby lobby = await Lobby.Get(user);
 
         int scene = (int)(CloudManager.OnlyUser(lobby, user).Scene.Value ?? 0);
@@ -65,7 +65,7 @@ public class VotingScene : MonoBehaviour
         foreach (var discarded in StaticSuspects.DiscardedSuspects)
         {
             // Get database objects
-            User user; try { user = await User.Get(); } catch { SceneManager.LoadSceneAsync("SignIn"); return; }
+            User user = await User.Get(); if (user == null) { SceneManager.LoadSceneAsync("SignIn"); return; }
             Lobby lobby = await Lobby.Get(user);
 
             // Get lobby case number
@@ -97,7 +97,7 @@ public class VotingScene : MonoBehaviour
 
     async void SetBackground()
     {
-        User user; try { user = await User.Get(); } catch { SceneManager.LoadSceneAsync("SignIn"); return; }
+        User user = await User.Get(); if (user == null) { SceneManager.LoadSceneAsync("SignIn"); return; }
         Lobby lobby = await Lobby.Get(user);
 
         int caseNb = (int)(lobby.Case.Value ?? 0);
@@ -137,7 +137,7 @@ public class VotingScene : MonoBehaviour
             ResetButton.SetActive(false);
 
             // Get database objects
-            User user; try { user = await User.Get(); } catch { SceneManager.LoadSceneAsync("SignIn"); return; }
+            User user = await User.Get(); if (user == null) { SceneManager.LoadSceneAsync("SignIn"); return; }
             Lobby lobby = await Lobby.Get(user);
 
             // Get lobby case number
@@ -182,11 +182,11 @@ public class VotingScene : MonoBehaviour
 
     public async void ConfirmVote()
     {
-        User m_user; try { m_user = await User.Get(); } catch { SceneManager.LoadSceneAsync("SignIn"); return; }
+        User m_user = await User.Get(); if (m_user == null) { SceneManager.LoadSceneAsync("SignIn"); return; }
         Lobby m_lobby = await Lobby.Get(m_user);
 
         // Get database objects
-        User user; try { user = await User.Get(); } catch { SceneManager.LoadSceneAsync("SignIn"); return; }
+        User user = await User.Get(); if (user == null) { SceneManager.LoadSceneAsync("SignIn"); return; }
         Lobby lobby = await Lobby.Get(user);
 
         // Get lobby case number

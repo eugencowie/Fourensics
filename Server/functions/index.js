@@ -1,141 +1,91 @@
+// Import modules
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 
+// Initialise Admin API
 admin.initializeApp();
 
-getOtherLobbyUserIds = (id, uid) => "0123".split('')
-    .filter(x => x !== uid)
-    .map(x => admin.database().ref(`/lobbies/${id}/users/${x}/user-id`).once('value'));
+// Extracts values from an array of DataSnapshot
+extractAllResults = (results) => results.map(x => x.val());
 
-getLobbyUserIds = (id, uid) => "0123".split('')
-    .map(x => admin.database().ref(`/lobbies/${id}/users/${x}/user-id`).once('value'));
+// Extracts non-empty values from an array of DataSnapshot
+extractValidResults = (results) => extractAllResults(results).filter(x => !!x);
 
-getUserNotificationTokens = (results) => results
-    .map(x => admin.database().ref(`/users/${x.val()}/notification-token`).once('value'));
+// Make an array of all user numbers
+makeAllUserNbrs = () => "0123".split('');
 
-extractResults = (results) => results
-    .map(x => x.val())
-    .filter(x => !!x);
+// Make an array of all user numbers except for the specified user number
+makeOtherUserNbrs = (uid) => makeAllUserNbrs().filter(x => x !== uid);
 
-makeNotification = (title, body) => {
-    return {
-        notification: {
-            title: title,
-            body: body
-        }
-    };
-};
+// Get the user ids of all users
+getAllLobbyUserIds = (id, uid) => Promise.all(makeAllUserNbrs().map(x => admin.database().ref(`/lobbies/${id}/users/${x}/user-id`).once('value'))).then(extractValidResults);
 
-makeSimpleNotification = (body) => makeNotification(body, body);
+// Get the user ids of all users except for the one specified
+getOtherLobbyUserIds = (id, uid) => Promise.all(makeOtherUserNbrs(uid).map(x => admin.database().ref(`/lobbies/${id}/users/${x}/user-id`).once('value'))).then(extractValidResults);
 
-exports.playerJoinedLobby = functions.database.ref('/lobbies/{id}/users/{uid}/user-id').onCreate((snapshot, context) => {
+// Get the notification tokens of all specified users
+getUserNotificationTokens = (userIds) => Promise.all(userIds.map(x => admin.database().ref(`/users/${x}/notification-token`).once('value'))).then(extractValidResults);
 
-    return Promise.all(getOtherLobbyUserIds(context.params.id, context.params.uid)).then(results => {
+// Send the specified notification to the specified tokens
+sendNotification = (tokens, title, body) => admin.messaging().sendToDevice(tokens, { notification: { title: title, body: body }});
 
-        return Promise.all(getUserNotificationTokens(results));
+// Send the specified notification to the specified tokens
+sendSimpleNotification = (tokens, body) => makeNotification(body, body);
 
-    }).then(results => {
+// Convenience functions
+ref = (path) => functions.database.ref(path);
+onCreate = (path, func) => ref(path).onCreate(func);
+onUpdate = (path, func) => ref(path).onUpdate(func);
+onDelete = (path, func) => ref(path).onDelete(func);
+onWrite  = (path, func) => ref(path).onWrite(func);
 
-        return admin.messaging().sendToDevice(extractResults(results), makeSimpleNotification('A player has joined the game!'));
+exports.playerJoinedLobby = onCreate('/lobbies/{id}/users/{uid}/user-id', (snapshot, context) => {
+    return getOtherLobbyUserIds(context.params.id, context.params.uid)
+        .then(getUserNotificationTokens)
+        .then(tokens => makeSimpleNotification(tokens, 'A player has joined the game!'));
+});
 
-    });
+exports.playerLeftLobby = onDelete('/lobbies/{id}/users/{uid}/user-id', (snapshot, context) => {
+    return getOtherLobbyUserIds(context.params.id, context.params.uid)
+        .then(getUserNotificationTokens)
+        .then(tokens => makeSimpleNotification('A player has left the game!'));
+});
+
+exports.lobbyStarted = onUpdate('/lobbies/{id}/state', (snapshot, context) => {
+    return getLobbyUserIds(context.params.id, context.params.uid)
+        .then(getUserNotificationTokens)
+        .then(tokens => makeSimpleNotification('The game has started!'));
+});
+
+exports.clueChanged = onWrite('/lobbies/{id}/users/{uid}/items/{iid}/description', (snapshot, context) => {
+    return getOtherLobbyUserIds(context.params.id, context.params.uid)
+        .then(getUserNotificationTokens)
+        .then(tokens => makeSimpleNotification('New items have been added to the database!'));
+});
+
+exports.playerReady = onCreate('/lobbies/{id}/users/{uid}/ready', (snapshot, context) => {
+    return getOtherLobbyUserIds(context.params.id, context.params.uid)
+        .then(getUserNotificationTokens)
+        .then(tokens => makeSimpleNotification('A player is ready to vote!'));
 
 });
 
-exports.playerLeftLobby = functions.database.ref('/lobbies/{id}/users/{uid}/user-id').onDelete((snapshot, context) => {
+exports.clueHighlighted = onCreate('/lobbies/{id}/users/{uid}/items/{iid}/highlight', (snapshot, context) => {
+    return getLobbyUserIds(context.params.id, context.params.uid)
+        .then(getUserNotificationTokens)
+        .then(tokens => makeSimpleNotification('New items have been highlighted in the database!'));
+});
 
-    return Promise.all(getOtherLobbyUserIds(context.params.id, context.params.uid)).then(results => {
-
-        return Promise.all(getUserNotificationTokens(results));
-
-    }).then(results => {
-
-        return admin.messaging().sendToDevice(extractResults(results), makeSimpleNotification('A player has left the game!'));
-
-    });
+exports.playerVoted = onCreate('/lobbies/{id}/users/{uid}/vote', (snapshot, context) => {
+    return getOtherLobbyUserIds(context.params.id, context.params.uid)
+        .then(getUserNotificationTokens)
+        .then(tokens => makeSimpleNotification('A player has voted!'));
 
 });
 
-exports.lobbyStarted = functions.database.ref('/lobbies/{id}/state').onUpdate((snapshot, context) => {
+exports.playerRetry = onCreate('/lobbies/{id}/users/{uid}/retry', (snapshot, context) => {
+    return getOtherLobbyUserIds(context.params.id, context.params.uid)
+        .then(getUserNotificationTokens)
+        .then(tokens => makeSimpleNotification('A player wants to retry!'));
 
-    return Promise.all(getLobbyUserIds(context.params.id, context.params.uid)).then(results => {
-
-        return Promise.all(getUserNotificationTokens(results));
-
-    }).then(results => {
-
-        return admin.messaging().sendToDevice(extractResults(results), makeSimpleNotification('The game has started!'));
-
-    });
-
-});
-
-exports.clueChanged = functions.database.ref('/lobbies/{id}/users/{uid}/items/{iid}/description').onWrite((snapshot, context) => {
-
-    return Promise.all(getOtherLobbyUserIds(context.params.id, context.params.uid)).then(results => {
-
-        return Promise.all(getUserNotificationTokens(results));
-
-    }).then(results => {
-
-        return admin.messaging().sendToDevice(extractResults(results), makeSimpleNotification('New items have been added to the database!'));
-
-    });
-
-});
-
-exports.playerReady = functions.database.ref('/lobbies/{id}/users/{uid}/ready').onCreate((snapshot, context) => {
-
-    return Promise.all(getOtherLobbyUserIds(context.params.id, context.params.uid)).then(results => {
-
-        return Promise.all(getUserNotificationTokens(results));
-
-    }).then(results => {
-
-        return admin.messaging().sendToDevice(extractResults(results), makeSimpleNotification('A player is ready to vote!'));
-
-    });
-    
-});
-
-exports.clueHighlighted = functions.database.ref('/lobbies/{id}/users/{uid}/items/{iid}/highlight').onCreate((snapshot, context) => {
-
-    return Promise.all(getLobbyUserIds(context.params.id, context.params.uid)).then(results => {
-
-        return Promise.all(getUserNotificationTokens(results));
-
-    }).then(results => {
-
-        return admin.messaging().sendToDevice(extractResults(results), makeSimpleNotification('New items have been highlighted in the database!'));
-
-    });
-
-});
-
-exports.playerVoted = functions.database.ref('/lobbies/{id}/users/{uid}/vote').onCreate((snapshot, context) => {
-
-    return Promise.all(getOtherLobbyUserIds(context.params.id, context.params.uid)).then(results => {
-
-        return Promise.all(getUserNotificationTokens(results));
-
-    }).then(results => {
-
-        return admin.messaging().sendToDevice(extractResults(results), makeSimpleNotification('A player has voted!'));
-
-    });
-    
-});
-
-exports.playerRetry = functions.database.ref('/lobbies/{id}/users/{uid}/retry').onCreate((snapshot, context) => {
-
-    return Promise.all(getOtherLobbyUserIds(context.params.id, context.params.uid)).then(results => {
-
-        return Promise.all(getUserNotificationTokens(results));
-
-    }).then(results => {
-
-        return admin.messaging().sendToDevice(extractResults(results), makeSimpleNotification('A player wants to retry!'));
-
-    });
-    
 });

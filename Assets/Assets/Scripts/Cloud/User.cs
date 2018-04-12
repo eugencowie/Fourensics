@@ -1,3 +1,4 @@
+using Firebase;
 using Firebase.Auth;
 using Firebase.Messaging;
 using Google;
@@ -59,6 +60,10 @@ class User : ICloudObject
 
     public async static Task SignInWithGoogle()
     {
+        // Check for Firebase dependencies
+        DependencyStatus status = await FirebaseApp.CheckAndFixDependenciesAsync();
+        if (status != DependencyStatus.Available) { throw new Exception("Unable to satisfy dependencies."); }
+
         // Set up Google sign in service
         GoogleSignIn.Configuration = new GoogleSignInConfiguration
         {
@@ -87,6 +92,10 @@ class User : ICloudObject
 
     public async static Task SignInAsGuest()
     {
+        // Check for Firebase dependencies
+        DependencyStatus status = await FirebaseApp.CheckAndFixDependenciesAsync();
+        if (status != DependencyStatus.Available) { throw new Exception("Unable to satisfy dependencies."); }
+
         // Authenticate as a guest user
         FirebaseAuth.GetAuth(Cloud.Firebase);
         FirebaseUser firebaseUser = await Cloud.Auth.SignInAnonymouslyAsync();
@@ -106,6 +115,10 @@ class User : ICloudObject
     {
         if (m_instance == null)
         {
+            // Check for Firebase dependencies
+            DependencyStatus status = await FirebaseApp.CheckAndFixDependenciesAsync();
+            if (status != DependencyStatus.Available) { throw new Exception("Unable to satisfy dependencies."); }
+
             // Fetch user from the cloud using Firebase user id
             m_instance = await Cloud.Fetch<User>(new Key("users").Child(SystemInfo.deviceUniqueIdentifier));
 

@@ -15,15 +15,8 @@ class SignInScene : MonoBehaviour
 
     [SerializeField] SignInPanels m_panels = null;
 
-    async void Start()
+    void Start()
     {
-        // Show wait panel
-        SwitchPanel(m_panels.Wait);
-
-        // Check for Firebase dependencies
-        DependencyStatus status = await FirebaseApp.CheckAndFixDependenciesAsync();
-        if (status != DependencyStatus.Available) { throw new Exception("Unable to satisfy dependencies."); }
-
         // Show start panel
         SwitchPanel(m_panels.Main);
     }

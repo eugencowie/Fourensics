@@ -64,10 +64,13 @@ exports.allPlayersJoinedLobby = onCreate('/lobbies/{id}/users/{uid}/user-id', (s
     });
 });
 
-exports.lobbyStarted = onUpdate('/lobbies/{id}/state', (snapshot, context) => {
-    return getAllLobbyUserIds(context.params.id)
-        .then(getUserNotificationTokens)
-        .then(sendSimpleNotification('The game has started!'));
+exports.lobbyStarted = onUpdate('/lobbies/{id}/state', (change, context) => {
+    if (change.after.val() === 1) {
+        return getAllLobbyUserIds(context.params.id)
+            .then(getUserNotificationTokens)
+            .then(sendSimpleNotification('The game has started!'));
+    }
+    else return null;
 });
 
 exports.clueChanged = onWrite('/lobbies/{id}/users/{uid}/items/{iid}/description', (snapshot, context) => {

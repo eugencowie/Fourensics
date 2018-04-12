@@ -3,33 +3,40 @@ const admin = require('firebase-admin');
 
 admin.initializeApp();
 
+getOtherLobbyUserIds = (id, uid) => "0123".split('')
+    .filter(x => x !== uid)
+    .map(x => admin.database().ref(`/lobbies/${id}/users/${x}/user-id`).once('value'));
+
+getLobbyUserIds = (id, uid) => "0123".split('')
+    .map(x => admin.database().ref(`/lobbies/${id}/users/${x}/user-id`).once('value'));
+
+getUserNotificationTokens = (results) => results
+    .map(x => admin.database().ref(`/users/${x.val()}/notification-token`).once('value'));
+
+extractResults = (results) => results
+    .map(x => x.val())
+    .filter(x => !!x);
+
+makeNotification = (title, body) => {
+    return {
+        notification: {
+            title: title,
+            body: body
+        }
+    };
+};
+
+makeSimpleNotification = (body) => makeNotification(body, body);
+
 exports.playerJoinedLobby = functions.database.ref('/lobbies/{id}/users/{uid}/user-id').onCreate((snapshot, context) => {
 
-    const getLobbyUserIds = "0123".split('')
-        .filter(x => x !== context.params.uid)
-        .map(x => admin.database().ref(`/lobbies/${context.params.id}/users/${x}/user-id`).once('value'));
+    return Promise.all(getOtherLobbyUserIds(context.params.id, context.params.uid)).then(results => {
 
-    return Promise.all(getLobbyUserIds).then(results => {
-
-        const getUserNotificationTokens = results
-            .map(x => admin.database().ref(`/users/${x.val()}/notification-token`).once('value'));
-
-        return Promise.all(getUserNotificationTokens);
+        return Promise.all(getUserNotificationTokens(results));
 
     }).then(results => {
 
-        const notificationTokens = results
-            .map(x => x.val())
-            .filter(x => !!x);
-
-        const payload = {
-            notification: {
-                title: 'A player has joined the game!',
-                body: 'A player has joined the game!'
-            }
-        };
-
-        return admin.messaging().sendToDevice(notificationTokens, payload);
+        return admin.messaging().sendToDevice(extractResults(results), makeSimpleNotification('A player has joined the game!'));
 
     });
 
@@ -37,31 +44,13 @@ exports.playerJoinedLobby = functions.database.ref('/lobbies/{id}/users/{uid}/us
 
 exports.playerLeftLobby = functions.database.ref('/lobbies/{id}/users/{uid}/user-id').onDelete((snapshot, context) => {
 
-    const getLobbyUserIds = "0123".split('')
-        .filter(x => x !== context.params.uid)
-        .map(x => admin.database().ref(`/lobbies/${context.params.id}/users/${x}/user-id`).once('value'));
+    return Promise.all(getOtherLobbyUserIds(context.params.id, context.params.uid)).then(results => {
 
-    return Promise.all(getLobbyUserIds).then(results => {
-
-        const getUserNotificationTokens = results
-            .map(x => admin.database().ref(`/users/${x.val()}/notification-token`).once('value'));
-
-        return Promise.all(getUserNotificationTokens);
+        return Promise.all(getUserNotificationTokens(results));
 
     }).then(results => {
 
-        const notificationTokens = results
-            .map(x => x.val())
-            .filter(x => !!x);
-
-        const payload = {
-            notification: {
-                title: 'A player has left the game!',
-                body: 'A player has left the game!'
-            }
-        };
-
-        return admin.messaging().sendToDevice(notificationTokens, payload);
+        return admin.messaging().sendToDevice(extractResults(results), makeSimpleNotification('A player has left the game!'));
 
     });
 
@@ -69,30 +58,13 @@ exports.playerLeftLobby = functions.database.ref('/lobbies/{id}/users/{uid}/user
 
 exports.lobbyStarted = functions.database.ref('/lobbies/{id}/state').onUpdate((snapshot, context) => {
 
-    const getLobbyUserIds = "0123".split('')
-        .map(x => admin.database().ref(`/lobbies/${context.params.id}/users/${x}/user-id`).once('value'));
+    return Promise.all(getLobbyUserIds(context.params.id, context.params.uid)).then(results => {
 
-    return Promise.all(getLobbyUserIds).then(results => {
-
-        const getUserNotificationTokens = results
-            .map(x => admin.database().ref(`/users/${x.val()}/notification-token`).once('value'));
-
-        return Promise.all(getUserNotificationTokens);
+        return Promise.all(getUserNotificationTokens(results));
 
     }).then(results => {
 
-        const notificationTokens = results
-            .map(x => x.val())
-            .filter(x => !!x);
-
-        const payload = {
-            notification: {
-                title: 'The game has started!',
-                body: 'The game has started!'
-            }
-        };
-
-        return admin.messaging().sendToDevice(notificationTokens, payload);
+        return admin.messaging().sendToDevice(extractResults(results), makeSimpleNotification('The game has started!'));
 
     });
 
@@ -100,31 +72,13 @@ exports.lobbyStarted = functions.database.ref('/lobbies/{id}/state').onUpdate((s
 
 exports.clueChanged = functions.database.ref('/lobbies/{id}/users/{uid}/items/{iid}/description').onWrite((snapshot, context) => {
 
-    const getLobbyUserIds = "0123".split('')
-        .filter(x => x !== context.params.uid)
-        .map(x => admin.database().ref(`/lobbies/${context.params.id}/users/${x}/user-id`).once('value'));
+    return Promise.all(getOtherLobbyUserIds(context.params.id, context.params.uid)).then(results => {
 
-    return Promise.all(getLobbyUserIds).then(results => {
-
-        const getUserNotificationTokens = results
-            .map(x => admin.database().ref(`/users/${x.val()}/notification-token`).once('value'));
-
-        return Promise.all(getUserNotificationTokens);
+        return Promise.all(getUserNotificationTokens(results));
 
     }).then(results => {
 
-        const notificationTokens = results
-            .map(x => x.val())
-            .filter(x => !!x);
-
-        const payload = {
-            notification: {
-                title: 'New items have been added to the database!',
-                body: 'New items have been added to the database!'
-            }
-        };
-
-        return admin.messaging().sendToDevice(notificationTokens, payload);
+        return admin.messaging().sendToDevice(extractResults(results), makeSimpleNotification('New items have been added to the database!'));
 
     });
 
@@ -132,31 +86,13 @@ exports.clueChanged = functions.database.ref('/lobbies/{id}/users/{uid}/items/{i
 
 exports.playerReady = functions.database.ref('/lobbies/{id}/users/{uid}/ready').onCreate((snapshot, context) => {
 
-    const getLobbyUserIds = "0123".split('')
-        .filter(x => x !== context.params.uid)
-        .map(x => admin.database().ref(`/lobbies/${context.params.id}/users/${x}/user-id`).once('value'));
+    return Promise.all(getOtherLobbyUserIds(context.params.id, context.params.uid)).then(results => {
 
-    return Promise.all(getLobbyUserIds).then(results => {
-
-        const getUserNotificationTokens = results
-            .map(x => admin.database().ref(`/users/${x.val()}/notification-token`).once('value'));
-
-        return Promise.all(getUserNotificationTokens);
+        return Promise.all(getUserNotificationTokens(results));
 
     }).then(results => {
 
-        const notificationTokens = results
-            .map(x => x.val())
-            .filter(x => !!x);
-
-        const payload = {
-            notification: {
-                title: 'A player is ready to vote!',
-                body: 'A player is ready to vote!'
-            }
-        };
-
-        return admin.messaging().sendToDevice(notificationTokens, payload);
+        return admin.messaging().sendToDevice(extractResults(results), makeSimpleNotification('A player is ready to vote!'));
 
     });
     
@@ -164,30 +100,13 @@ exports.playerReady = functions.database.ref('/lobbies/{id}/users/{uid}/ready').
 
 exports.clueHighlighted = functions.database.ref('/lobbies/{id}/users/{uid}/items/{iid}/highlight').onCreate((snapshot, context) => {
 
-    const getLobbyUserIds = "0123".split('')
-        .map(x => admin.database().ref(`/lobbies/${context.params.id}/users/${x}/user-id`).once('value'));
+    return Promise.all(getLobbyUserIds(context.params.id, context.params.uid)).then(results => {
 
-    return Promise.all(getLobbyUserIds).then(results => {
-
-        const getUserNotificationTokens = results
-            .map(x => admin.database().ref(`/users/${x.val()}/notification-token`).once('value'));
-
-        return Promise.all(getUserNotificationTokens);
+        return Promise.all(getUserNotificationTokens(results));
 
     }).then(results => {
 
-        const notificationTokens = results
-            .map(x => x.val())
-            .filter(x => !!x);
-
-        const payload = {
-            notification: {
-                title: 'New items have been highlighted in the database!',
-                body: 'New items have been highlighted in the database!'
-            }
-        };
-
-        return admin.messaging().sendToDevice(notificationTokens, payload);
+        return admin.messaging().sendToDevice(extractResults(results), makeSimpleNotification('New items have been highlighted in the database!'));
 
     });
 
@@ -195,31 +114,13 @@ exports.clueHighlighted = functions.database.ref('/lobbies/{id}/users/{uid}/item
 
 exports.playerVoted = functions.database.ref('/lobbies/{id}/users/{uid}/vote').onCreate((snapshot, context) => {
 
-    const getLobbyUserIds = "0123".split('')
-        .filter(x => x !== context.params.uid)
-        .map(x => admin.database().ref(`/lobbies/${context.params.id}/users/${x}/user-id`).once('value'));
+    return Promise.all(getOtherLobbyUserIds(context.params.id, context.params.uid)).then(results => {
 
-    return Promise.all(getLobbyUserIds).then(results => {
-
-        const getUserNotificationTokens = results
-            .map(x => admin.database().ref(`/users/${x.val()}/notification-token`).once('value'));
-
-        return Promise.all(getUserNotificationTokens);
+        return Promise.all(getUserNotificationTokens(results));
 
     }).then(results => {
 
-        const notificationTokens = results
-            .map(x => x.val())
-            .filter(x => !!x);
-
-        const payload = {
-            notification: {
-                title: 'A player has voted!',
-                body: 'A player has voted!'
-            }
-        };
-
-        return admin.messaging().sendToDevice(notificationTokens, payload);
+        return admin.messaging().sendToDevice(extractResults(results), makeSimpleNotification('A player has voted!'));
 
     });
     
@@ -227,31 +128,13 @@ exports.playerVoted = functions.database.ref('/lobbies/{id}/users/{uid}/vote').o
 
 exports.playerRetry = functions.database.ref('/lobbies/{id}/users/{uid}/retry').onCreate((snapshot, context) => {
 
-    const getLobbyUserIds = "0123".split('')
-        .filter(x => x !== context.params.uid)
-        .map(x => admin.database().ref(`/lobbies/${context.params.id}/users/${x}/user-id`).once('value'));
+    return Promise.all(getOtherLobbyUserIds(context.params.id, context.params.uid)).then(results => {
 
-    return Promise.all(getLobbyUserIds).then(results => {
-
-        const getUserNotificationTokens = results
-            .map(x => admin.database().ref(`/users/${x.val()}/notification-token`).once('value'));
-
-        return Promise.all(getUserNotificationTokens);
+        return Promise.all(getUserNotificationTokens(results));
 
     }).then(results => {
 
-        const notificationTokens = results
-            .map(x => x.val())
-            .filter(x => !!x);
-
-        const payload = {
-            notification: {
-                title: 'A player wants to retry!',
-                body: 'A player wants to retry!'
-            }
-        };
-
-        return admin.messaging().sendToDevice(notificationTokens, payload);
+        return admin.messaging().sendToDevice(extractResults(results), makeSimpleNotification('A player wants to retry!'));
 
     });
     

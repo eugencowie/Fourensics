@@ -16,8 +16,8 @@ class GameOverScene : MonoBehaviour
         public Text LoseText;
     }
 
-    [SerializeField] VideoPlayer m_winVideo;
-    [SerializeField] VideoPlayer m_loseVideo;
+    [SerializeField] Image m_winVideo;
+    [SerializeField] Image m_loseVideo;
     [SerializeField] Button m_retryButton;
     [SerializeField] Button m_resetButton;
 
@@ -48,10 +48,6 @@ class GameOverScene : MonoBehaviour
             SceneManager.LoadSceneAsync("Lobby");
             return;
         }
-
-        // Set video end event handlers
-        m_winVideo.loopPointReached += VideoLoopPointReached;
-        m_loseVideo.loopPointReached += VideoLoopPointReached;
 
         // Register vote/retry changed event handlers
         foreach (LobbyUser x in CloudManager.OtherUsers(m_lobby, m_user))
@@ -110,7 +106,7 @@ class GameOverScene : MonoBehaviour
         SceneManager.LoadSceneAsync("Lobby");
     }
 
-    void VideoLoopPointReached(VideoPlayer source)
+    void VideoLoopPointReached()
     {
         // Enable win/lose text
         m_winOrLoseText.gameObject.SetActive(true);
@@ -147,6 +143,7 @@ class GameOverScene : MonoBehaviour
                     // Check if enough players have voted correctly
                     if (percentage >= requiredPercentage)
                     {
+                        /*
                         // Append current users vote to win text
                         m_cases[caseNb - 1].WinText.text += $"\n\nYou voted for {CloudManager.OnlyUser(lobby, user).Vote.Value}";
 
@@ -157,6 +154,7 @@ class GameOverScene : MonoBehaviour
                             m_cases[caseNb - 1].WinText.text += $"\nPlayer {counter} voted for {u.Vote.Value}";
                             counter++;
                         }
+                        */
 
                         // Hide wait text
                         m_waitText.gameObject.SetActive(false);
@@ -167,6 +165,8 @@ class GameOverScene : MonoBehaviour
                         // Set win/lose text and buttons
                         m_winOrLoseText = m_cases[caseNb - 1].WinText;
                         m_winOrLoseButtons.Add(m_resetButton);
+
+                        VideoLoopPointReached();
                     }
                     else
                     {
@@ -180,6 +180,8 @@ class GameOverScene : MonoBehaviour
                         m_winOrLoseText = m_cases[caseNb - 1].LoseText;
                         m_winOrLoseButtons.Add(m_resetButton);
                         m_winOrLoseButtons.Add(m_retryButton);
+
+                        VideoLoopPointReached();
                     }
                 }
             }

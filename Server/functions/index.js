@@ -86,12 +86,10 @@ exports.clueChanged = onWrite('/lobbies/{id}/users/{uid}/items/{iid}/description
 });*/
 
 exports.allPlayersReady = onCreate('/lobbies/{id}/users/{uid}/ready', (snapshot, context) => {
-    return getAllLobbyUserReadys(context.params.id).then(readys => {
-        if (readys.filter(x => x===true).length === 4) {
-            return getOtherLobbyUserIds(context.params.id, context.params.uid)
-                .then(sendSimpleNotification('All players have joined the game!'));
-        }
-    });
+    return getAllLobbyUserReadys(context.params.id)
+        .then(readys => (readys.filter(x => x===true).length === 2))
+        .then(allReady => getAllLobbyUserIds(context.params.id))
+        .then(sendSimpleNotification('All players are ready to vote!'));
 });
 
 exports.clueHighlighted = onCreate('/lobbies/{id}/users/{uid}/items/{iid}/highlight', (snapshot, context) => {

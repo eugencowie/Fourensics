@@ -202,6 +202,7 @@ class GameOverScene : MonoBehaviour
 
             // Create new lobby
             Lobby newLobby = Cloud.Create<Lobby>(new Key("lobbies").Child(newCode));
+            newLobby.CreatedAt.Value = DateTimeOffset.UtcNow.ToString("o");
             newLobby.State.Value = (long)LobbyState.RetryLobby;
             newLobby.Case.Value = lobby.Case.Value;
 

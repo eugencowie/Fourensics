@@ -7,6 +7,7 @@ enum LobbyState { Lobby, InGame, Voting, Finished, RetryLobby }
 class Lobby : ICloudObject
 {
     public Key Key { get; private set; }
+    public CloudNode CreatedAt { get; private set; }
     public CloudNode<long> State { get; private set; }
     public CloudNode<long> Case { get; private set; }
     public LobbyUser[] Users { get; private set; }
@@ -17,6 +18,7 @@ class Lobby : ICloudObject
     void ICloudObject.Create(Key key)
     {
         Key = key;
+        CreatedAt = CloudNode.Create(Key.Child("created-at"));
         State = CloudNode<long>.Create(Key.Child("state"));
         Case = CloudNode<long>.Create(Key.Child("case"));
         Retry = CloudNode.Create(Key.Child("retry"));
@@ -26,6 +28,7 @@ class Lobby : ICloudObject
     async Task ICloudObject.Fetch(Key key)
     {
         Key = key;
+        CreatedAt = await CloudNode.Fetch(Key.Child("created-at"));
         State = await CloudNode<long>.Fetch(Key.Child("state"));
         Case = await CloudNode<long>.Fetch(Key.Child("case"));
         Retry = await CloudNode.Fetch(Key.Child("retry"));
@@ -34,6 +37,7 @@ class Lobby : ICloudObject
 
     public void Reset()
     {
+        CreatedAt = null;
         State.Value = null;
         Case.Value = null;
         Retry.Value = null;

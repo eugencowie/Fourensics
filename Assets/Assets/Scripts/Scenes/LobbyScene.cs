@@ -222,6 +222,7 @@ class LobbyScene : MonoBehaviour
         {
             // Create new lobby
             Lobby lobby = Lobby.Create(code);
+            lobby.CreatedAt.Value = DateTimeOffset.UtcNow.ToString("o");
             lobby.State.Value = (int)LobbyState.Lobby;
             lobby.Case.Value = caseNb;
 

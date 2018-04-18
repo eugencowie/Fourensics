@@ -41,5 +41,9 @@ public class CameraSwipe : MonoBehaviour
         {
             m_velocity *= 0.9f;
         }
+        else
+        {
+            m_velocity = 0;
+        }
     }
 }

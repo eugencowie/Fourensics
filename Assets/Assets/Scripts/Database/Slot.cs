@@ -26,7 +26,7 @@ public static class StaticSlot
     {
         if (ChangeText != null)
         {
-            ChangeText.text = "Changes Remaining : " + (5 - m_TimesRemoved);
+            ChangeText.text = "Changes Remaining: " + (5 - m_TimesRemoved);
         }
     }
 

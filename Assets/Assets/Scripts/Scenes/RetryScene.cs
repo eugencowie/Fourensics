@@ -6,12 +6,17 @@ using UnityEngine.UI;
 class RetryScene : MonoBehaviour
 {
     [SerializeField] Text m_playersLabel = null;
+    [SerializeField] Button m_startButton = null;
 
     async void Start()
     {
         // Get database objects
         User user; try { user = await User.Get(); } catch { SceneManager.LoadScene("SignIn"); return; }
         Lobby lobby = await Lobby.Get(user);
+
+        // Show start button for first user
+        if (CloudManager.OnlyUser(lobby, user).Id == "0")
+            m_startButton.gameObject.SetActive(true);
 
         // Register lobby user id change callbacks
         foreach (LobbyUser lobbyUser in lobby.Users)

@@ -4,48 +4,39 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-public class FancyInventory : MonoBehaviour
+class FancyInventory : MonoBehaviour
 {
-    [SerializeField] private GameObject SlotTemplate = null;
-    [SerializeField] private GameObject MainScreen = null;
-    [SerializeField] private GameObject InspectScreen = null;
-    [SerializeField] private Text HintText = null;
-    [SerializeField] private Image HintImage = null;
+    [SerializeField] GameObject SlotTemplate = null;
+    [SerializeField] GameObject MainScreen = null;
+    [SerializeField] GameObject InspectScreen = null;
+    [SerializeField] Text HintText = null;
+    [SerializeField] Image HintImage = null;
 
-    private List<GameObject> m_buttons = new List<GameObject>();
+    List<GameObject> m_buttons = new List<GameObject>();
+    const int m_spacing = 235;
+    const float m_scrollSpeed = 2000;
 
-    private Vector3 m_initialPosition;
-    private const int m_spacing = 235;
-    private const float m_scrollSpeed = 2000;
-    private float m_scrollAmount = 0;
-
-    //private Vector3 m_touchOrigin;
-    //private bool m_isSwiping;
-
-    private void Start()
+    void Start()
     {
-        m_initialPosition = transform.localPosition;
-
         foreach (var button in m_buttons)
         {
+            // Decrease container size
+            GetComponent<RectTransform>().sizeDelta = new Vector2(GetComponent<RectTransform>().sizeDelta.x, GetComponent<RectTransform>().sizeDelta.y - 250);
+
             Destroy(button);
         }
 
         m_buttons.Clear();
-
-        LoadFromStaticInv();
-    }
-
-    public void LoadFromStaticInv()
-    {
-        foreach (var item in StaticInventory.Hints)
+        List<ObjectHintData> copy = StaticInventory.Hints.ToList();
+        StaticInventory.Hints.Clear();
+        foreach (var item in copy)
         {
             ObjectHintData data = item;
             AddItem(() => ItemButtonPressed(data), data);
         }
     }
 
-    private void ItemButtonPressed(ObjectHintData hint)
+    void ItemButtonPressed(ObjectHintData hint)
     {
         if (DragHandler.itemBeingDragged == null)
         {
@@ -62,32 +53,6 @@ public class FancyInventory : MonoBehaviour
         }
     }
 
-    /*private void Update()
-    {
-        if (Input.GetMouseButtonDown(0) && EventSystem.current.IsPointerOverGameObject())
-        {
-            m_touchOrigin = Input.mousePosition;
-            m_isSwiping = true;
-        }
-
-        if (!Input.GetMouseButton(0))
-        {
-            m_isSwiping = false;
-        }
-
-        if (m_isSwiping)
-        {
-            Vector3 screenPos = Camera.main.ScreenToViewportPoint(Input.mousePosition - m_touchOrigin);
-
-            float movement = screenPos.normalized.y * m_scrollSpeed * Time.deltaTime;
-
-            if (Mathf.Abs(movement) > 20)
-            {
-                Scroll(movement);
-            }
-        }
-    }*/
-
     public void AddItem(UnityAction itemAction, ObjectHintData item)
     {
         if (!m_buttons.Any(b => b.name == item.Name))
@@ -97,6 +62,10 @@ public class FancyInventory : MonoBehaviour
             {
                 StaticInventory.Hints.Add(new ObjectHintData(item.Name, item.Hint, item.Image)); // TODO
             }
+            else return;
+
+            // Increase button container size
+            GetComponent<RectTransform>().sizeDelta = new Vector2(GetComponent<RectTransform>().sizeDelta.x, GetComponent<RectTransform>().sizeDelta.y + 250);
 
             // Create new button
             GameObject newSlot = Instantiate(SlotTemplate);
@@ -104,7 +73,12 @@ public class FancyInventory : MonoBehaviour
 
             // Set initial transform
             newSlot.transform.SetParent(transform);
-            newSlot.transform.localScale = Vector3.one;
+            newSlot.transform.localPosition = SlotTemplate.transform.localPosition;
+            newSlot.transform.localRotation = SlotTemplate.transform.localRotation;
+            newSlot.transform.localScale = SlotTemplate.transform.localScale;
+
+            // Set button position
+            newSlot.transform.localPosition -= new Vector3(0, m_spacing * m_buttons.Count, 0);
 
             // Set click method
             foreach (Transform t in newSlot.transform)
@@ -119,7 +93,6 @@ public class FancyInventory : MonoBehaviour
                     }
                 }
             }
-
 
             // Set button text
             foreach (Transform t in newSlot.transform)
@@ -154,10 +127,6 @@ public class FancyInventory : MonoBehaviour
             // Activate button
             newSlot.SetActive(true);
             m_buttons.Add(newSlot);
-
-            // Scroll inventory to show the new item
-            float maxScrollAmount = Mathf.Max(0, (m_buttons.Count * m_spacing) - (m_spacing * 5));
-            ScrollTo(maxScrollAmount);
         }
     }
 
@@ -167,30 +136,5 @@ public class FancyInventory : MonoBehaviour
         {
             AddItem(itemAction, new ObjectHintData(item));
         }
-    }
-
-    public void ScrollUpButtonPressed()
-    {
-        Scroll(-m_spacing);
-    }
-
-    public void ScrollDownButtonPressed()
-    {
-        Scroll(m_spacing);
-    }
-
-    private void Scroll(float movement)
-    {
-        ScrollTo(m_scrollAmount + movement);
-    }
-
-    private void ScrollTo(float position)
-    {
-        m_scrollAmount = position;
-
-        float maxScrollAMount = Mathf.Max(0, (m_buttons.Count * m_spacing) - (m_spacing * 5));
-        m_scrollAmount = Mathf.Clamp(m_scrollAmount, 0, maxScrollAMount);
-
-        transform.localPosition = m_initialPosition + new Vector3(0, m_scrollAmount, 0);
     }
 }

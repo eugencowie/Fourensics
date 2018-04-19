@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-public static class StaticInventory
+static class StaticInventory
 {
     [SerializeField]
     public static List<ObjectHintData> Hints = new List<ObjectHintData>();
@@ -15,20 +15,16 @@ public static class StaticInventory
     }
 }
 
-public class Inventory : MonoBehaviour
+class Inventory : MonoBehaviour
 {
-    [SerializeField] private GameObject ButtonContainer = null;
-    [SerializeField] private GameObject Button = null;
+    [SerializeField] GameObject ButtonContainer = null;
+    [SerializeField] GameObject Button = null;
 
-    private List<GameObject> m_buttons = new List<GameObject>();
-    private const int m_spacing = 235;
-    private const float m_scrollSpeed = 2000;
-    //private float m_scrollAmount = 0;
+    List<GameObject> m_buttons = new List<GameObject>();
+    const int m_spacing = 235;
+    const float m_scrollSpeed = 2000;
 
-    //private Vector3 m_touchOrigin;
-    //private bool m_isSwiping;
-
-    private void Start()
+    void Start()
     {
         foreach (var button in m_buttons)
         {
@@ -48,32 +44,6 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    /*private void Update()
-    {
-        if (Input.GetMouseButtonDown(0) && EventSystem.current.IsPointerOverGameObject())
-        {
-            m_touchOrigin = Input.mousePosition;
-            m_isSwiping = true;
-        }
-
-        if (!Input.GetMouseButton(0))
-        {
-            m_isSwiping = false;
-        }
-
-        if (m_isSwiping)
-        {
-            Vector3 screenPos = Camera.main.ScreenToViewportPoint(Input.mousePosition - m_touchOrigin);
-
-            float movement = screenPos.normalized.y * m_scrollSpeed * Time.deltaTime;
-
-            if (Mathf.Abs(movement) > 20)
-            {
-                Scroll(movement);
-            }
-        }
-    }*/
-
     public void AddItem(UnityAction itemAction, ObjectHintData item)
     {
         if (!m_buttons.Any(b => b.name == item.Name))
@@ -92,12 +62,6 @@ public class Inventory : MonoBehaviour
             GameObject newButton = Instantiate(Button);
             newButton.name = item.Name;
 
-            // Set click method
-            if (itemAction != null)
-            {
-                newButton.GetComponent<Button>().onClick.AddListener(itemAction);
-            }
-
             // Set initial transform
             newButton.transform.SetParent(ButtonContainer.transform);
             newButton.transform.localPosition = Button.transform.localPosition;
@@ -106,6 +70,12 @@ public class Inventory : MonoBehaviour
 
             // Set button position
             newButton.transform.localPosition -= new Vector3(0, m_spacing * m_buttons.Count, 0);
+
+            // Set click method
+            if (itemAction != null)
+            {
+                newButton.GetComponent<Button>().onClick.AddListener(itemAction);
+            }
 
             // Set button text
             foreach (Transform t in newButton.transform)
@@ -137,10 +107,6 @@ public class Inventory : MonoBehaviour
             // Activate button
             newButton.SetActive(true);
             m_buttons.Add(newButton);
-
-            // Scroll inventory to show the new item
-            //float maxScrollAmount = Mathf.Max(0, (m_buttons.Count * m_spacing) - (m_spacing * 5));
-            //ScrollTo(maxScrollAmount);
         }
     }
 
@@ -151,29 +117,4 @@ public class Inventory : MonoBehaviour
             AddItem(itemAction, new ObjectHintData(item));
         }
     }
-
-    /*public void ScrollUpButtonPressed()
-    {
-        Scroll(-m_spacing);
-    }
-
-    public void ScrollDownButtonPressed()
-    {
-        Scroll(m_spacing);
-    }
-
-    private void Scroll(float movement)
-    {
-        ScrollTo(m_scrollAmount + movement);
-    }
-
-    private void ScrollTo(float position)
-    {
-        m_scrollAmount = position;
-
-        float maxScrollAmount = Mathf.Max(0, (m_buttons.Count * m_spacing) - (m_spacing * 5));
-        m_scrollAmount = Mathf.Clamp(m_scrollAmount, 0, maxScrollAmount);
-
-        ButtonContainer.transform.localPosition = new Vector3(0, m_scrollAmount, 0);
-    }*/
 }

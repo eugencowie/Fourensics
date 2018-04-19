@@ -34,22 +34,23 @@ public class VotingDiscardSlot : MonoBehaviour, IDropHandler
             var suspect = VotingDragHandler.itemBeingDragged.GetComponent<VotingDragHandler>().Suspect;
             var page = suspect.GetComponent<VotingPageController>();
 
-            var prevPage = page.PanelLeft;
-            var nextPage = page.PanelRight;
-
-            prevPage.GetComponent<VotingPageController>().PanelRight = nextPage;
-            nextPage.GetComponent<VotingPageController>().PanelLeft = prevPage;
-
-            // TODO: don't remove last item
-
-            page.Right();
-            suspect.gameObject.SetActive(false);
-
-            Destroy(VotingDragHandler.itemBeingDragged);
-
-            if (!StaticSuspects.DiscardedSuspects.Any(s => s.Name == suspect.Name.text))
+            if (page.PanelLeft != page.gameObject || page.PanelRight != page.gameObject)
             {
-                StaticSuspects.DiscardedSuspects.Add(new VotingSuspectData(suspect));
+                var prevPage = page.PanelLeft;
+                var nextPage = page.PanelRight;
+
+                prevPage.GetComponent<VotingPageController>().PanelRight = nextPage;
+                nextPage.GetComponent<VotingPageController>().PanelLeft = prevPage;
+
+                page.Right();
+                suspect.gameObject.SetActive(false);
+
+                Destroy(VotingDragHandler.itemBeingDragged);
+
+                if (!StaticSuspects.DiscardedSuspects.Any(s => s.Name == suspect.Name.text))
+                {
+                    StaticSuspects.DiscardedSuspects.Add(new VotingSuspectData(suspect));
+                }
             }
         }
     }

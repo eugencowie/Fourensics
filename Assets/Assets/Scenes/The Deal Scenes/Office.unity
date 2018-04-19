@@ -739,7 +739,7 @@ GameObject:
   - component: {fileID: 230691038}
   - component: {fileID: 230691037}
   - component: {fileID: 230691036}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: 'light '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3555,7 +3555,7 @@ GameObject:
   - component: {fileID: 878962514}
   - component: {fileID: 878962513}
   - component: {fileID: 878962512}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: light (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5370,6 +5370,11 @@ Prefab:
         type: 2}
       propertyPath: m_WasSpriteAssigned
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 20189122430657728, guid: b4cf21df0c4bb50498a7194cec12805e,
+        type: 2}
+      propertyPath: m_CullingMask.m_Bits
+      value: 4294965247
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b4cf21df0c4bb50498a7194cec12805e, type: 2}

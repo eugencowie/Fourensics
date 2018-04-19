@@ -4151,7 +4151,7 @@ GameObject:
   - component: {fileID: 1324678078}
   - component: {fileID: 1324678077}
   - component: {fileID: 1324678076}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Blue light
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -40,7 +40,9 @@ public class Inventory : MonoBehaviour
 
         m_buttons.Clear();
 
-        foreach (var item in StaticInventory.Hints)
+        List<ObjectHintData> copy = StaticInventory.Hints.ToList();
+        StaticInventory.Hints.Clear();
+        foreach (var item in copy)
         {
             AddItem(null, item);
         }

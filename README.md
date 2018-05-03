@@ -1,5 +1,11 @@
 # Fourensics
 
+## Trailer
+
+[![Link to trailer](https://raw.githubusercontent.com/eugencowie/Fourensics/master/Assets/Editor%20Default%20Resources/trailer_thumb.png)](https://www.youtube.com/watch?v=kSQRbzX3B9g)
+
+[Click here](https://www.youtube.com/watch?v=kSQRbzX3B9g) to watch the trailer on YouTube!
+
 ## Download
 
 * [Releases](https://github.com/eugencowie/Fourensics/releases)

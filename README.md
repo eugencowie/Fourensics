@@ -1,5 +1,7 @@
 # Fourensics
 
+![Title image](https://github.com/eugencowie/Fourensics/blob/master/Assets/Editor%20Default%20Resources/title_thumb.png?raw=true)
+
 **Fourensics** is a four-player cooperative Android game that can be played asynchronously. It is a criminal investigation game with communication between players as its core feature.
 
 Each player must investigate a seperate crime scene for clues and communicate their findings to the other players, using an intuitive database system to share the pieces of evidence they think are most important. No single crime scene gives the full picture, so players must look at each others' findings to piece together what happened.
@@ -8,7 +10,7 @@ Once all players have finished their investigation they must choose which of the
 
 ## Trailer
 
-[![Link to trailer](https://github.com/eugencowie/Fourensics/blob/master/Assets/Editor%20Default%20Resources/trailer_thumb.png?raw=true)](https://www.youtube.com/watch?v=kSQRbzX3B9g)
+[![Trailer image](https://github.com/eugencowie/Fourensics/blob/master/Assets/Editor%20Default%20Resources/trailer_thumb.png?raw=true)](https://www.youtube.com/watch?v=kSQRbzX3B9g)
 
 [Click here](https://www.youtube.com/watch?v=kSQRbzX3B9g) to watch the trailer on YouTube!
 

@@ -8,7 +8,7 @@ Once all players have finished their investigation they must choose which of the
 
 ## Trailer
 
-[![Link to trailer](https://raw.githubusercontent.com/eugencowie/Fourensics/master/Assets/Editor%20Default%20Resources/trailer_thumb.png)](https://www.youtube.com/watch?v=kSQRbzX3B9g)
+[![Link to trailer](https://github.com/eugencowie/Fourensics/blob/master/Assets/Editor%20Default%20Resources/trailer_thumb.png?raw=true)](https://www.youtube.com/watch?v=kSQRbzX3B9g)
 
 [Click here](https://www.youtube.com/watch?v=kSQRbzX3B9g) to watch the trailer on YouTube!
 
